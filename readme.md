@@ -10,7 +10,7 @@ This repo contains a minimun running Z1 application on server and web platforms.
 
 ### Server
 
-The server does not require any database details or further configuration as it implements [API Box Nedb](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/api-box-nedb) JSON file database as a flavor of [Feature Box Server](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/feature-box-server-nedb), the defacto lib for server platform development in the Z1 ideology.
+The server does not require any database details or further configuration as it implements [API Box Nedb](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/api-box-nedb) JSON file database as a flavor of [Feature Box Server](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/feature-box-server-nedb), the defacto lib for composable server platform apps.
 
 From within this repo's ```server``` folder run:
 ```
@@ -28,7 +28,7 @@ This compiles the server application for production.
 
 ### Web
 
-A bare bones [Z1 Feature Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/feature-box) web application including [Z1 State Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/state-box) and [Z1 UI Box for Tailwind](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/ui-box-tailwind) with macro command for the underlying [React](https://reactjs.org/) and [Redux](https://redux.js.org/) peer dependencies.
+A bare bones [Z1 Feature Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/feature-box) web application powered by [Z1 State Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/state-box) and [Z1 UI Box for Tailwind](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/ui-box-tailwind) implementing macro command for the underlying [React](https://reactjs.org/) and [Redux](https://redux.js.org/) peer dependencies.
 
 From within this repo's ```web``` folder run:
 ```
