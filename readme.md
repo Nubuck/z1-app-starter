@@ -2,7 +2,7 @@
 
 [Z1](https://www.npmjs.com/search?q=%40z1) is a software development ideology forged to bring order, certainty and effeciency to the chaoticly evolving world of solution development; implemented in JavaScript.
 
-This repository serves as an early access starter for [Z1](https://www.npmjs.com/search?q=%40z1) developers to accelerate application and [Z1 CORE](https://github.com/SaucecodeOfficial/zero-one-core) their work.
+This repository serves as an early access starter for [Z1](https://www.npmjs.com/search?q=%40z1) developers to accelerate application and [Z1 CORE](https://github.com/SaucecodeOfficial/zero-one-core) work.
 
 ## Getting Started
 
