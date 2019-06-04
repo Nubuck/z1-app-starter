@@ -1,0 +1,37 @@
+{
+  "host": "localhost",
+  "port": 3035,
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "db": {
+    "folder": "nedb"
+  },
+  "management": {
+    "path": "/account/manage",
+    "from": "noreply@saucecode.tech",
+    "product": "Legion CMD"
+  },
+  "authentication": {
+    "secret": "290c9d87f6bbf22f641dc0c89a3abaae6a71e7da064563f805e0ff753501be42804c6efc8801988cea3137cbf0653b3c0a4f1b395e446cc9ba7a0c6bbf9de69744ef727d4a929bad2fb16841e011d05c6e1c5b0b1beaca1971f69857f703e20b84fd89b7d92435050b59c043761e50933e91f9699bdc0643584bd4e2897a2d89acefdc0b20a3c26d18c33d752f01e1a5c20647d0494b8e337a97bb4b71b4774b3034635d1f2f962cc367d49ca2c8ca0e4065e1c1683af19ba4ddedfc7ad2b1feed70a47f5e988b1f2cac924c2ea679c2eba11d3290d63323cab7f6d5a8e929d0b640ff649830449b13156ac663778e63e1da6be0f3426d1d5ee9dca2e000e384",
+    "strategies": ["jwt", "local"],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    }
+  }
+}
