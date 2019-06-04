@@ -1,6 +1,6 @@
 # Z1 GANG STARTER
 
-[Z1](https://www.npmjs.com/search?q=%40z1) is a software development ideology forged to bring order, certainty and effeciency to the chaoticly evolving world of solution development; implemented in JavaScript.
+[Z1](https://www.npmjs.com/search?q=%40z1) is a software development ideology forged to bring unity, certainty and effeciency to the chaoticly evolving and fragmented world of solution development; implemented in JavaScript.
 
 This repository serves as an early access starter for [Z1](https://www.npmjs.com/search?q=%40z1) developers to accelerate application and [Z1 CORE](https://github.com/SaucecodeOfficial/zero-one-core) work.
 
@@ -28,7 +28,7 @@ This compiles the server application for production.
 
 ### Web
 
-A bare bones [Z1 Feature Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/feature-box) web application including [Z! State Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/state-box), [Z1 UI Box for Tailwind](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/ui-box-tailwind) and naturally the underlying [React](https://reactjs.org/) and [Redux](https://redux.js.org/) peer dependencies.
+A bare bones [Z1 Feature Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/feature-box) web application including [Z1 State Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/state-box) and [Z1 UI Box for Tailwind](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/ui-box-tailwind) with macro command for the underlying [React](https://reactjs.org/) and [Redux](https://redux.js.org/) peer dependencies.
 
 From within this repo's ```web``` folder run:
 ```
@@ -48,7 +48,6 @@ While [Z1 Core](https://github.com/SaucecodeOfficial/zero-one-core) documentatio
 
 Once Z1 is complete this repo will be moved to the upcoming Z1 GANG HQ.
 
-Pleas open issues for discussion, but please be patient while documentation, guides and tooling is completed.
+Please open issues for discussion, but please be patient while documentation, guides and tooling are completed.
 
-Praise Kek.
 
