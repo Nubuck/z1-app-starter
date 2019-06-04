@@ -28,7 +28,7 @@ This compiles the server application for production.
 
 ### Web
 
-A bare bones [Z1 Feature Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/feature-box) web application including [Z! State Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/state-box), [Z1 UI Box for Tailwind](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/ui-box-tailwind) and naturally the underlying [React]{https://reactjs.org/} and [Redux](https://redux.js.org/) peer dependencies.
+A bare bones [Z1 Feature Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/feature-box) web application including [Z! State Box](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/state-box), [Z1 UI Box for Tailwind](https://github.com/SaucecodeOfficial/zero-one-core/tree/master/libs/ui-box-tailwind) and naturally the underlying [React]{https://reactjs.org/) and [Redux](https://redux.js.org/) peer dependencies.
 
 From within this repo's ```web``` folder run:
 ```
