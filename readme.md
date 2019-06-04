@@ -44,7 +44,7 @@ yarn build
 
 ## Roadmap
 
-While [Z! Core](https://github.com/SaucecodeOfficial/zero-one-core) documentation is being completed this repo is due to be updated frequently.
+While [Z1 Core](https://github.com/SaucecodeOfficial/zero-one-core) documentation is being completed this repo is due to be updated frequently.
 
 Once Z1 is complete this repo will be moved to the upcoming Z1 GANG HQ.
 
