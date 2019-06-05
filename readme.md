@@ -1,4 +1,4 @@
-# Z1 GANG STARTER
+# Z1 App Starter
 
 [Z1](https://www.npmjs.com/search?q=%40z1) is a software development ideology forged to bring unity, certainty and efficiency to the chaotically evolving and fragmented world of solution development; implemented in JavaScript.
 
