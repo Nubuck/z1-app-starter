@@ -41,6 +41,7 @@ Once ready to ship, simply run:
 ```
 yarn build
 ```
+Then drop the output of the ```lib``` folder into your server's ```site``` folder to host in production.
 
 ## Roadmap
 
