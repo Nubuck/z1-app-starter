@@ -1,12 +1,12 @@
 # Z1 GANG STARTER
 
-[Z1](https://www.npmjs.com/search?q=%40z1) is a software development ideology forged to bring unity, certainty and effeciency to the chaoticly evolving and fragmented world of solution development; implemented in JavaScript.
+[Z1](https://www.npmjs.com/search?q=%40z1) is a software development ideology forged to bring unity, certainty and efficiency to the chaotically evolving and fragmented world of solution development; implemented in JavaScript.
 
 This repository serves as an early access starter for [Z1](https://www.npmjs.com/search?q=%40z1) developers to accelerate application and [Z1 CORE](https://github.com/SaucecodeOfficial/zero-one-core) work.
 
 ## Getting Started
 
-This repo contains a minimun running Z1 application on server and web platforms.
+This repo contains a minimum running Z1 application on server and web platforms.
 
 ### Server
 
