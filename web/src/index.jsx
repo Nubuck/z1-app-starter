@@ -3,15 +3,15 @@ import React from 'react'
 import { render } from 'react-dom'
 import { createStateStore, reloadStateStore } from '@z1/lib-feature-box'
 import { Provider } from 'react-redux'
-// api
 import { createApiClient } from '@z1/lib-api-box-client'
 // hot code
 import App from './App'
 import features from './features'
-// state
+// api
 const api = createApiClient({
   path: process.env.NODE_ENV === 'development' ? 'http://localhost:3035' : '/',
 })
+// state
 const store = createStateStore({
   boxes: features.state,
   context: {

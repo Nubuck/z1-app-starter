@@ -4,8 +4,9 @@ const use = [
     {
       publicPath: '/',
       html: {
-        title: 'Z1 Screen Cmd',
+        title: 'Z1 App Starter',
         links: ['https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css'],
+        // this doesn't work - neutrino issue
         appMountHtmlSnippet:
           '<div id="root" class="flex flex-col w-full h-full"></div>',
       },
