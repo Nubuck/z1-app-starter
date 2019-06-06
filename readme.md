@@ -1,6 +1,6 @@
 # Z1 App Starter
 
-[Z1](https://www.npmjs.com/search?q=%40z1) is a software development ideology forged to bring unity, certainty and efficiency to the chaotically evolving and fragmented world of solution development; implemented in JavaScript.
+[Z1](https://www.npmjs.com/search?q=%40z1) is a software development ideology forged to promote unity, certainty and efficiency in the chaotically evolving and fragmented world of solution development, implemented in the wildest ecosystem of all: JavaScript.
 
 This repository serves as an early access starter for [Z1](https://www.npmjs.com/search?q=%40z1) developers to accelerate application and [Z1 CORE](https://github.com/SaucecodeOfficial/zero-one-core) work.
 
