@@ -584,68 +584,75 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
 
-"@z1/lib-api-box-client-core@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@z1/lib-api-box-client-core/-/lib-api-box-client-core-0.2.5.tgz#a132072df769f76910bb59192d90c7329307c58c"
-  integrity sha512-xt0GIVW0vYbf3JGwSywC4EqobsTTOPUdfok8eFaIguTaatz+00SK/blXCq8yCl9Y0Z/7owUOKax2rrWuFxTNrA==
+"@z1/lib-api-box-client-core@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/lib-api-box-client-core/-/lib-api-box-client-core-0.2.9.tgz#050c31e592b0f19edead26fcb73e0ac97d941de4"
+  integrity sha512-McX7Urv5RBd3yT8HozuQ+YuuaQSX5ly6aAC91A2TznCy7ktGVyYEtLK4+AFJcgyIl+i4hV/sjQ+Hynykt1xPyQ==
   dependencies:
     "@z1/preset-feathers-client" "^0.2.5"
-    "@z1/preset-task" "^0.2.5"
+    "@z1/preset-task" "^0.2.9"
 
-"@z1/lib-api-box-client@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@z1/lib-api-box-client/-/lib-api-box-client-0.2.5.tgz#1406b13e5475839a0ce469c02f22352c8c660640"
-  integrity sha512-NRy92nWoQZdj2Nm+9DXVZRBS1nG5+O9NTqELwaQxfL0PBhGcweLzxWqvpEIkCJi2DSQz0+VuPvnKfSM6nugvSw==
+"@z1/lib-api-box-client@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/lib-api-box-client/-/lib-api-box-client-0.2.9.tgz#3117e8adcab6cbd9460970aba142d46e308bb74f"
+  integrity sha512-HalCC/kxV/TZ5lIDGOeUInIs5CtalCHM7ZGgzRM7tjhyrQyP3JqboVSVYlzUL/klTSSoVzgk5/nZi4UyuAgwLg==
   dependencies:
-    "@z1/lib-api-box-client-core" "^0.2.5"
+    "@z1/lib-api-box-client-core" "^0.2.9"
     localforage "^1.6.0"
 
-"@z1/lib-feature-box@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@z1/lib-feature-box/-/lib-feature-box-0.2.5.tgz#a1c86144d6861ad3f4fcfeb0d721b5f2cb378843"
-  integrity sha512-/a/ihqlAr2rvR58UijNHbQatswq8ZuzX9/JjF20K98+qylGU14qEpLX2dghH6lOTdFLB4ZSY3Xvs74a/Klqegg==
+"@z1/lib-feature-box@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/lib-feature-box/-/lib-feature-box-0.2.9.tgz#a85dabe618213507c22c6ed26c63eed281b4ebfb"
+  integrity sha512-j6qFV4l3oSR9NLi46JgygnFPMmMJMxRs8xQLrdoYN+ZsL/ITStf3C1EYrDkNdi7EZXMheRY5sbqpWXA9K8O5kw==
   dependencies:
-    "@z1/lib-state-box" "^0.2.5"
+    "@z1/lib-state-box" "^0.2.9"
     redux-first-router "^2.1.1"
     redux-first-router-link "^2.1.1"
     redux-first-router-restore-scroll "^1.2.2"
 
-"@z1/lib-state-box-core@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@z1/lib-state-box-core/-/lib-state-box-core-0.2.5.tgz#effefe9bdd22a059269f986bc3d7976a5e1549cb"
-  integrity sha512-6zckE2Mh8ZzNze1+N9WPkZMrodl3Q0QIZPzevlLEbXp/Zft7lqhZQOgELFD4322UeFDthnpIEWL/LqeZcghbFw==
+"@z1/lib-state-box-core@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/lib-state-box-core/-/lib-state-box-core-0.2.9.tgz#23b2e937d5116202d651758c40ae19dcfffaae55"
+  integrity sha512-M/anszBTl1xVMvnZ55bjGwMJLNkQXq4H9+2QUp2NjNoCCqFWporfNSHk1UkBuwKl9P7PN8uTanM1Q57L2qSs3Q==
   dependencies:
-    "@z1/preset-task" "^0.2.5"
+    "@z1/preset-task" "^0.2.9"
     redux-logic "^0.12.3"
     redux-toolbelt "^2.1.4"
     rxjs "^5.5.6"
 
-"@z1/lib-state-box@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@z1/lib-state-box/-/lib-state-box-0.2.5.tgz#9ec0d061c13e0c5ed0fd4fdc2add17ff3450a05f"
-  integrity sha512-+hQLkZeBgJAMJlbS6fj6I7KXerxZfsz2Da9K8ArJLgY0P6ZXngimK7wZlc07eW4TfYOCmeyarKd3OY/gNuu80Q==
+"@z1/lib-state-box@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/lib-state-box/-/lib-state-box-0.2.9.tgz#912b2ebb255207120fb00b010585a3918aee8e1d"
+  integrity sha512-3EA00S/Wc+UXFzdP+haS2UPxZwiaPLjB6RgH7xfUVVw0bJh62R2pCHQ3UizIg0FTI8oNlQl/aLs+8Qm2KO+5zA==
   dependencies:
-    "@z1/lib-state-box-core" "^0.2.5"
+    "@z1/lib-state-box-core" "^0.2.9"
     redux-logger "^3.0.6"
 
-"@z1/lib-ui-box-tailwind@^0.2.8":
-  version "0.2.8"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-tailwind/-/lib-ui-box-tailwind-0.2.8.tgz#f54dc659ed685cd4190966f1516a2a516a62235d"
-  integrity sha512-wvEDv49tzC6jr0K0mKIpf8LCnNHUYFRk7+npaL5GYn++KcwEJZ8WfsJWTHJub65LJU66Id6Vh6zz2sRwgAbwAA==
+"@z1/lib-ui-box-reverse@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-reverse/-/lib-ui-box-reverse-0.2.9.tgz#7dba01c8d4eb7007b78322ca8b34803737a1c11a"
+  integrity sha512-5wWkWbBsZS4JxqO40exZaXVJs0aBKBd8uYe1woMcWfKjUkFw0hHhfGvmbeGs76AsnKJ/WUPGUeLNrHlh3xi/Vw==
   dependencies:
-    "@z1/preset-task" "^0.2.5"
+    "@z1/preset-task" "^0.2.9"
 
-"@z1/lib-ui-schema@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-schema/-/lib-ui-schema-0.2.5.tgz#25cc4ea39d13fe4efb44def7a1eb9be985e03b86"
-  integrity sha512-ucXwpcd7NS0jBF5+GfQCpQe2FnILYNBXeVmlWjFRhwJ6NxmYqNOs/LO+EYbCqY+Yt73yJVecZWfaXL6EEFiHRw==
+"@z1/lib-ui-box-tailwind@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-tailwind/-/lib-ui-box-tailwind-0.2.9.tgz#a4e788a5ec1cf95a9750baeae53167726f7ad28c"
+  integrity sha512-M8Rf0UldGQV4L4aNiP3M/qi94RrJuAJx6vWuLeJU9cXBb5jpbG37U9/dM2CjyfNz/AbB0UMjoPacr5pNJwWrMw==
   dependencies:
-    "@z1/preset-task" "^0.2.5"
+    "@z1/preset-task" "^0.2.9"
 
-"@z1/preset-dev-neutrino@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@z1/preset-dev-neutrino/-/preset-dev-neutrino-0.2.5.tgz#97b1892d5e8d913cd5b0daaccb78709039785caa"
-  integrity sha512-se22FTvKgEZ6tWUy28efBDaFQvKu7ZrcJoW5wzAae/yGsP/xF88+8MY4EDKjsYyTzD4McN+MxkbsSVqy3XuYfQ==
+"@z1/lib-ui-schema@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-schema/-/lib-ui-schema-0.2.9.tgz#b949087eceaae1d03f06a740da597635347e013f"
+  integrity sha512-B8lRScChr/ZjbQE6kY65X/Tr6ynAoC8eQDq3i9pR/RbEZF4RuAivNXhhbT8JwVnEj/d/VdRap8hE3eiLGsF2/A==
+  dependencies:
+    "@z1/preset-task" "^0.2.9"
+
+"@z1/preset-dev-neutrino@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/preset-dev-neutrino/-/preset-dev-neutrino-0.2.9.tgz#4438d0a5e8ce7e6e408aa05d571a85fdf2053577"
+  integrity sha512-ajkLYvhg9HNqvAfp+wwftfS8tU2Oof0qLKItkiX5QN+wZe8pKzZnM3b8+9Wc7nWRz4SgqaYHqUIa1OuS9ZkDrQ==
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/plugin-proposal-class-properties" "^7.1.0"
@@ -678,10 +685,10 @@
     "@feathersjs/socketio-client" "^1.2.1"
     socket.io-client "^2.2.0"
 
-"@z1/preset-task@^0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@z1/preset-task/-/preset-task-0.2.5.tgz#8f983e3815be90e80c5f10e107e4734065b63950"
-  integrity sha512-Osf3p2umPnu19aZ6QiLaaHN7BlcRmsCsSQeqR9kltpSwO7R1jjA41SgeaD5ZnzHqYSkGZWlikdD3Yu/RaqokyQ==
+"@z1/preset-task@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@z1/preset-task/-/preset-task-0.2.9.tgz#c145ccaed9d9e5089e242942abc49d5cec68e685"
+  integrity sha512-4RCLozhPcoi7+KaBytQDHS3CHoilkrwwkkGxRD1c+zXqRMGvE6OmI6B0i0BBF9NdJKL0faayp5OWMIEU6QDu7w==
   dependencies:
     change-case "^3.0.2"
     common-tags "^1.7.2"

@@ -9,10 +9,11 @@
     "test": "neutrino test"
   },
   "dependencies": {
-    "@z1/lib-api-box-client": "^0.2.5",
-    "@z1/lib-feature-box": "^0.2.5",
-    "@z1/lib-ui-box-tailwind": "^0.2.8",
-    "@z1/lib-ui-schema": "^0.2.5",
+    "@z1/lib-api-box-client": "^0.2.9",
+    "@z1/lib-feature-box": "^0.2.9",
+    "@z1/lib-ui-box-tailwind": "^0.2.9",
+    "@z1/lib-ui-box-reverse": "^0.2.9",
+    "@z1/lib-ui-schema": "^0.2.9",
     "babel-polyfill": "^6.26.0",
     "history": "^4.9.0",
     "react": "^16.8.6",
@@ -22,6 +23,6 @@
     "redux": "^4.0.1"
   },
   "devDependencies": {
-    "@z1/preset-dev-neutrino": "^0.2.5"
+    "@z1/preset-dev-neutrino": "^0.2.9"
   }
 }

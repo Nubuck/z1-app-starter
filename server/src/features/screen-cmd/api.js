@@ -12,7 +12,16 @@ export const screenCmdApi = createApiBox({
         {
           Model: m.screen_cmd,
         },
-        {}
+        {
+          hooks: {
+            before: {
+              create: [h.auth.authenticate('jwt')],
+              update: [h.auth.authenticate('jwt')],
+              patch: [h.auth.authenticate('jwt')],
+              remove: [h.auth.authenticate('jwt')],
+            },
+          },
+        }
       ),
     ]
   },
