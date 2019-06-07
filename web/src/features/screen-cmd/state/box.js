@@ -1,5 +1,6 @@
 import { createStateBox, task, VIEW_STATUS } from '@z1/lib-feature-box'
-
+// schema
+import { uiBoxSchema } from './schema'
 // main
 export const screenCmdState = task((t, a) =>
   createStateBox({
@@ -7,16 +8,18 @@ export const screenCmdState = task((t, a) =>
     initial: {
       status: VIEW_STATUS.INIT,
       cmd: null,
+      form: uiBoxSchema({}),
     },
     mutations(m) {
       return [
         m(['ROUTE_HOME'], (state, action) => {
           return t.merge(state, {
-            status: 'ready',
+            status: VIEW_STATUS.LOADING,
           })
         }),
         m(['INIT'], (state, action) => {
           return t.merge(state, {
+            status: VIEW_STATUS.READY,
             cmd: action.payload,
           })
         }),
