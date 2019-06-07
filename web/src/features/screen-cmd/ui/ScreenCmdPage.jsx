@@ -1,6 +1,6 @@
 import React from 'react'
-import { task, connectState } from '@z1/lib-feature-box'
-
+import { task, connectState, VIEW_STATUS } from '@z1/lib-feature-box'
+import { toCss } from '@z1/lib-ui-box-tailwind'
 // ui
 import SchemaForm from 'react-jsonschema-form'
 
@@ -17,7 +17,24 @@ export const ScreenCmdPage = task(t => ({ mutations }) =>
       <div className={css.page}>
         <h1 className={css.title}>Z1 GANG SCREEN CMD</h1>
         {cmd.status}
-        <SchemaForm schema={cmd.form.schema} uiSchema={cmd.form.uiSchema} />
+        {t.not(t.eq(cmd.status, VIEW_STATUS.READY)) ? null : (
+          <div className={css.editor}>
+            <div className={css.colLeft}>
+              <SchemaForm
+                schema={cmd.form.schema}
+                uiSchema={cmd.form.uiSchema}
+                formData={cmd.current}
+                onChange={props => mutations.formChange(props.formData)}
+              >
+                <div />
+              </SchemaForm>
+            </div>
+            <div className={css.colRight}>
+              <div className={css.row}>{`${JSON.stringify(cmd.data)}`}</div>
+              <div className={css.row}>{toCss(cmd.data)}</div>
+            </div>
+          </div>
+        )}
       </div>
     )
   })

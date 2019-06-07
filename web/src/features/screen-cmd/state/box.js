@@ -1,7 +1,13 @@
 import { createStateBox, task, VIEW_STATUS } from '@z1/lib-feature-box'
 // schema
 import { uiBoxSchema } from './schema'
-// main
+// main=>
+const isResonsiveProp = task(t => (key, val) => {
+  return t.and(
+    t.contains(key, ['sm', 'md', 'lg', 'xl']),
+    t.not(t.eq(val, undefined))
+  )
+})
 export const screenCmdState = task((t, a) =>
   createStateBox({
     name: 'screenCmd',
@@ -9,18 +15,67 @@ export const screenCmdState = task((t, a) =>
       status: VIEW_STATUS.INIT,
       cmd: null,
       form: uiBoxSchema({}),
+      data: {},
+      current: {},
     },
     mutations(m) {
       return [
-        m(['ROUTE_HOME'], (state, action) => {
+        m(['routeHome'], (state, action) => {
           return t.merge(state, {
             status: VIEW_STATUS.LOADING,
           })
         }),
-        m(['INIT'], (state, action) => {
+        m(['init'], (state, action) => {
           return t.merge(state, {
             status: VIEW_STATUS.READY,
             cmd: action.payload,
+          })
+        }),
+        m(['formChange'], (state, action) => {
+          return t.merge(state, {
+            current: action.payload,
+            data: t.fromPairs(
+              t.filter(
+                ([_, nextVal]) => {
+                  return t.and(
+                    t.not(t.eq(nextVal, null)),
+                    t.not(t.eq(nextVal, undefined))
+                  )
+                },
+                t.map(([key, val]) => {
+                  const nextVal = t.gt(
+                    t.findIndex(
+                      ([k, v]) => isResonsiveProp(k, v),
+                      t.toPairs(val)
+                    ),
+                    -1
+                  )
+                    ? [
+                        t.eq(val.all, undefined) ? null : val.all,
+                        t.fromPairs(
+                          t.filter(([_, nextVal]) => {
+                            return t.and(
+                              t.and(
+                                t.not(t.eq(nextVal, undefined)),
+                                t.not(t.eq(nextVal, null))
+                              ),
+                              t.not(t.eq(nextVal, false))
+                            )
+                          }, t.toPairs(t.omit(['all'], val)))
+                        ),
+                      ]
+                    : t.eq(val.all, undefined)
+                    ? null
+                    : val.all
+                  return [key, nextVal]
+                }, t.toPairs(action.payload || {}))
+              )
+            ),
+          })
+        }),
+        m(['formSubmit'], (state, action) => {
+          return t.merge(state, {
+            data: action.payload,
           })
         }),
       ]

@@ -13,4 +13,23 @@ export const css = {
     fontSize: '2xl',
     fontFamily: 'mono',
   }),
+  editor: toCss({
+    display: 'flex',
+    flexDirection: 'row',
+  }),
+  colLeft: toCss({
+    display: 'flex',
+    flexDirection: 'col',
+    width: '2/3',
+  }),
+  colRight: toCss({
+    display: 'flex',
+    flexDirection: 'col',
+    width: '1/3',
+  }),
+  row: toCss({
+    display: 'flex',
+    flexDirection: 'row',
+    padding: { y: 4 },
+  }),
 }
