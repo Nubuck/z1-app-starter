@@ -21,11 +21,14 @@ export const css = {
     display: 'flex',
     flexDirection: 'col',
     width: '2/3',
+    overflowY: 'scroll',
+    maxHeight: 'screen',
   }),
   colRight: toCss({
     display: 'flex',
     flexDirection: 'col',
     width: '1/3',
+
   }),
   row: toCss({
     display: 'flex',

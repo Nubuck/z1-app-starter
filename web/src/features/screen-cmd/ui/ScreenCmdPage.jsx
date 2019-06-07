@@ -15,11 +15,11 @@ export const ScreenCmdPage = task(t => ({ mutations }) =>
   connectState(stateQuery, mutations)(({ cmd, mutations }) => {
     return (
       <div className={css.page}>
-        <h1 className={css.title}>Z1 GANG SCREEN CMD</h1>
-        {cmd.status}
-        {t.not(t.eq(cmd.status, VIEW_STATUS.READY)) ? null : (
-          <div className={css.editor}>
-            <div className={css.colLeft}>
+        <div className={css.editor}>
+          <div className={css.colLeft}>
+            <h1 className={css.title}>Z1 GANG SCREEN CMD</h1>
+            {cmd.status}
+            {t.not(t.eq(cmd.status, VIEW_STATUS.READY)) ? null : (
               <SchemaForm
                 schema={cmd.form.schema}
                 uiSchema={cmd.form.uiSchema}
@@ -28,13 +28,13 @@ export const ScreenCmdPage = task(t => ({ mutations }) =>
               >
                 <div />
               </SchemaForm>
-            </div>
-            <div className={css.colRight}>
-              <div className={css.row}>{`${JSON.stringify(cmd.data)}`}</div>
-              <div className={css.row}>{toCss(cmd.data)}</div>
-            </div>
+            )}
           </div>
-        )}
+          <div className={css.colRight}>
+            <div className={css.row}>{`${JSON.stringify(cmd.data)}`}</div>
+            <div className={css.row}>{toCss(cmd.data)}</div>
+          </div>
+        </div>
       </div>
     )
   })
