@@ -1,27 +1,20 @@
 import React from 'react'
-import { task } from '@z1/lib-feature-box'
-import { toCss } from '@z1/lib-ui-box-tailwind'
+import { task, connectState } from '@z1/lib-feature-box'
+
+// styles
+import { css } from './boxes'
+
+// state
+const stateQuery = ({ screenCmd }) => ({ cmd: screenCmd })
 
 // main
-export const ScreenCmdPage = task(t => (/* options */) => (/* props */) => {
-  return (
-    <div
-      className={toCss({
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'col',
-        padding: 3,
-      })}
-    >
-      <h1
-        className={toCss({
-          color: 'gray-700',
-          fontSize: '2xl',
-          fontFamily: 'mono',
-        })}
-      >
-        Z1 GANG SCREEN CMD
-      </h1>
-    </div>
-  )
-})
+export const ScreenCmdPage = task(t => ({ mutations }) =>
+  connectState(stateQuery, mutations)(({ cmd, mutations }) => {
+    return (
+      <div className={css.page}>
+        <h1 className={css.title}>Z1 GANG SCREEN CMD</h1>
+        {cmd.status}
+      </div>
+    )
+  })
+)

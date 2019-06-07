@@ -7,23 +7,22 @@ const stateQuery = ({ location }) => ({
   location,
 })
 
+// styles
+const css = {
+  screen: toCss({
+    position: 'relative',
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'col',
+    width: 'full',
+    height: 'screen',
+    overflowY: 'scroll',
+  }),
+}
+
 // main
 const App = connectState(stateQuery)(({ routes, location }) => {
-  return (
-    <div
-      className={toCss({
-        position: 'relative',
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'col',
-        width: 'full',
-        height: 'screen',
-        overflowY: 'scroll',
-      })}
-    >
-      {renderRoute(location.type, routes)}
-    </div>
-  )
+  return <div className={css.screen}>{renderRoute(location.type, routes)}</div>
 })
 
 export default App

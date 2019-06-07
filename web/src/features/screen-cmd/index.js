@@ -14,7 +14,7 @@ export default createFeature(({}) => {
     routes: [
       {
         type: [screenCmdState.actions.routeHome],
-        ui: ScreenCmdPage({}),
+        ui: ScreenCmdPage({ mutations: screenCmdState.mutations }),
       },
     ],
   }

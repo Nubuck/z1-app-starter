@@ -15,7 +15,7 @@
     "@z1/preset-dev-neutrino": "^0.2.9"
   },
   "dependencies": {
-    "@z1/kit-account-server-nedb": "^0.2.9",
+    "@z1/kit-account-server-nedb": "^0.2.10",
     "@z1/lib-feature-box-server-nedb": "^0.2.9"
   }
 }
