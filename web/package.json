@@ -11,8 +11,8 @@
   "dependencies": {
     "@z1/lib-api-box-client": "^0.2.9",
     "@z1/lib-feature-box": "^0.2.10",
-    "@z1/lib-ui-box-tailwind": "^0.2.9",
     "@z1/lib-ui-box-reverse": "^0.2.9",
+    "@z1/lib-ui-box-tailwind": "^0.2.9",
     "@z1/lib-ui-schema": "^0.2.9",
     "babel-polyfill": "^6.26.0",
     "history": "^4.9.0",
@@ -20,6 +20,8 @@
     "react-dom": "^16.8.6",
     "react-jsonschema-form": "^1.5.0",
     "react-redux": "^7.0.3",
+    "react-sortable-tree": "^2.6.2",
+    "react-syntax-highlighter": "^10.3.0",
     "redux": "^4.0.1"
   },
   "devDependencies": {
