@@ -1,8 +1,6 @@
 import { task } from '@z1/lib-feature-box'
 import { formSchema } from './formSchema'
-
-import { uiBoxTypes } from './types'
-
+import { uiBoxEnums } from './enums'
 // main
 export const uiBoxSchema = task(t =>
   formSchema((f, T) =>
@@ -21,20 +19,36 @@ export const uiBoxSchema = task(t =>
           },
           [
             f(
-              'dynoProp',
-              { type: T.OBJECT, title: 'Select Prop', childKey: 'oneOf' },
+              'boxProps',
+              { type: T.OBJECT, title: 'Select Prop', childKey: 'anyOf' },
               [
                 f('container', { title: 'container', type: T.OBJECT }, [
                   f('all', { type: T.BOOL }),
                   f('sm', { type: T.BOOL }),
+                  f('md', { type: T.BOOL }),
+                  f('lg', { type: T.BOOL }),
+                  f('xl', { type: T.BOOL }),
+                ]),
+                f('display', { title: 'display', type: T.OBJECT }, [
+                  f('all', { type: T.STRING, enum: uiBoxEnums.display }),
+                  f('sm', { type: T.STRING, enum: uiBoxEnums.display }),
+                  f('md', { type: T.STRING, enum: uiBoxEnums.display }),
+                  f('lg', { type: T.STRING, enum: uiBoxEnums.display }),
+                  f('xl', { type: T.STRING, enum: uiBoxEnums.display }),
                 ]),
                 f('clearfix', { title: 'clearfix', type: T.OBJECT }, [
                   f('all', { type: T.BOOL }),
                   f('sm', { type: T.BOOL }),
+                  f('md', { type: T.BOOL }),
+                  f('lg', { type: T.BOOL }),
+                  f('xl', { type: T.BOOL }),
                 ]),
                 f('float', { title: 'float', type: T.OBJECT }, [
-                  f('all', { type: T.BOOL }),
-                  f('sm', { type: T.BOOL }),
+                  f('all', { type: T.STRING, enum: uiBoxEnums.float }),
+                  f('sm', { type: T.STRING, enum: uiBoxEnums.float }),
+                  f('md', { type: T.STRING, enum: uiBoxEnums.float }),
+                  f('lg', { type: T.STRING, enum: uiBoxEnums.float }),
+                  f('xl', { type: T.STRING, enum: uiBoxEnums.float }),
                 ]),
               ]
             ),

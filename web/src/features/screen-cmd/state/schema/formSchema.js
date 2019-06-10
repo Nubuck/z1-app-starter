@@ -211,7 +211,7 @@ const jsonField = task(t => (name, field, children) => {
     : t.merge(nextFieldSchema, {
         type: nextFieldType,
         [propChildKey]: t.map(
-          ([key, val]) => val,
+          ([_, val]) => val,
           t.toPairs(correctSchemaFields(nextChildren))
         ),
       })
