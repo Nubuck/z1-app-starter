@@ -2,9 +2,6 @@ import { task } from '@z1/lib-feature-box'
 
 // common
 const colorNames = [
-  'transparent',
-  'black',
-  'white',
   'gray',
   'red',
   'orange',
@@ -19,9 +16,10 @@ const colorNames = [
 ]
 const colorRange = [100, 200, 300, 400, 500, 600, 700, 800, 900]
 const colors = task(t =>
-  t.flatten(
-    t.map(color => t.map(range => `${color}-${range}`, colorRange), colorNames)
-  )
+  t.flatten([
+    ['transparent', 'black', 'white'],
+    t.map(color => t.map(range => `${color}-${range}`, colorRange), colorNames),
+  ])
 )
 // layout
 const overflows = ['auto', 'hidden', 'visible', 'scroll']
@@ -173,6 +171,7 @@ const flex = [1, 'auto', 'initial', 'none']
 const flexDirection = ['row', 'row-reverse', 'col', 'col-reverse']
 const flexWrap = ['wrap', 'reverse']
 const alignItems = ['stretch', 'start', 'center', 'end', 'baseline']
+const alignContent = ['start', 'center', 'end', 'between','around']
 const alignSelf = ['auto', 'start', 'center', 'end', 'stretch']
 const flexOrder = [
   'first',
@@ -268,7 +267,22 @@ const outline = ['none']
 const pointerEvents = ['none', 'auto']
 const resize = ['x', 'y']
 const userSelect = ['none', 'text', 'all', 'auto']
-
+const opacity = [
+  0,
+  25,
+  50,
+  75,
+  100
+]
+const shadow = [
+  'sm',
+  'md',
+  'lg',
+  'xl',
+  '2xl',
+  'outline',
+  'none'
+]
 // main
 export const uiBoxEnums = {
   colors,
@@ -308,6 +322,7 @@ export const uiBoxEnums = {
   flexDirection,
   flexWrap,
   alignItems,
+  alignContent,
   alignSelf,
   flexOrder,
   tableCollapse,
@@ -324,4 +339,6 @@ export const uiBoxEnums = {
   pointerEvents,
   resize,
   userSelect,
+  opacity,
+  shadow
 }
