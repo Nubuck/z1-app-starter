@@ -7,9 +7,10 @@ import SchemaForm from 'react-jsonschema-form'
 function ArrayFieldTemplate(props) {
   return (
     <div>
-      {props.items && props.items.map((element, index) =>
-        React.cloneElement(element.children, { key: `element_${index}` })
-      )}
+      {props.items &&
+        props.items.map((element, index) =>
+          React.cloneElement(element.children, { key: `element_${index}` })
+        )}
       {props.canAdd && (
         <button
           type="button"
@@ -17,7 +18,9 @@ function ArrayFieldTemplate(props) {
             'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
           }
           onClick={props.onAddClick}
-        >ADD</button>
+        >
+          ADD
+        </button>
       )}
     </div>
   )
@@ -39,11 +42,15 @@ export const ScreenCmdPage = task(t => ({ mutationCreators }) =>
             {cmd.status}
             {t.not(t.eq(cmd.status, VIEW_STATUS.READY)) ? null : (
               <SchemaForm
+                className={'baz-container'}
                 ArrayFieldTemplate={ArrayFieldTemplate}
                 schema={cmd.form.schema}
                 uiSchema={cmd.form.uiSchema}
                 formData={cmd.current}
-                onChange={props => mutations.formChange(props.formData)}
+                onChange={props => {
+                  // console.log('ON CHANGE', props)
+                  mutations.formChange(props.formData)
+                }}
               >
                 <div />
               </SchemaForm>

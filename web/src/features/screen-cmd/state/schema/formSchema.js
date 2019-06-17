@@ -215,20 +215,41 @@ const jsonField = task(t => (name, field, children) => {
           t.toPairs(correctSchemaFields(nextChildren))
         ),
       })
+  // children ui schema
+  const nextChildUiSchema = t.gt(t.length(children), 0)
+    ? uiSchemaFromFieldList(children)
+    : {}
   // ui schema mutation
-  const nextUiSchema =
-    !t.isEmpty(uiSchema) && !t.isNil(uiSchema)
-      ? t.gt(t.length(children), 0)
-        ? t.merge(
-            {
-              [name]: uiSchema,
-            },
-            uiSchemaFromFieldList(children)
-          )
-        : { [name]: uiSchema }
-      : t.gt(t.length(children), 0)
-      ? uiSchemaFromFieldList(children)
-      : {}
+  const nextUiSchema = t.and(
+    t.not(t.isEmpty(uiSchema)),
+    t.not(t.isNil(uiSchema))
+  )
+    ? t.eq(nextSchema.type, 'object')
+      ? {
+          [name]: t.merge(uiSchema, nextChildUiSchema),
+        }
+      : t.eq(nextSchema.type, 'array')
+      ? {
+          [name]: t.merge(uiSchema, { items: nextChildUiSchema }),
+        }
+      : t.merge(
+          {
+            [name]: uiSchema,
+          },
+          nextChildUiSchema
+        )
+    : t.gt(t.length(t.keys(nextChildUiSchema)), 0)
+    ? t.eq(nextSchema.type, 'object')
+      ? {
+          [name]: nextChildUiSchema,
+        }
+      : t.eq(nextSchema.type, 'array')
+      ? {
+          [name]: { items: nextChildUiSchema },
+        }
+      : nextChildUiSchema
+    : {}
+  // console.log('NEXT', nextFieldSchema, nextUiSchema)
   // yield
   return {
     name,
@@ -249,8 +270,16 @@ export const formSchema = task(t => factory => {
     ? t.path(schemaKeys, schema)
     : schema
   const uiSchema = uiSchemaFromFieldList(fieldList)
+  const uiSchemaKeys = t.keys(uiSchema)
+  const nextUiSchema = t.and(
+    t.equals(t.length(uiSchemaKeys), 1),
+    t.eq(t.head(schemaKeys), t.head(uiSchemaKeys))
+  )
+    ? t.path(uiSchemaKeys, uiSchema)
+    : uiSchema
+
   return {
     schema: nextSchema,
-    uiSchema,
+    uiSchema: nextUiSchema,
   }
 })
