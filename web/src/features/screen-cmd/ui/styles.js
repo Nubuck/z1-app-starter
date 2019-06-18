@@ -17,6 +17,7 @@ export const css = {
   editor: toCss({
     display: 'flex',
     flexDirection: 'row',
+    fontFamily: 'mono',
   }),
   colLeft: toCss({
     display: 'flex',

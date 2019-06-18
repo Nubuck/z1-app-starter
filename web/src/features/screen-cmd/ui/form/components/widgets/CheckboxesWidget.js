@@ -27,6 +27,7 @@ function CheckboxesWidget(props) {
         const checkbox = (
           <span>
             <input
+              className="form-checkbox h-6 w-6 outline-none focus:shadow-none"
               type="checkbox"
               id={`${id}_${index}`}
               checked={checked}
@@ -41,7 +42,9 @@ function CheckboxesWidget(props) {
                 }
               }}
             />
-            <span>{option.label}</span>
+            <span className="ml-3 font-medium text-gray-700">
+              {options.label}
+            </span>
           </span>
         )
         return inline ? (
