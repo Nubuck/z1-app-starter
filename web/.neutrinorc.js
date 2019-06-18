@@ -1,3 +1,21 @@
+const OmitJsForCssPlugin = require('webpack-omit-js-for-css-plugin')
+
+function styleLoaders() {
+  return [
+    {
+      loader: 'postcss-loader',
+      options: {
+        plugins() {
+          return [
+            require('tailwindcss')('./tailwind.config.js'),
+            require('autoprefixer'),
+          ]
+        },
+      },
+    },
+  ]
+}
+
 const use = [
   [
     '@z1/preset-dev-neutrino/lib/react',
@@ -5,10 +23,6 @@ const use = [
       publicPath: '/',
       html: {
         title: 'Z1 App Starter',
-        links: ['https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css'],
-        // this doesn't work - neutrino issue
-        appMountHtmlSnippet:
-          '<div id="root" class="flex flex-col w-full h-full"></div>',
       },
       targets: {
         browsers: ['safari >= 6'],
@@ -28,6 +42,25 @@ const use = [
       .add('@z1/lib-api-box-client')
       .add('@z1/lib-feature-box')
       .add('@z1/lib-ui-schema'),
+  [
+    '@z1/preset-dev-neutrino/lib/style-loader',
+    {
+      loaders: styleLoaders(),
+      test: /\.css$/,
+      extractId: 'extract',
+      extract: {
+        plugin: {
+          filename: '[name].css',
+          ignoreOrder: false,
+          allChunks: true,
+        },
+        loader: {
+          fallback: 'style-loader',
+          use: styleLoaders(),
+        },
+      },
+    },
+  ],
 ]
 
 if (process.env.NODE_ENV !== 'development') {
@@ -47,6 +80,20 @@ module.exports = {
   options: {
     output: 'lib',
     root: __dirname,
+  },
+  env: {
+    NODE_ENV: {
+      production: {
+        use: [
+          neutrino =>
+            neutrino.config
+              .plugin('junk')
+              .after('extract')
+              .use(OmitJsForCssPlugin)
+              .end(),
+        ],
+      },
+    },
   },
   use,
 }
