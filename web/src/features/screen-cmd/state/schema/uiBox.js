@@ -819,48 +819,73 @@ export const uiBoxSchema = task(t =>
               'all',
               {
                 type: T.OBJECT,
+              
               },
               [
                 f('top', {
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
+                  ui:{
+                    classNames:'flex flex-col w-3/12'
+                  }
                 }),
                 f('right', {
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
+                  ui:{
+                    classNames:'flex flex-col w-3/12'
+                  }
                 }),
                 f('bottom', {
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
+                  ui:{
+                    classNames:'flex flex-col w-3/12'
+                  }
                 }),
                 f('left', {
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
+                  ui:{
+                    classNames:'flex flex-col w-3/12'
+                  }
                 }),
                 f('topRight', {
                   title: 'Top Right',
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
+                  ui:{
+                    classNames:'flex flex-col w-3/12'
+                  }
                 }),
                 f('topLeft', {
                   title: 'Top Left',
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
+                  ui:{
+                    classNames:'flex flex-col w-3/12'
+                  }
                 }),
                 f('bottomRight', {
                   title: 'Bottom Right',
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
+                  ui:{
+                    classNames:'flex flex-col w-3/12'
+                  }
                 }),
                 f('bottomLeft', {
                   title: 'Bottom Left',
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
+                  ui:{
+                    classNames:'flex flex-col w-3/12'
+                  }
                 }),
               ]
             ),
             f(
-              'alsml',
+              'sm',
               {
                 type: T.OBJECT,
               },
