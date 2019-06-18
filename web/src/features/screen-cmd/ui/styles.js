@@ -12,6 +12,7 @@ export const css = {
     color: 'gray-700',
     fontSize: '2xl',
     fontFamily: 'mono',
+    margin: { bottom: 3 },
   }),
   editor: toCss({
     display: 'flex',
@@ -28,7 +29,6 @@ export const css = {
     display: 'flex',
     flexDirection: 'col',
     width: '1/3',
-
   }),
   row: toCss({
     display: 'flex',

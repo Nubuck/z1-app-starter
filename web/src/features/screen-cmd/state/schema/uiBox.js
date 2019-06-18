@@ -25,7 +25,7 @@ export const uiBoxSchema = task(t =>
             f('all', {
               type: T.BOOL,
               ui: {
-                classNames: 'baz-1',
+                classNames: 's',
               },
             }),
             f('sm', {

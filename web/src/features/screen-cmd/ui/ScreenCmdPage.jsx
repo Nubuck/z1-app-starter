@@ -3,7 +3,7 @@ import { task, connectState, VIEW_STATUS } from '@z1/lib-feature-box'
 import { toCss } from '@z1/lib-ui-box-tailwind'
 
 // ui
-import SchemaForm from 'react-jsonschema-form'
+import SchemaForm from './form'
 function ArrayFieldTemplate(props) {
   return (
     <div>
@@ -39,7 +39,7 @@ export const ScreenCmdPage = task(t => ({ mutationCreators }) =>
         <div className={css.editor}>
           <div className={css.colLeft}>
             <h1 className={css.title}>Z1 GANG SCREEN CMD</h1>
-            {cmd.status}
+
             {t.not(t.eq(cmd.status, VIEW_STATUS.READY)) ? null : (
               <SchemaForm
                 className={'baz-container'}
@@ -61,6 +61,7 @@ export const ScreenCmdPage = task(t => ({ mutationCreators }) =>
             {/* <div className={css.row}>{toCss(cmd.data)}</div> */}
           </div>
         </div>
+        {cmd.status}
       </div>
     )
   })
