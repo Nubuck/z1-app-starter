@@ -2,18 +2,17 @@ import React from 'react'
 import { task } from '@z1/lib-feature-box'
 
 // ui
-import SchemaForm from './form'
+import SchemaForm from '../form'
 
 // styles
-import { css } from './styles'
+import { css } from '../styles'
 
 // main
 export const BoxEditorView = task(t => ({ ui: {} }) => ({ cmd, mutations }) => {
   return (
     <div className={css.editor}>
       <div className={css.colLeft}>
-        <h1 className={css.title}>Z1 GANG SCREEN CMD</h1>
-
+        <h2 className={css.title}>UI BOX EDITOR</h2>
         {t.not(t.eq(cmd.status, VIEW_STATUS.READY)) ? null : (
           <SchemaForm
             className={'baz-container'}

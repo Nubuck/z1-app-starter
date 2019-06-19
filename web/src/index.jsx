@@ -1,4 +1,5 @@
 // globals
+import 'react-sortable-tree/style.css'
 import './app.css'
 // packages
 import React from 'react'

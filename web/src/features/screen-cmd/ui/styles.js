@@ -19,6 +19,12 @@ export const css = {
     flexDirection: 'row',
     fontFamily: 'mono',
   }),
+  editorContainer: toCss({
+    display: 'flex',
+    flexDirection: 'col',
+    fontFamily: 'mono',
+    height: '64',
+  }),
   colLeft: toCss({
     display: 'flex',
     flexDirection: 'col',
