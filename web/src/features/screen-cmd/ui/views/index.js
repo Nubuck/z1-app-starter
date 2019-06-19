@@ -6,7 +6,7 @@ import { LayoutEditorView } from './LayoutEditorView'
 import { VIEWS } from '../../ctx'
 
 // main
-export const views = props => ({
+export const makeViews = props => ({
   [VIEWS.HOME]: HomeView(props),
   [VIEWS.BOX_EDITOR]: BoxEditorView(props),
   [VIEWS.VIEW_EDITOR]: LayoutEditorView(props),

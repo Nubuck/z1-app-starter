@@ -9,7 +9,7 @@ import { VIEWS } from '../ctx'
 // tasks
 const createInitViewState = task(t => (views = {}) => {
   return t.mergeAll([
-    { viewKey: null },
+    { viewKey: null, route: null },
     {
       views: t.mergeAll(
         t.map(([_, value]) => {
@@ -36,8 +36,10 @@ const nextViewState = task(t => (state, action) => {
     t.pathOr('home', ['payload', 'view'], action)
   )
   const detailKey = t.pathOr(null, ['payload', 'detail'], action)
+  const route = action.type.replace(`${boxName}/`, '')
   return t.merge(state, {
     viewKey,
+    route,
     views: t.merge(state.views, {
       [viewKey]: t.mergeAll([
         state.views[viewKey],
@@ -55,26 +57,7 @@ export const screenCmdState = task((t, a) =>
     name: boxName,
     initial: createInitViewState(VIEWS),
     mutations(m) {
-      return [
-        m(['routeHome', 'routeView', 'routeViewDetail'], nextViewState),
-        // m(['routeLoadSuccess', 'routeLoadFail'], (state, action) => {
-        //   return t.merge(state, {
-        //     status: VIEW_STATUS.READY,
-        //     cmd: action.payload,
-        //   })
-        // }),
-        // m(['formChange'], (state, action) => {
-        //   return t.merge(state, {
-        //     current: action.payload,
-        //     data: action.payload,
-        //   })
-        // }),
-        // m(['formSubmit'], (state, action) => {
-        //   return t.merge(state, {
-        //     data: action.payload,
-        //   })
-        // }),
-      ]
+      return [m(['routeHome', 'routeView', 'routeViewDetail'], nextViewState)]
     },
     routes(r, actions) {
       return [
@@ -93,12 +76,12 @@ export const screenCmdState = task((t, a) =>
       const matchRoute = t.globrex(`${boxName}/ROUTE_*`).regex
       return [
         g([matchRoute], async ({ getState, action }, allow, reject) => {
-          const state = getState()
-          // const viewKey = 
+          const state = getState()[boxName]
+          const nextRoute = action.type.replace(`${boxName}/`, '')
           console.log(
             'GUARD ROUTE ENTER STATE: ',
             state,
-            matchRoute.test(action.type)
+            t.eq(nextRoute, state.route) ? 'noop' : 'next-route'
           )
           allow(action)
         }),
@@ -111,15 +94,6 @@ export const screenCmdState = task((t, a) =>
           async ({ getState, api }, dispatch, done) => {
             const state = getState()
             console.log('FX STATE: ', state)
-            // const [screenCmdErr, screenCmdResult] = await a.of(
-            //   api.service('screen-cmd').find()
-            // )
-            // if (screenCmdErr) {
-            //   console.log('FX STATE ERR', screenCmdErr)
-            //   dispatch(box.mutations.routeLoadFail(null))
-            // } else {
-            //   dispatch(box.mutations.routeLoadSuccess(screenCmdResult.data))
-            // }
             done()
           }
         ),

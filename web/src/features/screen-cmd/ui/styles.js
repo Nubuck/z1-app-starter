@@ -19,7 +19,7 @@ export const css = {
     flexDirection: 'row',
     fontFamily: 'mono',
   }),
-  editorContainer: toCss({
+  container: toCss({
     display: 'flex',
     flexDirection: 'col',
     fontFamily: 'mono',

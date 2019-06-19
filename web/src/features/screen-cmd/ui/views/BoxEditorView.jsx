@@ -1,5 +1,5 @@
 import React from 'react'
-import { task } from '@z1/lib-feature-box'
+import { task, VIEW_STATUS, Link } from '@z1/lib-feature-box'
 
 // ui
 import SchemaForm from '../form'
@@ -12,6 +12,9 @@ export const BoxEditorView = task(t => ({ ui: {} }) => ({ cmd, mutations }) => {
   return (
     <div className={css.editor}>
       <div className={css.colLeft}>
+        <p>
+          <Link to="/">HOME</Link>
+        </p>
         <h2 className={css.title}>UI BOX EDITOR</h2>
         {t.not(t.eq(cmd.status, VIEW_STATUS.READY)) ? null : (
           <SchemaForm
@@ -21,7 +24,7 @@ export const BoxEditorView = task(t => ({ ui: {} }) => ({ cmd, mutations }) => {
             formData={cmd.current}
             onChange={props => {
               // console.log('ON CHANGE', props)
-              mutations.formChange(props.formData)
+              // mutations.formChange(props.formData)
             }}
           >
             <div />

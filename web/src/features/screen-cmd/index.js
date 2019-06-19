@@ -13,13 +13,12 @@ export default task(t =>
       action => t.globrex('*/ROUTE_*').regex.test(action),
       t.map(([_, value]) => value, t.toPairs(screenCmdState.actions))
     )
-    console.log('NEXT ROUTES', nextRoutes)
     return {
       name: 'screenCmd',
       state: [screenCmdState],
       routes: [
         {
-          type:nextRoutes ,
+          type: nextRoutes,
           ui: ScreenCmdPage({ mutationCreators: screenCmdState.mutations }),
         },
       ],
