@@ -439,6 +439,32 @@ module.exports = {
       selectIconOffset: defaultTheme.spacing[2],
       selectIconSize: '1.5em',
     },
+    spinner: theme => ({
+      default: {
+        color: '#dae1e7', // color you want to make the spinner
+        size: '1em', // size of the spinner (used for both width and height)
+        border: '2px', // border-width of the spinner (shouldn't be bigger than half the spinner's size)
+        speed: '500ms', // the speed at which the spinner should rotate
+      },
+      md: {
+        color: '#dae1e7',
+        size: '2em',
+        border: '2px',
+        speed: '500ms',
+      },
+      lg: {
+        color: '#dae1e7',
+        size: '3em',
+        border: '2px',
+        speed: '500ms',
+      },
+      xl: {
+        color: '#dae1e7',
+        size: '4em',
+        border: '4px',
+        speed: '500ms',
+      },
+    }),
   },
   variants: {
     alignContent: ['responsive'],
@@ -505,7 +531,14 @@ module.exports = {
     width: ['responsive'],
     wordBreak: ['responsive'],
     zIndex: ['responsive'],
+    variants: {
+      // all the following default to ['responsive']
+      spinner: ['responsive'],
+    },
   },
   corePlugins: {},
-  plugins: [require('@tailwindcss/custom-forms')],
+  plugins: [
+    require('@tailwindcss/custom-forms'),
+    require('tailwindcss-spinner')(),
+  ],
 }

@@ -11,6 +11,7 @@ export const uiBoxSchema = task(t =>
         title: 'UI Box Editor',
       },
       [
+        // TODO
         // layout
         f(
           'container',
@@ -19,10 +20,11 @@ export const uiBoxSchema = task(t =>
             title: 'Container',
             ui: {
               classNames: 'baz-0',
+              expandable: true,
             },
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
               ui: {
                 classNames: 's',
@@ -64,7 +66,7 @@ export const uiBoxSchema = task(t =>
             },
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.display,
               ui: {
@@ -111,7 +113,7 @@ export const uiBoxSchema = task(t =>
             },
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
               ui: {
                 classNames: 'baz-1',
@@ -150,7 +152,7 @@ export const uiBoxSchema = task(t =>
             title: 'Float',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.float,
             }),
@@ -179,7 +181,7 @@ export const uiBoxSchema = task(t =>
             title: 'Object Fit',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.objectFit,
             }),
@@ -208,7 +210,7 @@ export const uiBoxSchema = task(t =>
             title: 'Object Position',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.objectPosition,
             }),
@@ -237,7 +239,7 @@ export const uiBoxSchema = task(t =>
             title: 'Overflow',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.overflows,
             }),
@@ -266,7 +268,7 @@ export const uiBoxSchema = task(t =>
             title: 'Overflow Horizontal',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.overflows,
             }),
@@ -295,7 +297,7 @@ export const uiBoxSchema = task(t =>
             title: 'Overflow Vertical',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.overflows,
             }),
@@ -324,7 +326,7 @@ export const uiBoxSchema = task(t =>
             title: 'Scrolling',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.scrolling,
             }),
@@ -353,7 +355,7 @@ export const uiBoxSchema = task(t =>
             title: 'Position',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.position,
             }),
@@ -382,7 +384,7 @@ export const uiBoxSchema = task(t =>
             title: 'Inset',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
             }),
             f('sm', {
@@ -406,7 +408,7 @@ export const uiBoxSchema = task(t =>
             title: 'Inset Horizontal',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
             }),
             f('sm', {
@@ -430,7 +432,7 @@ export const uiBoxSchema = task(t =>
             title: 'Inset Vertical',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
             }),
             f('sm', {
@@ -454,7 +456,7 @@ export const uiBoxSchema = task(t =>
             title: 'Visible',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
             }),
             f('sm', {
@@ -478,7 +480,7 @@ export const uiBoxSchema = task(t =>
             title: 'Z-index',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.zIndex,
             }),
@@ -508,7 +510,7 @@ export const uiBoxSchema = task(t =>
           },
           [
             f(
-              'all',
+              'xs',
               {
                 type: T.OBJECT,
                 ui: {
@@ -620,7 +622,7 @@ export const uiBoxSchema = task(t =>
             title: 'Border Color',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.colors,
             }),
@@ -657,7 +659,7 @@ export const uiBoxSchema = task(t =>
             title: 'Border Style',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.borderStyle,
             }),
@@ -687,7 +689,7 @@ export const uiBoxSchema = task(t =>
           },
           [
             f(
-              'all',
+              'xs',
               {
                 type: T.OBJECT,
               },
@@ -816,71 +818,70 @@ export const uiBoxSchema = task(t =>
           },
           [
             f(
-              'all',
+              'xs',
               {
                 type: T.OBJECT,
-              
               },
               [
                 f('top', {
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
-                  ui:{
-                    classNames:'flex flex-col w-3/12'
-                  }
+                  ui: {
+                    classNames: 'flex flex-col w-3/12',
+                  },
                 }),
                 f('right', {
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
-                  ui:{
-                    classNames:'flex flex-col w-3/12'
-                  }
+                  ui: {
+                    classNames: 'flex flex-col w-3/12',
+                  },
                 }),
                 f('bottom', {
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
-                  ui:{
-                    classNames:'flex flex-col w-3/12'
-                  }
+                  ui: {
+                    classNames: 'flex flex-col w-3/12',
+                  },
                 }),
                 f('left', {
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
-                  ui:{
-                    classNames:'flex flex-col w-3/12'
-                  }
+                  ui: {
+                    classNames: 'flex flex-col w-3/12',
+                  },
                 }),
                 f('topRight', {
                   title: 'Top Right',
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
-                  ui:{
-                    classNames:'flex flex-col w-3/12'
-                  }
+                  ui: {
+                    classNames: 'flex flex-col w-3/12',
+                  },
                 }),
                 f('topLeft', {
                   title: 'Top Left',
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
-                  ui:{
-                    classNames:'flex flex-col w-3/12'
-                  }
+                  ui: {
+                    classNames: 'flex flex-col w-3/12',
+                  },
                 }),
                 f('bottomRight', {
                   title: 'Bottom Right',
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
-                  ui:{
-                    classNames:'flex flex-col w-3/12'
-                  }
+                  ui: {
+                    classNames: 'flex flex-col w-3/12',
+                  },
                 }),
                 f('bottomLeft', {
                   title: 'Bottom Left',
                   type: T.STRING,
                   enum: uiBoxEnums.borderRadius,
-                  ui:{
-                    classNames:'flex flex-col w-3/12'
-                  }
+                  ui: {
+                    classNames: 'flex flex-col w-3/12',
+                  },
                 }),
               ]
             ),
@@ -1070,7 +1071,7 @@ export const uiBoxSchema = task(t =>
             title: 'Width',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.sizes,
             }),
@@ -1099,7 +1100,7 @@ export const uiBoxSchema = task(t =>
             title: 'Max Width',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.maxWidth,
             }),
@@ -1128,7 +1129,7 @@ export const uiBoxSchema = task(t =>
             title: 'Height',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.sizes,
             }),
@@ -1157,7 +1158,7 @@ export const uiBoxSchema = task(t =>
             title: 'Max Height',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.maxHeight,
             }),
@@ -1187,7 +1188,7 @@ export const uiBoxSchema = task(t =>
             title: 'Color',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.colors,
             }),
@@ -1224,7 +1225,7 @@ export const uiBoxSchema = task(t =>
             title: 'Font Family',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.fontFamily,
             }),
@@ -1253,7 +1254,7 @@ export const uiBoxSchema = task(t =>
             title: 'Font Smoothing',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.fontSmoothing,
             }),
@@ -1282,7 +1283,7 @@ export const uiBoxSchema = task(t =>
             title: 'Font Style',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.fontStyle,
             }),
@@ -1311,7 +1312,7 @@ export const uiBoxSchema = task(t =>
             title: 'Font Weight',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.fontWeight,
             }),
@@ -1348,7 +1349,7 @@ export const uiBoxSchema = task(t =>
             title: 'Letter Spacing',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.letterSpacing,
             }),
@@ -1377,7 +1378,7 @@ export const uiBoxSchema = task(t =>
             title: 'Line Height',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.lineHeight,
             }),
@@ -1406,7 +1407,7 @@ export const uiBoxSchema = task(t =>
             title: 'List Type',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.listType,
             }),
@@ -1435,7 +1436,7 @@ export const uiBoxSchema = task(t =>
             title: 'List Position',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.listPosition,
             }),
@@ -1464,7 +1465,7 @@ export const uiBoxSchema = task(t =>
             title: 'Text Align Horizontal',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.textAlignX,
             }),
@@ -1493,7 +1494,7 @@ export const uiBoxSchema = task(t =>
             title: 'Text Align Vertical',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.textAlignY,
             }),
@@ -1522,7 +1523,7 @@ export const uiBoxSchema = task(t =>
             title: 'Text Decoration',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.textDecoration,
             }),
@@ -1551,7 +1552,7 @@ export const uiBoxSchema = task(t =>
             title: 'Text Transform',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.textTransform,
             }),
@@ -1580,7 +1581,7 @@ export const uiBoxSchema = task(t =>
             title: 'Whitespace',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.whitespace,
             }),
@@ -1609,7 +1610,7 @@ export const uiBoxSchema = task(t =>
             title: 'Word Break',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.wordBreak,
             }),
@@ -1639,7 +1640,7 @@ export const uiBoxSchema = task(t =>
             title: 'Flex',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.flex,
             }),
@@ -1668,7 +1669,7 @@ export const uiBoxSchema = task(t =>
             title: 'Flex Direction',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.flexDirection,
             }),
@@ -1697,7 +1698,7 @@ export const uiBoxSchema = task(t =>
             title: 'Flex Wrap',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.flexWrap,
             }),
@@ -1726,7 +1727,7 @@ export const uiBoxSchema = task(t =>
             title: 'Align Items',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.alignItems,
             }),
@@ -1755,7 +1756,7 @@ export const uiBoxSchema = task(t =>
             title: 'Align Content',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.alignContent,
             }),
@@ -1784,7 +1785,7 @@ export const uiBoxSchema = task(t =>
             title: 'Align Self',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.alignSelf,
             }),
@@ -1813,7 +1814,7 @@ export const uiBoxSchema = task(t =>
             title: 'Justify Content',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.alignContent,
             }),
@@ -1842,7 +1843,7 @@ export const uiBoxSchema = task(t =>
             title: 'Flex Grow',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
             }),
             f('sm', {
@@ -1866,7 +1867,7 @@ export const uiBoxSchema = task(t =>
             title: 'Flex Shrink',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
             }),
             f('sm', {
@@ -1890,7 +1891,7 @@ export const uiBoxSchema = task(t =>
             title: 'Flex Order',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.flexOrder,
             }),
@@ -1920,7 +1921,7 @@ export const uiBoxSchema = task(t =>
             title: 'Table Collapse',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.tableCollapse,
             }),
@@ -1949,7 +1950,7 @@ export const uiBoxSchema = task(t =>
             title: 'Table Layout',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.tableLayout,
             }),
@@ -1979,7 +1980,7 @@ export const uiBoxSchema = task(t =>
             title: 'Background Attachmemnt',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.bgAttachment,
             }),
@@ -2008,7 +2009,7 @@ export const uiBoxSchema = task(t =>
             title: 'Background Color',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.colors,
             }),
@@ -2045,7 +2046,7 @@ export const uiBoxSchema = task(t =>
             title: 'Background Position',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.bgPosition,
             }),
@@ -2074,7 +2075,7 @@ export const uiBoxSchema = task(t =>
             title: 'Background Repeat',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.bgRepeat,
             }),
@@ -2103,7 +2104,7 @@ export const uiBoxSchema = task(t =>
             title: 'Background Size',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.bgSize,
             }),
@@ -2134,7 +2135,7 @@ export const uiBoxSchema = task(t =>
           },
           [
             f(
-              'all',
+              'xs',
               {
                 type: T.OBJECT,
               },
@@ -2313,7 +2314,7 @@ export const uiBoxSchema = task(t =>
           },
           [
             f(
-              'all',
+              'xs',
               {
                 type: T.OBJECT,
               },
@@ -2492,7 +2493,7 @@ export const uiBoxSchema = task(t =>
             title: 'Appearance',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.appearance,
             }),
@@ -2521,7 +2522,7 @@ export const uiBoxSchema = task(t =>
             title: 'Cursor',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.cursor,
             }),
@@ -2550,7 +2551,7 @@ export const uiBoxSchema = task(t =>
             title: 'Outline',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.outline,
             }),
@@ -2583,7 +2584,7 @@ export const uiBoxSchema = task(t =>
             title: 'Pointer Events',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.pointerEvents,
             }),
@@ -2612,7 +2613,7 @@ export const uiBoxSchema = task(t =>
             title: 'Resize',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.resize,
             }),
@@ -2641,7 +2642,7 @@ export const uiBoxSchema = task(t =>
             title: 'User Select',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.userSelect,
             }),
@@ -2670,7 +2671,7 @@ export const uiBoxSchema = task(t =>
             title: 'Shadow',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.shadow,
             }),
@@ -2707,7 +2708,7 @@ export const uiBoxSchema = task(t =>
             title: 'Opacity',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.STRING,
               enum: uiBoxEnums.opacity,
             }),
@@ -2736,7 +2737,7 @@ export const uiBoxSchema = task(t =>
             title: 'Fill',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
             }),
             f('sm', {
@@ -2760,7 +2761,7 @@ export const uiBoxSchema = task(t =>
             title: 'Stroke',
           },
           [
-            f('all', {
+            f('xs', {
               type: T.BOOL,
             }),
             f('sm', {

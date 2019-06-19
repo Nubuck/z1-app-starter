@@ -22,18 +22,24 @@ export const css = {
   colLeft: toCss({
     display: 'flex',
     flexDirection: 'col',
-    width: '2/3',
+    width: '7/12',
     overflowY: 'scroll',
     maxHeight: 'screen',
   }),
   colRight: toCss({
     display: 'flex',
     flexDirection: 'col',
-    width: '1/3',
+    width: '5/12',
   }),
   row: toCss({
     display: 'flex',
     flexDirection: 'row',
     padding: { y: 4 },
+  }),
+  col: toCss({
+    display: 'flex',
+    flexDirection: 'col',
+    padding: { x: 3 },
+    flexWrap: true,
   }),
 }
