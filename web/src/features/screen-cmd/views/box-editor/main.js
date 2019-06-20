@@ -18,8 +18,8 @@ export const boxEditor = task((t, a) =>
       async load({ state, api, detailKey, viewData, formData, status, type }) {
         console.log('LOAD BOX EDITOR DATA', viewData, formData, status, type)
         return {
-          status: null,
-          data: null,
+          status,
+          data: viewData,
           error: null,
         }
       },
@@ -49,8 +49,8 @@ export const boxEditor = task((t, a) =>
       async transmit({ state, api, viewData, formData, status, type }) {
         console.log('LOAD BOX EDITOR FORM', viewData, formData, status, type)
         return {
-          status: null,
-          data: null,
+          status,
+          data: formData,
           error: null,
         }
       },

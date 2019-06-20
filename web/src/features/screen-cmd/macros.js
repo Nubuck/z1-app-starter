@@ -89,37 +89,36 @@ const nextRouteState = task(t => (boxName, macroProps) => (state, action) => {
   })
 })
 
-const nextViewState = task(t => macroProps => (state, action) => {
+const nextViewState = task(t => (boxName, macroProps) => (state, action) => {
   const data = t.pathOr(null, [state.viewKey, 'data'], macroProps)
   const form = t.pathOr(null, [state.viewKey, 'form'], macroProps)
-  const formData = t.pathOr({}, [state.viewKey, 'form', 'data'], state)
+  const viewState = t.pathOr({}, ['views', state.viewKey], state)
+  const formData = t.pathOr({}, ['form', 'data'], viewState)
+  const type = t.caseTo.paramCase(action.type.replace(`${boxName}/`, ''))
   const nextViewState = t.isType(data, 'Function')
     ? t.merge(
         t.path(['views', state.viewKey], state),
         data({
-          type: 'data-load-complete',
-          viewData: action.payload.data,
+          type,
+          viewData: action.payload.data || viewState.data,
           formData,
-          status: action.payload.status,
-          error: action.payload.error,
+          status: action.payload.status || viewState.status,
+          error: action.payload.error || viewState.error,
         })
       )
     : t.merge(t.path(['views', state.viewKey], state), {
         status: action.payload.status || VIEW_STATUS.READY,
-        data:
-          action.payload.data ||
-          t.path(['views', state.viewKey, 'data'], state),
-        error: action.payload.error || null,
+        data: action.payload.data || viewState.data,
+        error: action.payload.error || viewState.error,
       })
   const nextForm = t.isType(form, 'Function')
     ? form({
-        type: 'data-load-complete',
+        type,
         formData,
         viewData: nextViewState.data,
         status: nextViewState.status,
       })
     : t.path(['views', state.viewKey, 'form'], state)
-
   return t.merge(state, {
     views: t.merge(state.views, {
       [state.viewKey]: t.merge(nextViewState, { form: nextForm }),
@@ -133,54 +132,44 @@ const nextFormState = task(t => (boxName, macroProps) => (state, action) => {
   if (t.isNil(form)) {
     return state
   }
-  const formState = t.pathOr({}, [state.viewKey, 'form'], state)
-  const viewData = t.pathOr({}, [state.viewKey, 'data'], state)
+  const currentView = t.pathOr({}, ['views', state.viewKey], state)
   const type = t.caseTo.paramCase(action.type.replace(`${boxName}/`, ''))
-  const nextStatus = t.eq(type, 'form-changed')
-    ? state.status
-    : t.eq(type, 'form-transmit')
-    ? VIEW_STATUS.LOADING
-    : t.eq(type, 'form-transmit-complete')
-    ? action.payload.status
-    : state.status
-  const nextViewData = t.eq(type, 'form-changed')
-    ? viewData
-    : t.eq(type, 'form-transmit')
-    ? viewData
-    : t.eq(type, 'form-transmit-complete')
-    ? t.isType(data, 'Function')
+  const matchType = t.getMatch(type)
+  const nextStatus = matchType({
+    'form-change': currentView.status,
+    'form-transmit': VIEW_STATUS.LOADING,
+    'form-transmit-complete': action.payload.status || currentView.status,
+  })
+  const viewState = t.merge(currentView, { status: nextStatus })
+  const formState = t.pathOr({}, ['form'], viewState)
+  const nextViewState = matchType({
+    'form-change': viewState,
+    'form-transmit': viewState,
+    'form-transmit-complete': t.isType(data, 'Function')
       ? data({
           type,
-          status: nextStatus,
-          viewData,
+          status: viewState.status,
+          viewData: viewState.data,
           formData: action.payload.data || formState.data,
-          error: action.payload.error || null,
+          error: action.payload.error || viewState.error,
         })
-      : state.viewData
-    : viewData
+      : viewState,
+  })
   const nextFormState = form({
     type,
-    status: state.status,
-    viewData: nextViewData,
+    status: nextViewState.status,
+    viewData: nextViewState.data,
     formData: formState.data,
   })
   return t.merge(state, {
-    status: t.eq(type, 'form-changed')
-      ? state.status
-      : t.eq(type, 'form-transmit')
-      ? VIEW_STATUS.LOADING
-      : t.eq(type, 'form-transmit-complete')
-      ? action.payload.status
-      : state.status,
-    error: t.eq(type, 'form-changed')
-      ? state.error
-      : t.eq(type, 'form-transmit')
-      ? null
-      : t.eq(type, 'form-transmit-complete')
-      ? action.payload.error || null
-      : state.error,
-    views: t.merge(state[state.viewKey], {
-      form: t.merge(formState, nextFormState),
+    views: t.merge(state.views, {
+      [state.viewKey]: t.mergeAll([
+        viewState,
+        nextViewState,
+        {
+          form: t.merge(formState, nextFormState),
+        },
+      ]),
     }),
   })
 })
@@ -210,10 +199,13 @@ export const macroRouteViewState = task((t, a) => (boxName, props = {}) => {
           ['routeHome', 'routeView', 'routeViewDetail'],
           nextRouteState(boxName, macroProps)
         ),
-        m(['dataLoad', 'dataLoadComplete'], nextViewState(macroProps)),
+        m(
+          ['dataChange', 'dataLoad', 'dataLoadComplete'],
+          nextViewState(boxName, macroProps)
+        ),
         m(
           ['formChange', 'formTransmit', 'formTransmitComplete'],
-          nextFormState(boxName)
+          nextFormState(boxName, macroProps)
         ),
       ]
     },
@@ -257,6 +249,11 @@ export const macroRouteViewState = task((t, a) => (boxName, props = {}) => {
             const state = t.pathOr({}, [boxName], getState())
             const viewLoad = t.pathOr(null, [state.viewKey, 'load'], macroProps)
             if (t.isNil(viewLoad)) {
+              dispatch(
+                box.mutations.dataLoadComplete({
+                  status: VIEW_STATUS.READY,
+                })
+              )
               done()
             } else {
               const viewData = t.pathOr(
@@ -269,13 +266,8 @@ export const macroRouteViewState = task((t, a) => (boxName, props = {}) => {
                 ['views', state.viewKey, 'form', 'data'],
                 state
               )
-              const status = t.pathOr(
-                {},
-                ['views', state.viewKey, 'status'],
-                state
-              )
               const detailKey = t.pathOr(
-                {},
+                null,
                 ['views', state.viewKey, 'detailKey'],
                 state
               )
@@ -288,7 +280,7 @@ export const macroRouteViewState = task((t, a) => (boxName, props = {}) => {
                   api,
                   detailKey,
                   type,
-                  status,
+                  status: VIEW_STATUS.READY,
                   viewData,
                   formData,
                 })
@@ -305,7 +297,7 @@ export const macroRouteViewState = task((t, a) => (boxName, props = {}) => {
                 dispatch(
                   box.mutations.dataLoadComplete({
                     error: loadResult.error || null,
-                    data: loadResult.data || null,
+                    data: loadResult.data,
                     status: loadResult.status || VIEW_STATUS.READY,
                   })
                 )
@@ -336,18 +328,13 @@ export const macroRouteViewState = task((t, a) => (boxName, props = {}) => {
                 ['views', state.viewKey, 'form', 'data'],
                 state
               )
-              const status = t.pathOr(
-                {},
-                ['views', state.viewKey, 'status'],
-                state
-              )
               const [transmitError, transmitResult] = await a.of(
                 transmit({
                   state,
                   api,
                   viewData,
                   formData,
-                  status,
+                  status:VIEW_STATUS.READY,
                   type: 'form-transmit',
                 })
               )
