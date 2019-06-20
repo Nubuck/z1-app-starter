@@ -8,15 +8,14 @@ import { VIEWS } from '../../ctx'
 // ui
 import SchemaForm from '../../form'
 
-// styles
-import { css } from '../../styles'
+// schema
+import { uiBoxSchema } from './schema'
 
 // main
 export const boxEditor = task((t, a) =>
   createView(VIEWS.BOX_EDITOR, {
     state: {
       async load({ state, api, detailKey, viewData, formData, status, type }) {
-        console.log('LOAD BOX EDITOR DATA', viewData, formData, status, type)
         return {
           status,
           data: viewData,
@@ -24,14 +23,6 @@ export const boxEditor = task((t, a) =>
         }
       },
       data({ viewData, formData, status, type, error }) {
-        console.log(
-          'GET BOX EDITOR DATA',
-          viewData,
-          formData,
-          status,
-          type,
-          error
-        )
         return {
           status,
           data: viewData,
@@ -39,15 +30,14 @@ export const boxEditor = task((t, a) =>
         }
       },
       form({ viewData, formData, status, type }) {
-        console.log('GET BOX EDITOR FORM', viewData, formData, status, type)
-        return {
-          schema: {},
-          uiSchema: {},
-          data: {},
-        }
+        return t.merge(
+          {
+            data: formData,
+          },
+          uiBoxSchema
+        )
       },
       async transmit({ state, api, viewData, formData, status, type }) {
-        console.log('LOAD BOX EDITOR FORM', viewData, formData, status, type)
         return {
           status,
           data: formData,
@@ -55,7 +45,7 @@ export const boxEditor = task((t, a) =>
         }
       },
     },
-    ui: props => ({ state, mutations }) => {
+    ui: ({ css }) => ({ state, mutations }) => {
       return (
         <div className={css.editor}>
           <div className={css.colLeft}>
@@ -70,8 +60,7 @@ export const boxEditor = task((t, a) =>
                 uiSchema={state.form.uiSchema}
                 formData={state.form.data}
                 onChange={props => {
-                  // console.log('ON CHANGE', props)
-                  // mutations.formChange(props.formData)
+                  mutations.formChange({ data: props.formData })
                 }}
               >
                 <div />

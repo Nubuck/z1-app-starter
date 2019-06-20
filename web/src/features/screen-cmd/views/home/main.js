@@ -5,15 +5,11 @@ import { createView } from '@z1/lib-feature-macros'
 // ctx
 import { VIEWS } from '../../ctx'
 
-// styles
-import { css } from '../../styles'
-
 // main
 export const home = task(t =>
   createView(VIEWS.HOME, {
     state: {
       async load({ state, api, detailKey, viewData, formData, status, type }) {
-        console.log('LOAD HOME DATA', viewData, formData, status, type)
         return {
           status: null,
           data: null,
@@ -21,7 +17,6 @@ export const home = task(t =>
         }
       },
       data({ viewData, formData, status, type, error }) {
-        console.log('GET HOME DATA', viewData, formData, status, type, error)
         return {
           status,
           data: viewData,
@@ -29,7 +24,7 @@ export const home = task(t =>
         }
       },
     },
-    ui: props => ({ state, mutations }) => {
+    ui: ({ css }) => ({ state, mutations }) => {
       return (
         <div className={css.container}>
           <h2 className={css.title}>HOME</h2>

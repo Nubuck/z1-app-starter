@@ -11,7 +11,7 @@
   "dependencies": {
     "@z1/lib-api-box-client": "^0.2.9",
     "@z1/lib-feature-box": "^0.2.10",
-    "@z1/lib-feature-macros": "^0.2.13",
+    "@z1/lib-feature-macros": "^0.2.14",
     "@z1/lib-ui-box-reverse": "^0.2.13",
     "@z1/lib-ui-box-tailwind": "^0.2.9",
     "@z1/lib-ui-schema": "^0.2.9",
