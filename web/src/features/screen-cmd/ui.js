@@ -1,6 +1,6 @@
 import React from 'react'
 import { task, connectState, VIEW_STATUS } from '@z1/lib-feature-box'
-import { renderView } from './macros'
+import { renderView } from '@z1/lib-feature-macros'
 
 // styles
 import { css } from './styles'

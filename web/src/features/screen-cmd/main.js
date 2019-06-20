@@ -1,5 +1,5 @@
 import { createFeature } from '@z1/lib-feature-box'
-import { routeActions } from './macros'
+import { routeActions } from '@z1/lib-feature-macros'
 
 // state
 import { screenCmdState } from './state'

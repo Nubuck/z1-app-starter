@@ -1,4 +1,4 @@
-import { combineViews } from '../macros'
+import { combineViews } from '@z1/lib-feature-macros'
 
 // views
 import { home } from './home'

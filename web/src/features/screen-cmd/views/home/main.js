@@ -1,6 +1,6 @@
 import React from 'react'
 import { task, Link } from '@z1/lib-feature-box'
-import { createView } from '../../macros'
+import { createView } from '@z1/lib-feature-macros'
 
 // ctx
 import { VIEWS } from '../../ctx'

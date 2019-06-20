@@ -1,5 +1,5 @@
 import { composeStateBox } from '@z1/lib-feature-box'
-import { macroRouteViewState } from './macros'
+import { macroRouteViewState } from '@z1/lib-feature-macros'
 
 // views
 import { views } from './views'
