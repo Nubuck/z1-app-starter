@@ -2,12 +2,9 @@ import React from 'react'
 import { task, Link } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
-// ctx
-import { VIEWS } from '../../ctx'
-
 // main
 export const home = task(t =>
-  createView(VIEWS.HOME, {
+  createView('HOME', {
     state: {
       async load({ state, api, detailKey, viewData, formData, status, type }) {
         return {

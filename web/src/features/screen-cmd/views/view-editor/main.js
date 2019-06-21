@@ -2,9 +2,6 @@ import React from 'react'
 import { task, Link, VIEW_STATUS } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
-// ctx
-import { VIEWS } from '../../ctx'
-
 // ui
 import SortableTree, {
   addNodeUnderParent,
@@ -17,7 +14,7 @@ const getNodeKey = ({ treeIndex }) => treeIndex
 
 // main
 export const viewEditor = task(t =>
-  createView(VIEWS.VIEW_EDITOR, {
+  createView('VIEW_EDITOR', {
     state: {
       data({ viewData, formData, status, type, error }) {
         return {

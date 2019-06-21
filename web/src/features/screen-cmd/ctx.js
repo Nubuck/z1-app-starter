@@ -1,5 +1,0 @@
-export const VIEWS = {
-  HOME: 'HOME',
-  BOX_EDITOR: 'BOX_EDITOR',
-  VIEW_EDITOR: 'VIEW_EDITOR',
-}

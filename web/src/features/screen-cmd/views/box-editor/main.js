@@ -2,9 +2,6 @@ import React from 'react'
 import { task, Link, VIEW_STATUS } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
-// ctx
-import { VIEWS } from '../../ctx'
-
 // ui
 import SchemaForm from '../../form'
 
@@ -13,7 +10,7 @@ import { uiBoxSchema } from './schema'
 
 // main
 export const boxEditor = task((t, a) =>
-  createView(VIEWS.BOX_EDITOR, {
+  createView('BOX_EDITOR', {
     state: {
       async load({ state, api, detailKey, viewData, formData, status, type }) {
         return {
