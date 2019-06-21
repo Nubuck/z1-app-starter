@@ -90,7 +90,6 @@ export const viewEditor = task(t =>
                 canNodeHaveChildren={() => true}
                 onChange={data => mutations.dataChange({ data })}
                 generateNodeProps={({ node, path }) => {
-                  console.log('NODE', node)
                   return {
                     title: (
                       <div className={css.row}>
@@ -179,7 +178,6 @@ export const viewEditor = task(t =>
             <div className={css.row}>
               <div className={css.col}>{`${JSON.stringify(state.data)}`}</div>
             </div>
-            {/* <div className={css.row}>{toCss(cmd.data)}</div> */}
           </div>
         </div>
       )
