@@ -21,15 +21,23 @@ export const home = task(t =>
         }
       },
     },
-    ui: ({ css, ui: { HStack, VStack, Icon, Box, Row, Col } }) => ({
+    ui: ({ css, ui: { HStack, VStack, Icon, Box, Row, Col, Text } }) => ({
       state,
       mutations,
     }) => {
       return (
         <VStack box={{ padding: 3 }}>
-          <HStack className={css.title} x="center" y="left">
-            <Icon name="home-outline" className="mr-2" />
-            <span>HOME</span>
+          <HStack x="center" y="left">
+            <Icon name="home-outline" className="mr-2" size="5xl" />
+            <Text
+              as="h1"
+              weight="bold"
+              family="mono"
+              size="5xl"
+              box={{ margin: 0 }}
+            >
+              HOME
+            </Text>
           </HStack>
           <VStack>
             <Link to="/box-editor">UI BOX EDITOR</Link>
@@ -38,15 +46,30 @@ export const home = task(t =>
           <Row box={{ margin: -1, padding: { y: 3 } }}>
             <Col box={{ padding: 1 }} xs={12}>
               <VStack
-                box={{ height: 24, bgColor: 'blue-500' }}
+                box={{ height: 32, bgColor: 'blue-500' }}
                 x="center"
                 y="center"
               >
-                <Icon name="home" box={{ color: 'white', fontSize: 'xl' }} />
+                <Icon name="home" color="white" size="6xl" />
               </VStack>
             </Col>
             <Col box={{ padding: 1 }} xs={12} sm={6} lg={3}>
-              <Box box={{ height: 24, bgColor: 'blue-300' }} />
+              <VStack
+                box={{ height: 24, bgColor: 'blue-300' }}
+                x="center"
+                y="center"
+              >
+                <Text
+                  as="h3"
+                  color="white"
+                  size="xl"
+                  family="mono"
+                  transform="uppercase"
+                  weight=""
+                >
+                  Full Columns
+                </Text>
+              </VStack>
             </Col>
             <Col box={{ padding: 1 }} xs={12} sm={6} lg={3}>
               <Box box={{ height: 24, bgColor: 'blue-300' }} />

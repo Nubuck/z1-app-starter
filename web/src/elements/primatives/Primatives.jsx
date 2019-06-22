@@ -6,14 +6,15 @@ import { uiBox } from '@z1/lib-ui-box-tailwind'
 export const Box = task(t => props => {
   const Element = t.pathOr('div', ['as'], props)
   const box = t.pathOr(null, ['box'], props)
-  const className = t.pathOr('', ['className'], props)
   return React.createElement(
     Element,
     t.merge(t.omit(['as', 'box', 'children', 'className'], props), {
       className: t.isNil(box)
-        ? className
+        ? t.pathOr('', ['className'], props)
         : uiBox(box)
-            .next({ className })
+            .next({
+              className: t.pathOr(box.className || '', ['className'], props),
+            })
             .toCss(),
     }),
     t.pathOr([], ['children'], props)
@@ -136,14 +137,93 @@ export const Icon = task(t => props => {
   const as = t.pathOr('i', ['as'], props)
   const prefix = t.pathOr('eva', ['prefix'], props)
   const icon = t.pathOr('', ['name'], props)
+  const fontSize = t.pathOr(null, ['size'], props)
+  const color = t.pathOr(null, ['color'], props)
   const className = t.pathOr(null, ['className'], props)
   return React.createElement(
     Box,
-    t.merge(t.omit(['as', 'prefix', 'className', 'name'], props), {
-      as,
-      className: `${prefix} ${prefix}-${icon}${
-        t.isNil(className) ? '' : ` ${className}`
-      }`,
-    })
+    t.merge(
+      t.omit(['as', 'prefix', 'className', 'name', 'size', 'color'], props),
+      {
+        as,
+        className: `${prefix} ${prefix}-${icon}${
+          t.isNil(className) ? '' : ` ${className}`
+        }`,
+        box: t.merge(
+          {
+            fontSize,
+            color,
+          },
+          t.pathOr({}, ['box'], props)
+        ),
+      }
+    )
+  )
+})
+
+// Text
+export const Text = task(t => props => {
+  const as = t.pathOr('span', ['as'], props)
+  const fontSize = t.pathOr(null, ['size'], props)
+  const fontFamily = t.pathOr(null, ['family'], props)
+  const fontWeight = t.pathOr(null, ['weight'], props)
+  const color = t.pathOr(null, ['color'], props)
+  const fontSmoothing = t.pathOr(null, ['smooth'], props)
+  const letterSpacing = t.pathOr(null, ['spacing'], props)
+  const lineHeight = t.pathOr(null, ['height'], props)
+  const textAlignX = t.pathOr(null, ['x'], props)
+  const textAlignY = t.pathOr(null, ['y'], props)
+  const textDecoration = t.pathOr(null, ['decoration'], props)
+  const textTransform = t.pathOr(null, ['transform'], props)
+  const whitespace = t.pathOr(null, ['space'], props)
+  const wordBreak = t.pathOr(null, ['break'], props)
+  const className = t.pathOr(null, ['className'], props)
+  return React.createElement(
+    Box,
+    t.merge(
+      t.omit(
+        [
+          'as',
+          'className',
+          'box',
+          'size',
+          'family',
+          'weight',
+          'color',
+          'smooth',
+          'spacing',
+          'height',
+          'x',
+          'y',
+          'decoration',
+          'transform',
+          'space',
+          'break',
+        ],
+        props
+      ),
+      {
+        as,
+        className,
+        box: t.merge(
+          {
+            fontSize,
+            fontFamily,
+            fontWeight,
+            color,
+            fontSmoothing,
+            letterSpacing,
+            lineHeight,
+            textAlignX,
+            textAlignY,
+            textDecoration,
+            textTransform,
+            whitespace,
+            wordBreak,
+          },
+          t.pathOr({}, ['box'], props)
+        ),
+      }
+    )
   )
 })
