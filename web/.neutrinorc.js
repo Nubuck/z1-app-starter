@@ -23,6 +23,12 @@ const use = [
       publicPath: '/',
       html: {
         title: 'Z1 App Starter',
+        links:[
+          {
+            href: 'https://unpkg.com/eva-icons/style/eva-icons.css',
+            rel: 'stylesheet',
+          },
+        ]
       },
       targets: {
         browsers: ['safari >= 6'],

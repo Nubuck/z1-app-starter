@@ -8,14 +8,14 @@ import { screenCmdState } from './state'
 import { ScreenCmdPage } from './ui'
 
 // exports
-export const screenCmd = createFeature(({}) => {
+export const screenCmd = createFeature(({ ui }) => {
   return {
     name: 'screenCmd',
     state: [screenCmdState],
     routes: [
       {
         type: routeActions(screenCmdState.actions),
-        ui: ScreenCmdPage({ mutationCreators: screenCmdState.mutations }),
+        ui: ScreenCmdPage({ ui, mutationCreators: screenCmdState.mutations }),
       },
     ],
   }

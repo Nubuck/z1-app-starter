@@ -14,18 +14,18 @@ const css = {
   title: toCss({
     color: 'gray-700',
     fontSize: '2xl',
-    fontFamily: 'mono',
+    // fontFamily: 'mono',
     margin: { bottom: 3 },
   }),
   editor: toCss({
     display: 'flex',
     flexDirection: 'row',
-    fontFamily: 'mono',
+    // fontFamily: 'mono',
   }),
   container: toCss({
     display: 'flex',
     flexDirection: 'col',
-    fontFamily: 'mono',
+    // fontFamily: 'mono',
     height: '64',
   }),
   colLeft: toCss({
@@ -50,9 +50,8 @@ const css = {
     flexDirection: 'col',
     padding: { x: 3 },
     flexWrap: true,
-    overflowX:'hidden'
+    overflowX: 'hidden',
   }),
-  
 }
 
 // ui
@@ -62,33 +61,9 @@ import { views } from './views'
 const stateQuery = ({ screenCmd }) => ({ state: screenCmd })
 
 // main
-export const ScreenCmdPage = task(t => ({ mutationCreators }) => {
-  const Views = views.ui({ ui: {}, css })
+export const ScreenCmdPage = task(t => ({ ui, mutationCreators }) => {
+  const Views = views.ui({ ui, css })
   return connectState(stateQuery, mutationCreators)(({ state, mutations }) => {
-    return (
-      <div className={css.page}>
-        {/* <div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => mutations.dataChange({})}
-          >
-            data change
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => mutations.formChange({})}
-          >
-            form change
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => mutations.formTransmit({})}
-          >
-            form transmit
-          </button>
-        </div> */}
-        {renderView(Views, state, mutations)}
-      </div>
-    )
+    return <div className={css.page}>{renderView(Views, state, mutations)}</div>
   })
 })

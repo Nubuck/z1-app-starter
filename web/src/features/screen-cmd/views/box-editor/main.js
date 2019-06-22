@@ -2,9 +2,6 @@ import React from 'react'
 import { task, Link, VIEW_STATUS } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
-// ui
-import SchemaForm from '../../form'
-
 // schema
 import { uiBoxSchema } from './schema'
 
@@ -42,7 +39,7 @@ export const boxEditor = task((t, a) =>
         }
       },
     },
-    ui: ({ css }) => ({ state, mutations }) => {
+    ui: ({ css, ui: { SchemaForm } }) => ({ state, mutations }) => {
       return (
         <div className={css.editor}>
           <div className={css.colLeft}>

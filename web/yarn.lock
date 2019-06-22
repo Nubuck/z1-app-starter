@@ -4386,6 +4386,11 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
+eva-icons@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/eva-icons/-/eva-icons-1.1.1.tgz#a5e7529ed4d04e913db9db33b749f0dac415186a"
+  integrity sha512-Uf7JQMA1lWQLLtHuk1lbMlwP4i3W0jjTy5SCYBGeR6DLPub5Ls2QiJlVT59llphVObXSVwaMuofevwgUZWf1CQ==
+
 event-emitter@~0.3.5:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/event-emitter/-/event-emitter-0.3.5.tgz#df8c69eef1647923c7157b9ce83840610b02cc39"

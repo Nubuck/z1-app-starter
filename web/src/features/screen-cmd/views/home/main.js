@@ -21,17 +21,18 @@ export const home = task(t =>
         }
       },
     },
-    ui: ({ css }) => ({ state, mutations }) => {
+    ui: ({ css, ui: { HStack, VStack, Spacer } }) => ({ state, mutations }) => {
       return (
-        <div className={css.container}>
-          <h2 className={css.title}>HOME</h2>
-          <div className={css.row}>
-            <div className={css.col}>
-              <Link to="/box-editor">UI BOX EDITOR</Link>
-              <Link to="/view-editor">UI VIEW EDITOR</Link>
-            </div>
-          </div>
-        </div>
+        <VStack box={{ padding: 3 }}>
+          <HStack className={css.title} x="center" y="left">
+            <i className="eva eva-home-outline mr-2" />
+            <span>HOME</span>
+          </HStack>
+          <VStack>
+            <Link to="/box-editor">UI BOX EDITOR</Link>
+            <Link to="/view-editor">UI VIEW EDITOR</Link>
+          </VStack>
+        </VStack>
       )
     },
   })

@@ -1,4 +1,5 @@
 // globals
+// import 'eva-icons/style/eva-icons.css'
 import 'react-sortable-tree/style.css'
 import './app.css'
 // packages
