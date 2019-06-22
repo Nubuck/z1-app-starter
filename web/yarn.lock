@@ -683,10 +683,10 @@
   dependencies:
     "@z1/preset-task" "^0.2.9"
 
-"@z1/lib-ui-box-tailwind@^0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-tailwind/-/lib-ui-box-tailwind-0.2.9.tgz#a4e788a5ec1cf95a9750baeae53167726f7ad28c"
-  integrity sha512-M8Rf0UldGQV4L4aNiP3M/qi94RrJuAJx6vWuLeJU9cXBb5jpbG37U9/dM2CjyfNz/AbB0UMjoPacr5pNJwWrMw==
+"@z1/lib-ui-box-tailwind@^0.2.18":
+  version "0.2.18"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-tailwind/-/lib-ui-box-tailwind-0.2.18.tgz#95f865dad4cce4992a6595a23d92b45d4ce6b9e3"
+  integrity sha512-0/pdQfJtbKM1/v66zlguMoxl03I6aT5loRUE6oXr+6IstXHKDqr483wmVKAn00AX96nHzDdXuYSIQYEEUFcywA==
   dependencies:
     "@z1/preset-task" "^0.2.9"
 
