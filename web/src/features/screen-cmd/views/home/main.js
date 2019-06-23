@@ -21,10 +21,10 @@ export const home = task(t =>
         }
       },
     },
-    ui: ({ css, ui: { HStack, VStack, Icon, Box, Row, Col, Text } }) => ({
-      state,
-      mutations,
-    }) => {
+    ui: ({
+      css,
+      ui: { HStack, VStack, Icon, Box, Row, Col, Text, Spinner },
+    }) => ({ state, mutations }) => {
       return (
         <VStack box={{ padding: 3 }}>
           <HStack x="center" y="left">
@@ -43,6 +43,13 @@ export const home = task(t =>
             <Link to="/box-editor">UI BOX EDITOR</Link>
             <Link to="/view-editor">UI VIEW EDITOR</Link>
           </VStack>
+          <Row x="center" y="center">
+            <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} />
+            <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} size="sm" />
+            <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} size="md" />
+            <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} size="lg" />
+            <Spinner as={Col} xs={12} md={3} box={{ height: 64 }} size="xl" />
+          </Row>
           <Row box={{ margin: -1, padding: { y: 3 } }}>
             <Col box={{ padding: 1 }} xs={12}>
               <VStack

@@ -6,12 +6,20 @@ import { uiBox } from '@z1/lib-ui-box-tailwind'
 export const Box = task(t => props => {
   const Element = t.pathOr('div', ['as'], props)
   const box = t.pathOr(null, ['box'], props)
+  const stretch = t.pathOr(null, ['stretch'], props)
+  const stretchProps = t.isNil(stretch)
+    ? {}
+    : {
+        alignSelf: 'stretch',
+        flex: 'auto',
+      }
   return React.createElement(
     Element,
     t.merge(t.omit(['as', 'box', 'children', 'className'], props), {
-      className: t.isNil(box)
+      className: t.and(t.isNil(box), t.isNil(stretch))
         ? t.pathOr('', ['className'], props)
-        : uiBox(box)
+        : uiBox(box || {})
+            .next(stretchProps)
             .next({
               className: t.pathOr(box.className || '', ['className'], props),
             })
@@ -32,6 +40,7 @@ const Stack = task(t => direction => props => {
     ? {}
     : t.eq(direction, 'vertical')
     ? {
+        flex: 'auto',
         alignItems: t.getMatch(alignX)({
           left: 'start',
           center: 'center',
@@ -62,6 +71,14 @@ const Stack = task(t => direction => props => {
           right: 'end',
         }),
       }
+  const stretch = t.pathOr(null, ['stretch'], props)
+  const stretchProps = t.isNil(stretch)
+    ? {}
+    : t.eq(direction, 'vertical')
+    ? {
+        height: 'full',
+      }
+    : {}
 
   return React.createElement(
     Box,
@@ -74,6 +91,7 @@ const Stack = task(t => direction => props => {
         stackProps,
         alignProps,
         justifyProps,
+        stretchProps,
         t.pathOr({}, ['box'], props),
       ]),
     }),
@@ -96,7 +114,7 @@ export const Row = task(t => props =>
 )
 
 const colWidth = task(t => width =>
-  t.isNil(width) ? width : width >= 12 ? 'full' : `${width}/12`
+  t.isNil(width) ? width : t.gte(width, 12) ? 'full' : `${width}/12`
 )
 export const Col = task(t => props =>
   React.createElement(
@@ -227,3 +245,34 @@ export const Text = task(t => props => {
     )
   )
 })
+
+// Spinner
+export const Spinner = task(t => props => {
+  const size = t.pathOr(null, ['size'], props)
+  const color = t.pathOr(null, ['color'], props)
+  const className = t.pathOr(null, ['className'], props)
+  return React.createElement(
+    Box,
+    t.merge(t.omit(['className', 'size', 'color'], props), {
+      className: `spinner ${t.isNil(size) ? '' : ` spinner-${size}`} ${
+        t.isNil(className) ? '' : ` ${className}`
+      }`,
+      box: t.merge(
+        {
+          color,
+        },
+        t.pathOr({}, ['box'], props)
+      ),
+    })
+  )
+})
+
+// Button
+
+// Input
+
+// Select
+
+// Checkbox
+
+// Radio
