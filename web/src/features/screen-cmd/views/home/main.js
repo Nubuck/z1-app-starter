@@ -84,7 +84,7 @@ export const home = task(t =>
                   radius="lg"
                   border={['blue-800', { hover: 'blue-400' }]}
                   borderWidth={2}
-                  family='mono'
+                  family="mono"
                 >
                   Full Columns
                 </Button>
@@ -157,9 +157,7 @@ export const home = task(t =>
                     size="lg"
                   />
                 ),
-              }}
-              renderWhen={{
-                xl: props => (
+                xl: (
                   <Spinner
                     as={Col}
                     xs={12}
@@ -168,21 +166,19 @@ export const home = task(t =>
                     size="xl"
                   />
                 ),
-                _: props => {
-                  return (
-                    <Col
-                      xs={12}
-                      md={3}
-                      box={{ height: 64 }}
-                      x="center"
-                      y="center"
-                    >
-                      <Text size="2xl" color="red-500">
-                        Not Found
-                      </Text>
-                    </Col>
-                  )
-                },
+                _: (
+                  <Col
+                    xs={12}
+                    md={3}
+                    box={{ height: 64 }}
+                    x="center"
+                    y="center"
+                  >
+                    <Text size="2xl" color="red-500">
+                      Not Found
+                    </Text>
+                  </Col>
+                ),
               }}
             />
           </Row>
