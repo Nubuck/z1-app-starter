@@ -23,7 +23,7 @@ export const home = task(t =>
     },
     ui: ({
       css,
-      ui: { HStack, VStack, Icon, Box, Row, Col, Text, Spinner },
+      ui: { HStack, VStack, Icon, Box, Row, Col, Text, Spinner, Match },
     }) => ({ state, mutations }) => {
       return (
         <VStack box={{ padding: 3 }}>
@@ -44,11 +44,65 @@ export const home = task(t =>
             <Link to="/view-editor">UI VIEW EDITOR</Link>
           </VStack>
           <Row x="center" y="center">
-            <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} />
-            <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} size="sm" />
-            <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} size="md" />
-            <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} size="lg" />
-            <Spinner as={Col} xs={12} md={3} box={{ height: 64 }} size="xl" />
+            <Match
+              value="lg"
+              cases={{
+                default: (
+                  <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} />
+                ),
+                sm: (
+                  <Spinner
+                    as={Col}
+                    xs={6}
+                    md={2}
+                    box={{ height: 64 }}
+                    size="sm"
+                  />
+                ),
+                md: (
+                  <Spinner
+                    as={Col}
+                    xs={6}
+                    md={2}
+                    box={{ height: 64 }}
+                    size="md"
+                  />
+                ),
+                lg: (
+                  <Spinner
+                    as={Col}
+                    xs={6}
+                    md={2}
+                    box={{ height: 64 }}
+                    size="lg"
+                  />
+                ),
+              }}
+              handleCases={{
+                xl: props => (
+                  <Spinner
+                    as={Col}
+                    xs={12}
+                    md={3}
+                    box={{ height: 64 }}
+                    size="xl"
+                  />
+                ),
+                _: props => {
+                  return (
+                    <Col
+                      xs={12}
+                      md={3}
+                      box={{ height: 64 }}
+                      x="center"
+                      y="center"
+                    >
+                      <Text size="2xl" color='red-500'>Not Found</Text>
+                    </Col>
+                  )
+                },
+              }}
+            />
           </Row>
           <Row box={{ margin: -1, padding: { y: 3 } }}>
             <Col box={{ padding: 1 }} xs={12}>
