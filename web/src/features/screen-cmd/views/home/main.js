@@ -23,7 +23,7 @@ export const home = task(t =>
     },
     ui: ({
       css,
-      ui: { HStack, VStack, Icon, Box, Row, Col, Text, Spinner, Match },
+      ui: { HStack, VStack, Icon, Box, Row, Col, Text, Spinner, Match, Button },
     }) => ({ state, mutations }) => {
       return (
         <VStack box={{ padding: 3 }}>
@@ -43,10 +43,90 @@ export const home = task(t =>
             <Link to="/box-editor">UI BOX EDITOR</Link>
             <Link to="/view-editor">UI VIEW EDITOR</Link>
           </VStack>
+          <Row box={{ margin: -1, padding: { y: 3 } }}>
+            <Col box={{ padding: 1 }} xs={12}>
+              <VStack
+                box={{ height: 32, bgColor: 'blue-500' }}
+                x="center"
+                y="center"
+              >
+                <Icon name="home" color="white" size="6xl" />
+              </VStack>
+            </Col>
+            <Col box={{ padding: 1 }} xs={12} sm={6} lg={3}>
+              <VStack
+                box={{ height: 24, bgColor: 'blue-300' }}
+                x="center"
+                y="center"
+              >
+                <Text
+                  as="h3"
+                  color="white"
+                  size="xl"
+                  family="mono"
+                  transform="uppercase"
+                  weight=""
+                >
+                  Full Columns
+                </Text>
+              </VStack>
+            </Col>
+            <Col box={{ padding: 1 }} xs={12} sm={6} lg={3}>
+              <VStack
+                box={{ height: 24, bgColor: 'blue-300' }}
+                x="center"
+                y="center"
+              >
+                <Button
+                  bg={['blue-400', { hover: 'blue-800' }]}
+                  size="lg"
+                  color={['blue-800', { hover: 'white' }]}
+                  radius="lg"
+                  border={['blue-800', { hover: 'blue-400' }]}
+                  borderWidth={2}
+                  family='mono'
+                >
+                  Full Columns
+                </Button>
+              </VStack>
+            </Col>
+            <Col box={{ padding: 1 }} xs={6} md={3} lg={2}>
+              <VStack
+                box={{ height: 24, bgColor: 'blue-200' }}
+                x="center"
+                y="center"
+              >
+                <Button
+                  bg={['blue-400', { hover: 'blue-800' }]}
+                  size="lg"
+                  color={['blue-800', { hover: 'white' }]}
+                  radius={'full'}
+                  border={['blue-800', { hover: 'blue-400' }]}
+                  box={{
+                    display: 'flex',
+                    padding: { x: 3, y: 3 },
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Icon name="home-outline" size="2xl" />
+                </Button>
+              </VStack>
+            </Col>
+            <Col box={{ padding: 1 }} xs={6} md={3} lg={2}>
+              <Box box={{ height: 24, bgColor: 'blue-200' }} />
+            </Col>
+            <Col box={{ padding: 1 }} xs={6} md={3} lg={1}>
+              <Box box={{ height: 24, bgColor: 'blue-200' }} />
+            </Col>
+            <Col box={{ padding: 1 }} xs={6} md={3} lg={1}>
+              <Box box={{ height: 24, bgColor: 'blue-200' }} />
+            </Col>
+          </Row>
           <Row x="center" y="center">
             <Match
-              value="lg"
-              cases={{
+              value="none"
+              when={{
                 default: (
                   <Spinner as={Col} xs={6} md={2} box={{ height: 64 }} />
                 ),
@@ -78,7 +158,7 @@ export const home = task(t =>
                   />
                 ),
               }}
-              handleCases={{
+              renderWhen={{
                 xl: props => (
                   <Spinner
                     as={Col}
@@ -97,56 +177,14 @@ export const home = task(t =>
                       x="center"
                       y="center"
                     >
-                      <Text size="2xl" color='red-500'>Not Found</Text>
+                      <Text size="2xl" color="red-500">
+                        Not Found
+                      </Text>
                     </Col>
                   )
                 },
               }}
             />
-          </Row>
-          <Row box={{ margin: -1, padding: { y: 3 } }}>
-            <Col box={{ padding: 1 }} xs={12}>
-              <VStack
-                box={{ height: 32, bgColor: 'blue-500' }}
-                x="center"
-                y="center"
-              >
-                <Icon name="home" color="white" size="6xl" />
-              </VStack>
-            </Col>
-            <Col box={{ padding: 1 }} xs={12} sm={6} lg={3}>
-              <VStack
-                box={{ height: 24, bgColor: 'blue-300' }}
-                x="center"
-                y="center"
-              >
-                <Text
-                  as="h3"
-                  color="white"
-                  size="xl"
-                  family="mono"
-                  transform="uppercase"
-                  weight=""
-                >
-                  Full Columns
-                </Text>
-              </VStack>
-            </Col>
-            <Col box={{ padding: 1 }} xs={12} sm={6} lg={3}>
-              <Box box={{ height: 24, bgColor: 'blue-300' }} />
-            </Col>
-            <Col box={{ padding: 1 }} xs={6} md={3} lg={2}>
-              <Box box={{ height: 24, bgColor: 'blue-200' }} />
-            </Col>
-            <Col box={{ padding: 1 }} xs={6} md={3} lg={2}>
-              <Box box={{ height: 24, bgColor: 'blue-200' }} />
-            </Col>
-            <Col box={{ padding: 1 }} xs={6} md={3} lg={1}>
-              <Box box={{ height: 24, bgColor: 'blue-200' }} />
-            </Col>
-            <Col box={{ padding: 1 }} xs={6} md={3} lg={1}>
-              <Box box={{ height: 24, bgColor: 'blue-200' }} />
-            </Col>
           </Row>
         </VStack>
       )

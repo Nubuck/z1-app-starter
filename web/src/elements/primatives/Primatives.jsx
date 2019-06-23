@@ -15,7 +15,7 @@ export const Box = task(t => props => {
       }
   return React.createElement(
     Element,
-    t.merge(t.omit(['as', 'box', 'children', 'className'], props), {
+    t.merge(t.omit(['as', 'box', 'className', 'stretch'], props), {
       className: t.and(t.isNil(box), t.isNil(stretch))
         ? t.pathOr('', ['className'], props)
         : uiBox(box || {})
@@ -24,8 +24,7 @@ export const Box = task(t => props => {
               className: t.pathOr(box.className || '', ['className'], props),
             })
             .toCss(),
-    }),
-    t.pathOr([], ['children'], props)
+    })
   )
 })
 
@@ -82,7 +81,7 @@ const Stack = task(t => direction => props => {
 
   return React.createElement(
     Box,
-    t.merge(t.omit(['children', 'box'], props), {
+    t.merge(t.omit(['box', 'x', 'y'], props), {
       box: t.mergeAll([
         {
           display: 'flex',
@@ -94,8 +93,7 @@ const Stack = task(t => direction => props => {
         stretchProps,
         t.pathOr({}, ['box'], props),
       ]),
-    }),
-    t.pathOr([], ['children'], props)
+    })
   )
 })
 
@@ -106,10 +104,9 @@ export const HStack = Stack('horizontal')
 export const Row = task(t => props =>
   React.createElement(
     HStack,
-    t.merge(t.omit(['children', 'box'], props), {
+    t.merge(t.omit(['box'], props), {
       box: t.merge({ flexWrap: true }, t.pathOr({}, ['box'], props)),
-    }),
-    t.pathOr([], ['children'], props)
+    })
   )
 )
 
@@ -119,7 +116,7 @@ const colWidth = task(t => width =>
 export const Col = task(t => props =>
   React.createElement(
     VStack,
-    t.merge(t.omit(['children', 'box'], props), {
+    t.merge(t.omit(['box'], props), {
       box: t.merge(
         {
           flex: 'none',
@@ -135,8 +132,7 @@ export const Col = task(t => props =>
         },
         t.pathOr({}, ['box'], props)
       ),
-    }),
-    t.pathOr([], ['children'], props)
+    })
   )
 )
 
@@ -161,7 +157,10 @@ export const Icon = task(t => props => {
   return React.createElement(
     Box,
     t.merge(
-      t.omit(['as', 'prefix', 'className', 'name', 'size', 'color'], props),
+      t.omit(
+        ['as', 'prefix', 'className', 'name', 'size', 'color', 'box'],
+        props
+      ),
       {
         as,
         className: `${prefix} ${prefix}-${icon}${
@@ -253,7 +252,7 @@ export const Spinner = task(t => props => {
   const className = t.pathOr(null, ['className'], props)
   return React.createElement(
     Box,
-    t.merge(t.omit(['className', 'size', 'color'], props), {
+    t.merge(t.omit(['className', 'size', 'color', 'box'], props), {
       className: `spinner ${t.isNil(size) ? '' : ` spinner-${size}`} ${
         t.isNil(className) ? '' : ` ${className}`
       }`,
@@ -268,26 +267,175 @@ export const Spinner = task(t => props => {
 })
 
 // Button
-export const Button = task(t => props => {})
+export const Button = task(t => props => {
+  const as = t.pathOr('button', ['as'], props)
+  const className = t.pathOr(null, ['className'], props)
+  const size = t.pathOr('md', ['size'], props)
+  const color = t.pathOr(null, ['color'], props)
+  const bgColor = t.pathOr(null, ['bg'], props)
+  const borderColor = t.pathOr(null, ['border'], props)
+  const borderRadius = t.pathOr(null, ['radius'], props)
+  const borderWidth = t.pathOr(null, ['borderWidth'], props)
+  const fontWeight = t.pathOr(null, ['weight'], props)
+  const fontFamily = t.pathOr(null, ['family'], props)
+  const proportion = t.getMatch(size)({
+    sm: {
+      padding: { x: 3, y: 2 },
+      fontSize: 'sm',
+      fontWeight: fontWeight || 'normal',
+    },
+    md: {
+      padding: { x: 4, y: 2 },
+      fontSize: 'base',
+      fontWeight: fontWeight || 'bold',
+    },
+    lg: {
+      padding: { x: 6, y: 3 },
+      fontSize: 'lg',
+      fontWeight: fontWeight || 'bold',
+    },
+  })
+  return React.createElement(
+    Box,
+    t.merge(
+      t.omit(
+        [
+          'as',
+          'className',
+          'box',
+          'size',
+          'color',
+          'bg',
+          'border',
+          'radius',
+          'weight',
+          'family',
+        ],
+        props
+      ),
+      {
+        as,
+        className,
+        box: t.mergeAll([
+          {
+            color,
+            bgColor,
+            borderColor,
+            borderRadius,
+            fontFamily,
+            borderWidth: t.and(t.isNil(borderColor), t.isNil(borderWidth))
+              ? null
+              : t.isNil(borderWidth)
+              ? true
+              : borderWidth,
+          },
+          proportion,
+          t.pathOr({}, ['box'], props),
+        ]),
+      }
+    )
+  )
+})
 
 // Input
-export const Input = task(t => props => {})
+export const Input = task(t => props => {
+  const as = t.pathOr('input', ['as'], props)
+  const className = t.pathOr(null, ['className'], props)
+  return React.createElement(
+    Box,
+    t.merge(t.omit(['as', 'className', 'box'], props), {
+      as,
+      className: `form-input${t.isNil(className) ? '' : ` ${className}`}`,
+      box: t.merge(
+        {
+          display: 'block',
+          width: 'full',
+        },
+        t.pathOr({}, ['box'], props)
+      ),
+    })
+  )
+})
+
+// Textarea
+export const TextArea = task(t => props => {
+  const as = t.pathOr('textarea', ['as'], props)
+  const className = t.pathOr(null, ['className'], props)
+  return React.createElement(
+    Box,
+    t.merge(t.omit(['as', 'className', 'box'], props), {
+      as,
+      className: `form-textarea${t.isNil(className) ? '' : ` ${className}`}`,
+      box: t.merge(
+        {
+          display: 'block',
+          width: 'full',
+        },
+        t.pathOr({}, ['box'], props)
+      ),
+    })
+  )
+})
 
 // Select
-export const Select = task(t => props => {})
+export const Select = task(t => props => {
+  const as = t.pathOr('select', ['as'], props)
+  const multiple = t.pathOr(null, ['multiple'], props)
+  const className = t.pathOr(null, ['className'], props)
+  return React.createElement(
+    Box,
+    t.merge(t.omit(['as', 'className', 'box'], props), {
+      as,
+      className: `${t.isNil(multiple) ? 'form-select' : 'form-multiselect'}${
+        t.isNil(className) ? '' : ` ${className}`
+      }`,
+      box: t.merge(
+        {
+          display: 'block',
+          width: 'full',
+        },
+        t.pathOr({}, ['box'], props)
+      ),
+    })
+  )
+})
 
 // Checkbox
-export const Checkbox = task(t => props => {})
+export const Checkbox = task(t => props => {
+  const as = t.pathOr('input', ['as'], props)
+  const type = t.pathOr('checkbox', ['as'], props)
+  const className = t.pathOr(null, ['className'], props)
+  return React.createElement(
+    Box,
+    t.merge(t.omit(['as', 'className', 'type'], props), {
+      as,
+      type,
+      className: `form-checkbox${t.isNil(className) ? '' : ` ${className}`}`,
+    })
+  )
+})
 
 // Radio
-export const Radio = task(t => props => {})
+export const Radio = task(t => props => {
+  const as = t.pathOr('input', ['as'], props)
+  const type = t.pathOr('radio', ['as'], props)
+  const className = t.pathOr(null, ['className'], props)
+  return React.createElement(
+    Box,
+    t.merge(t.omit(['as', 'className', 'type'], props), {
+      as,
+      type,
+      className: `form-radio${t.isNil(className) ? '' : ` ${className}`}`,
+    })
+  )
+})
 
 // meta
 export const Match = task(t => props => {
-  const cases = t.pathOr({}, ['cases'], props)
-  const handleCases = t.pathOr({}, ['handleCases'], props)
+  const cases = t.pathOr({}, ['when'], props)
+  const handleCases = t.pathOr({}, ['renderWhen'], props)
   const value = t.pathOr(null, ['value'], props)
-  const nextProps = t.omit(['value', 'cases', 'handleCases'], props)
+  const nextProps = t.omit(['value', 'when', 'renderWhen'], props)
   const matched = t.has(value)(cases)
     ? { render: cases[value], type: 'value' }
     : t.has(value)(handleCases)
