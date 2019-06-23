@@ -1,7 +1,7 @@
 import React from 'react'
 import { task, connectState, VIEW_STATUS } from '@z1/lib-feature-box'
 import { renderView } from '@z1/lib-feature-macros'
-import { toCss } from '@z1/lib-ui-box-tailwind'
+import { toCss } from '@z1/lib-ui-box-elements'
 
 // styles
 const css = {

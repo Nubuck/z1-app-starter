@@ -1,6 +1,6 @@
 import React from 'react'
 import { connectState, renderRoute } from '@z1/lib-feature-box'
-import { toCss } from '@z1/lib-ui-box-tailwind'
+import { toCss } from '@z1/lib-ui-box-elements'
 
 // state
 const stateQuery = ({ location }) => ({
