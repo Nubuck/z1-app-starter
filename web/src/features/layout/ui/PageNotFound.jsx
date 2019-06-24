@@ -1,10 +1,26 @@
 import React from 'react'
 
 // main
-export const PageNotFound = ({ ui: { VStack, Text } }) => props => {
+export const PageNotFound = ({
+  ui: { VStack, HStack, Text, Icon },
+}) => props => {
   return (
-    <VStack x="center" y="center" box={{ padding: { left: 64, top: 20 } }}>
-      <Text size="2xl" color="red-500" family="mono">
+    <VStack
+      x="center"
+      y="center"
+      box={{ color: 'red-500', height: 'full', bgColor: 'gray-900' }}
+    >
+      <HStack x="center" y="center">
+        <Icon
+          name="alert-triangle-outline"
+          size="5xl"
+          box={{ margin: { right: 4 } }}
+        />
+        <Text size="6xl" family="mono">
+          404
+        </Text>
+      </HStack>
+      <Text size="6xl" color="red-500" family="mono">
         Not Found
       </Text>
     </VStack>
