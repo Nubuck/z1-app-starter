@@ -16,7 +16,7 @@ export const Screen = ({ ui: { Box, VStack, HStack } }) => props => {
         zIndex: 0,
       }}
     >
-      <VStack
+      {/* <VStack
         x="left"
         y="top"
         box={{
@@ -57,7 +57,7 @@ export const Screen = ({ ui: { Box, VStack, HStack } }) => props => {
         style={{ left: '16rem' }}
       >
         Page
-      </HStack>
+      </HStack> */}
       {props.children}
     </Box>
   )

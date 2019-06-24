@@ -6,12 +6,12 @@ import SchemaForm from '../elements/form'
 
 // features
 import layoutFeature from './layout'
-// import screenCmdFeature from './screen-cmd'
+import screenCmdFeature from './screen-cmd'
 
 // main
 export default combineFeatures([
   layoutFeature({ ui: { ...Primatives } }),
-  // screenCmdFeature({
-  //   ui: { SchemaForm, ...Primatives },
-  // }),
+  screenCmdFeature({
+    ui: { SchemaForm, ...Primatives },
+  }),
 ])
