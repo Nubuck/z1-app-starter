@@ -4,14 +4,15 @@ import { NOT_FOUND, createFeature } from '@z1/lib-feature-box'
 import { Screen, PageNotFound } from './ui'
 
 // state
+import { navState, screenState } from './state'
 
 // exports
 export const layout = createFeature(({ ui }) => {
   return {
     name: 'layout',
-    state: [],
+    state: [screenState, navState],
     ui: {
-      Screen: Screen({ ui }),
+      Screen: Screen({ ui, makeMutations: navState.mutations }),
     },
     routes: [
       {

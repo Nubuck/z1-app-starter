@@ -41,7 +41,11 @@ export const Screen = ({
             color: ['white', { hover: 'yellow-500' }],
           }}
         >
-          <Icon name="flash" size="5xl" />
+          <Icon
+            name="flash-outline"
+            size="5xl"
+            style={{ transform: 'scaleX(-1)' }}
+          />
         </HStack>
         <HStack
           x="center"
