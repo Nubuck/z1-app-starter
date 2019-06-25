@@ -11,7 +11,7 @@ import landingFeaturee from './landing'
 
 // main
 export default combineFeatures([
-  layoutFeature({ ui: { ...Primatives } }),
+  layoutFeature({ ui: { ...Primatives }, brand: { title: 'Z1 App' } }),
   landingFeaturee({ ui: { ...Primatives } }),
   // screenCmdFeature({
   //   ui: { SchemaForm, ...Primatives },
