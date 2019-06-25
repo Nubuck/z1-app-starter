@@ -71,7 +71,7 @@ export const navState = task((t, a) =>
             ),
           })
         }),
-        m(['navViewChange'], (state, action) => {
+        m(['navChange'], (state, action) => {
           return t.merge(state, {
             title: t.pathOr(state.status, ['payload', 'title'], action),
             status: t.pathOr(state.status, ['payload', 'status'], action),
@@ -81,6 +81,7 @@ export const navState = task((t, a) =>
         }),
         m(['navMatch'], (state, action) => {
           return t.merge(state, {
+            title: t.pathOr(state.status, ['payload', 'title'], action),
             status: t.pathOr(state.status, ['payload', 'status'], action),
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
             width: t.pathOr(state.width, ['payload', 'width'], action),
@@ -91,36 +92,89 @@ export const navState = task((t, a) =>
     },
     effects(fx, { actions, mutations }) {
       return [
-        fx(['screen/RESIZE'], async ({ getState, action }, dispatch, done) => {
+        fx(['screen/RESIZE'], async ({ getState }, dispatch, done) => {
+          const state = getState()
+          const status = t.pathOr(null, ['nav', 'status'], state)
+          const size = t.pathOr('xs', ['screen', 'size'], state)
+          const nextStatus = t.eq(size, 'xs')
+            ? t.eq(status, NAV_STATUS.INIT)
+              ? NAV_STATUS.CLOSED
+              : status
+            : status
+          if (t.not(t.eq(status, nextStatus))) {
+            dispatch(mutations.navChange({ status: nextStatus }))
+          }
           done()
         }),
         fx(
-          [t.globrex('*ROUTE_*').regex],
-          async ({ getState }, dispatch, done) => {
-            const state = getState()
-            const routePath = t.pathOr(null, ['location', 'pathname'], state)
-            const schema = t.pathOr([], ['nav', 'schema'], state)
-            const matched = t.pathOr(null, ['nav', 'matched'], state)
-            const nextMatch = matchedNavItem(routePath, schema)
-            console.log('NEXT MATCH', matched, nextMatch)
-            dispatch(
-              mutations.navMatch({
-                matched: nextMatch,
-              })
-            )
-            done()
-          }
-        ),
-        fx(
           [
+            t.globrex('*/ROUTE_*').regex,
             actions.navSchemaAdd,
             actions.navSchemaUpdate,
             actions.navSchemaRemove,
           ],
           async ({ getState }, dispatch, done) => {
+            const state = getState()
+            const routePath = t.pathOr('', ['location', 'pathname'], state)
+            const schema = t.pathOr([], ['nav', 'schema'], state)
+            const matched = t.pathOr(null, ['nav', 'matched'], state)
+            const title = t.pathOr('', ['nav', 'title'], state)
+
+            // search
+            const nextMatch = matchedNavItem(routePath, schema)
+
+            // validate match
+            const validMatch = t.not(nextMatch)
+              ? t.not(matched)
+                ? nextMatch
+                : t.contains(routePath, matched.path)
+                ? matched
+                : nextMatch
+              : t.or(
+                  t.isNil(nextMatch.children),
+                  t.isZeroLen(nextMatch.children || [])
+                )
+              ? matched
+                ? t.contains(routePath, matched.path)
+                  ? matched
+                  : matchedNavItem(nextMatch.parentPath, schema)
+                : matchedNavItem(nextMatch.parentPath, schema)
+              : nextMatch
+
+            // compute layout
+            if (
+              t.not(
+                t.eq(
+                  t.pathOr(null, ['path'], matched),
+                  t.pathOr(null, ['path'], validMatch)
+                )
+              )
+            ) {
+              const nextMode = t.isNil(validMatch)
+                ? NAV_MODE.PRIMARY
+                : t.or(
+                    t.isNil(validMatch.children),
+                    t.isZeroLen(validMatch.children)
+                  )
+                ? NAV_MODE.PRIMARY
+                : NAV_MODE.SECONDARY
+
+              // mutate
+              dispatch(
+                mutations.navMatch({
+                  matched: validMatch,
+                  mode: nextMode,
+                  title: t.isNil(validMatch) ? title : validMatch.title,
+                  width: t.getMatch(nextMode)({
+                    [NAV_MODE.PRIMARY]: NAV_WIDTH.PRIMARY,
+                    [NAV_MODE.SECONDARY]:
+                      NAV_WIDTH.PRIMARY + NAV_WIDTH.SECONDARY,
+                  }),
+                })
+              )
+            }
             done()
-          },
-          { latest: false }
+          }
         ),
       ]
     },

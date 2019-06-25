@@ -28,7 +28,7 @@ export const screenState = task((t, a) =>
     initial: {
       width: 0,
       height: 0,
-      size: 'sm',
+      size: 'xs',
     },
     mutations(m) {
       return [m('resize', (state, action) => t.merge(state, action.payload))]

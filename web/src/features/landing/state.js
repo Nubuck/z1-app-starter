@@ -3,7 +3,7 @@ import { navSchema } from '@z1/lib-ui-schema'
 
 // nav
 const homeSchema = navSchema(n => [
-  n('//', { icon: 'flash-outline', title: 'Z1 App Stater' }, [
+  n('//', { icon: 'flash-outline', title: 'Z1 App Starter' }, [
     n('/about', { icon: 'lightbulb', title: 'About' }),
     n('/contact', { icon: 'phone', title: 'Contact' }),
   ]),
