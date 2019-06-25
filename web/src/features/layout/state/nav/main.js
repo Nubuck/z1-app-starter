@@ -79,7 +79,7 @@ export const navState = task((t, a) =>
             width: t.pathOr(state.width, ['payload', 'width'], action),
           })
         }),
-        m(['navRouteMatch'], (state, action) => {
+        m(['navMatch'], (state, action) => {
           return t.merge(state, {
             status: t.pathOr(state.status, ['payload', 'status'], action),
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
@@ -97,6 +97,17 @@ export const navState = task((t, a) =>
         fx(
           [t.globrex('*ROUTE_*').regex],
           async ({ getState }, dispatch, done) => {
+            const state = getState()
+            const routePath = t.pathOr(null, ['location', 'pathname'], state)
+            const schema = t.pathOr([], ['nav', 'schema'], state)
+            const matched = t.pathOr(null, ['nav', 'matched'], state)
+            const nextMatch = matchedNavItem(routePath, schema)
+            console.log('NEXT MATCH', matched, nextMatch)
+            dispatch(
+              mutations.navMatch({
+                matched: nextMatch,
+              })
+            )
             done()
           }
         ),
