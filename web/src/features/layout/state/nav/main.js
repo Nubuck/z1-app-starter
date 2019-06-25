@@ -73,7 +73,7 @@ export const navState = task((t, a) =>
         }),
         m(['navChange'], (state, action) => {
           return t.merge(state, {
-            title: t.pathOr(state.status, ['payload', 'title'], action),
+            title: t.pathOr(state.title, ['payload', 'title'], action),
             status: t.pathOr(state.status, ['payload', 'status'], action),
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
             width: t.pathOr(state.width, ['payload', 'width'], action),
@@ -81,7 +81,7 @@ export const navState = task((t, a) =>
         }),
         m(['navMatch'], (state, action) => {
           return t.merge(state, {
-            title: t.pathOr(state.status, ['payload', 'title'], action),
+            title: t.pathOr(state.title, ['payload', 'title'], action),
             status: t.pathOr(state.status, ['payload', 'status'], action),
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
             width: t.pathOr(state.width, ['payload', 'width'], action),
