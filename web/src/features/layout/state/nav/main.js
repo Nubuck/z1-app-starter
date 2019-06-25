@@ -37,9 +37,17 @@ export const navState = task((t, a) =>
       mode: NAV_MODE.PRIMARY,
       schema: [],
       matched: null,
-      primaryWidth: NAV_WIDTH.PRIMARY,
-      secondaryWidth: NAV_WIDTH.SECONDARY,
       width: NAV_WIDTH.PRIMARY,
+      size: 'xs',
+      primary: {
+        width: NAV_WIDTH.PRIMARY,
+        items: [],
+        actions: [],
+      },
+      secondary: {
+        width: NAV_WIDTH.SECONDARY,
+        items: [],
+      },
     },
     mutations(m) {
       return [
@@ -77,6 +85,7 @@ export const navState = task((t, a) =>
             status: t.pathOr(state.status, ['payload', 'status'], action),
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
             width: t.pathOr(state.width, ['payload', 'width'], action),
+            size: t.pathOr(state.width, ['payload', 'size'], action),
           })
         }),
         m(['navMatch'], (state, action) => {
@@ -86,6 +95,30 @@ export const navState = task((t, a) =>
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
             width: t.pathOr(state.width, ['payload', 'width'], action),
             matched: t.pathOr(state.matched, ['payload', 'matched'], action),
+            primary: t.merge(state.primary, {
+              items: t.pathOr(
+                state.primary.items,
+                ['payload', 'primary', 'items'],
+                action
+              ),
+              actions: t.pathOr(
+                state.primary.actions,
+                ['payload', 'primary', 'actions'],
+                action
+              ),
+            }),
+            secondary: t.merge(state.secondary, {
+              items: t.pathOr(
+                state.secondary.items,
+                ['payload', 'secondary', 'items'],
+                action
+              ),
+              actions: t.pathOr(
+                state.secondary.actions,
+                ['payload', 'secondary', 'actions'],
+                action
+              ),
+            }),
           })
         }),
       ]
@@ -100,9 +133,9 @@ export const navState = task((t, a) =>
             ? t.eq(status, NAV_STATUS.INIT)
               ? NAV_STATUS.CLOSED
               : status
-            : status
+            : NAV_STATUS.INIT
           if (t.not(t.eq(status, nextStatus))) {
-            dispatch(mutations.navChange({ status: nextStatus }))
+            dispatch(mutations.navChange({ status: nextStatus, size }))
           }
           done()
         }),
@@ -159,6 +192,15 @@ export const navState = task((t, a) =>
                 ? NAV_MODE.PRIMARY
                 : NAV_MODE.SECONDARY
 
+              const primary = {
+                items: schema,
+                actions: [],
+              }
+              const secondary = {
+                items: t.isNil(validMatch) ? [] : validMatch.children,
+                actions: [],
+              }
+
               // mutate
               dispatch(
                 mutations.navMatch({
@@ -170,6 +212,8 @@ export const navState = task((t, a) =>
                     [NAV_MODE.SECONDARY]:
                       NAV_WIDTH.PRIMARY + NAV_WIDTH.SECONDARY,
                   }),
+                  primary,
+                  secondary,
                 })
               )
             }

@@ -58,7 +58,7 @@ export const NavPrimary = task(
     const LogoItem = NavLogoItem({ ui: { HStack, Icon } })
     const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon } })
     const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon } })
-    return ({ items, actions }) => {
+    return ({ left, width, items, actions }) => {
       return (
         <VStack
           x="left"
@@ -68,21 +68,20 @@ export const NavPrimary = task(
             pin: { top: true, bottom: true, left: true },
             bgColor: 'gray-900',
             zIndex: 30,
-            visible: [false, { sm: true }],
           }}
-          style={{ width: primaryWidth }}
+          style={{ width: width, left }}
         >
           <LogoItem />
-          {t.map(
-            item => (
-              <PrimaryItem {...item} />
+          {t.mapIndexed(
+            (item, index) => (
+              <PrimaryItem key={index} {...item} />
             ),
             items || []
           )}
           {t.isZeroLen(actions || []) ? null : <Spacer />}
-          {t.map(
-            actions => (
-              <PrimaryAction {...actions} />
+          {t.mapIndexed(
+            (actions, index) => (
+              <PrimaryAction key={index} {...actions} />
             ),
             actions || []
           )}
@@ -93,92 +92,100 @@ export const NavPrimary = task(
 )
 
 // secondary
-export const NavSecondaryHeader = ({
-  ui: { Box, VStack, HStack, Icon, Spacer, Text },
-}) => ({ title, icon }) => {
-  return (
-    <HStack x="center" y="left" box={{ padding: { top: 4, x: 3, bottom: 5 } }}>
-      {t.isNil(icon) ? null : (
-        <Icon
-          name={icon}
-          size="4xl"
-          color="yellow-500"
-          box={{ alignSelf: 'center', margin: { right: 2 } }}
-        />
-      )}
-      <Text size="3xl" color="yellow-500" family="mono">
-        {title}
-      </Text>
-    </HStack>
-  )
-}
-export const NavSecondaryItem = ({
-  ui: { HStack, Icon, Spacer, Text },
-}) => props => {
-  return (
-    <HStack
-      x="center"
-      y="left"
-      box={{
-        padding: { y: 4, x: 4 },
-        bgColor: [null, { hover: 'gray-900' }],
-      }}
-    >
-      <Icon
-        name="code-outline"
-        size="2xl"
-        color="white"
-        box={{ alignSelf: 'center', margin: { right: 2 } }}
-      />
-      <Text size="lg" color="white" family="mono">
-        Secondary Item
-      </Text>
-      <Spacer />
+export const NavSecondaryHeader = task(
+  t => ({ ui: { Box, VStack, HStack, Icon, Spacer, Text } }) => ({
+    title,
+    icon,
+  }) => {
+    return (
+      <HStack
+        x="center"
+        y="left"
+        box={{ padding: { top: 4, left: 3, right: 2, bottom: 5 } }}
+      >
+        {t.isNil(icon) ? null : (
+          <Icon
+            name={icon}
+            size="4xl"
+            color="yellow-500"
+            box={{ alignSelf: 'center', margin: { right: 3 } }}
+          />
+        )}
+        <Text size="3xl" color="yellow-500" family="mono">
+          {title}
+        </Text>
+      </HStack>
+    )
+  }
+)
+export const NavSecondaryItem = task(
+  t => ({ ui: { HStack, Icon, Spacer, Text } }) => ({ title, icon }) => {
+    return (
+      <HStack
+        x="center"
+        y="left"
+        box={{
+          padding: { y: 4, x: 4 },
+          bgColor: [null, { hover: 'gray-900' }],
+        }}
+      >
+        {t.isNil(icon) ? null : (
+          <Icon
+            name={icon}
+            size="2xl"
+            color="white"
+            box={{ alignSelf: 'center', margin: { right: 2 } }}
+          />
+        )}
+        <Text size="lg" color="white" family="mono">
+          {title}
+        </Text>
+        {/* <Spacer />
       <Icon
         name="bell-outline"
         size="xl"
         color="red-500"
         box={{ alignSelf: 'center', margin: { left: 2 } }}
-      />
-    </HStack>
-  )
-}
-export const NavSecondary = ({
-  ui: { VStack, HStack, Icon, Spacer, Text },
-}) => {
-  const SecondaryHeader = NavSecondaryHeader({
-    ui: { HStack, Icon, Spacer, Text },
-  })
-  const SecondaryItem = NavSecondaryItem({
-    ui: { HStack, Icon, Spacer, Text },
-  })
-  return ({ secondaryWidth, primaryWidth }) => {
-    return (
-      <VStack
-        x="left"
-        y="top"
-        box={{
-          position: 'fixed',
-          pin: { top: true, bottom: true },
-          bgColor: 'gray-800',
-          zIndex: 30,
-          visible: [false, { sm: true }],
-        }}
-        style={{ width: secondaryWidth, left: primaryWidth }}
-      >
-        {/* NavSecondaryHeader */}
-        <SecondaryHeader text={'head'} />
-        {/* NavSecondaryItem */}
-        {t.map(
-            item => (
-              <SecondaryItem {...item} />
+      /> */}
+      </HStack>
+    )
+  }
+)
+export const NavSecondary = task(
+  t => ({ ui: { VStack, HStack, Icon, Spacer, Text } }) => {
+    const SecondaryHeader = NavSecondaryHeader({
+      ui: { HStack, Icon, Spacer, Text },
+    })
+    const SecondaryItem = NavSecondaryItem({
+      ui: { HStack, Icon, Spacer, Text },
+    })
+    return ({ title, icon, width, left, items }) => {
+      return (
+        <VStack
+          x="left"
+          y="top"
+          box={{
+            position: 'fixed',
+            pin: { top: true, bottom: true },
+            bgColor: 'gray-800',
+            zIndex: 30,
+          }}
+          style={{ width, left }}
+        >
+          {/* NavSecondaryHeader */}
+          <SecondaryHeader title={title} icon={icon} />
+          {/* NavSecondaryItem */}
+          {t.mapIndexed(
+            (item, index) => (
+              <SecondaryItem key={index} {...item} />
             ),
             items || []
           )}
-      </VStack>
-    )
+        </VStack>
+      )
+    }
   }
-}
+)
 
 // xs screen
 export const NavToggle = ({
@@ -227,7 +234,7 @@ export const NavToggle = ({
 }
 
 // page
-export const NavBodyItem = (NavSecondaryItem = ({
+export const NavBodyItem = ({
   ui: { Box, VStack, HStack, Icon, Spacer, Text },
 }) => props => {
   return (
@@ -258,8 +265,8 @@ export const NavBodyItem = (NavSecondaryItem = ({
       </Text>
     </HStack>
   )
-})
-export const NavBodyAction = (NavSecondaryItem = ({
+}
+export const NavBodyAction = ({
   ui: { Box, VStack, HStack, Icon, Spacer, Text },
 }) => props => {
   //   <HStack
@@ -302,7 +309,7 @@ export const NavBodyAction = (NavSecondaryItem = ({
       />
     </HStack>
   )
-})
+}
 export const NavBody = ({
   ui: { Box, VStack, HStack, Icon, Spacer, Text },
 }) => ({ secondaryWidth, primaryWidth }) => {
