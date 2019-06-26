@@ -11,11 +11,6 @@ export const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path, brand }) => {
       y="center"
       box={{
         padding: { top: 4, bottom: 6 },
-        bgColor: [null, { hover: brand.nav.primary.bgHover }],
-        color: [
-          brand.nav.primary.color,
-          { hover: brand.nav.primary.colorHover },
-        ],
       }}
       exact={true}
     >
@@ -39,7 +34,7 @@ export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
       x="center"
       y="center"
       box={{
-        padding: { y: 3 },
+        padding: { y: 4 },
         bgColor: [null, { hover: brand.nav.primary.bgHover }],
         color: [
           brand.nav.primary.color,
@@ -55,33 +50,55 @@ export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
     </HStack>
   )
 }
-export const NavPrimaryAction = ({ ui: { HStack, Icon } }) => ({
-  icon,
-  action,
-  brand,
-}) => {
-  return (
-    <HStack x="center" y="center" box={{ padding: { top: 2, bottom: 4 } }}>
-      <Icon
-        name={icon}
-        size="4xl"
+export const NavPrimaryAction = task(
+  t => ({ ui: { HStack, Icon } }) => ({
+    icon,
+    action,
+    onAction,
+    borderWidth,
+    brand,
+  }) => {
+    const color = [
+      brand.nav.primary.color,
+      { hover: brand.nav.primary.colorHover },
+    ]
+    return (
+      <HStack
+        x="center"
+        y="center"
         box={{
-          padding: 1,
-          borderWidth: 2,
-          borderColor: ['white', { hover: 'yellow-500' }],
-          borderRadius: 'full',
-          color: ['white', { hover: 'yellow-500' }],
+          padding: { top: 2, bottom: 4 },
+          cursor: 'pointer',
         }}
-      />
-    </HStack>
-  )
-}
+        onClick={() => {
+          if (
+            t.and(t.isType(onAction, 'Function'), t.isType(action, 'Object'))
+          ) {
+            onAction(action)
+          }
+        }}
+      >
+        <Icon
+          name={icon}
+          size="4xl"
+          box={{
+            padding: 1,
+            borderWidth: t.isNil(borderWidth) ? 2 : borderWidth,
+            borderColor: color,
+            borderRadius: 'full',
+            color,
+          }}
+        />
+      </HStack>
+    )
+  }
+)
 export const NavPrimary = task(
   t => ({ ui: { VStack, HStack, Icon, Spacer, toCss } }) => {
     const LogoItem = NavLogoItem({ ui: { HStack, Icon, toCss } })
     const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon, toCss } })
     const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon, toCss } })
-    return ({ left, width, items, actions, brand }) => {
+    return ({ left, width, items, actions, brand, dispatch }) => {
       return (
         <VStack
           x="left"
@@ -103,8 +120,13 @@ export const NavPrimary = task(
           )}
           {t.isZeroLen(actions || []) ? null : <Spacer />}
           {t.mapIndexed(
-            (action, index) => (
-              <PrimaryAction key={index} brand={brand} {...action} />
+            (actionItem, index) => (
+              <PrimaryAction
+                key={index}
+                brand={brand}
+                onAction={action => dispatch(action)}
+                {...actionItem}
+              />
             ),
             actions || []
           )}
@@ -140,7 +162,7 @@ export const NavToggle = ({
       x="center"
       y="center"
       box={{
-        display: ['flex', { md: 'hidden' }],
+        display: ['flex', { lg: 'hidden' }],
         position: 'fixed',
         zIndex: 40,
       }}

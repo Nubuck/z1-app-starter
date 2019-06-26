@@ -4,9 +4,39 @@ import { navSchema } from '@z1/lib-ui-schema'
 // nav
 const homeSchema = navSchema(n => [
   n('//', { icon: 'home-outline', title: 'Home' }, [
-    n('/about', { icon: 'bulb-outline', title: 'About' }),
-    n('/contact', { icon: 'phone-outline', title: 'Contact' }),
+    n('/activity', {
+      icon: 'activity-outline',
+      title: 'Activity',
+      alert: { color: 'red-500', icon: 'bell-outline' },
+    }),
+    n('/discover', { icon: 'radio-outline', title: 'Discover' }),
+    n('/collections', { icon: 'grid-outline', title: 'Collections' }),
   ]),
+  n('/chat', { icon: 'message-circle-outline', title: 'Chat' }),
+  n('/accounts', { icon: 'people-outline', title: 'Accounts' }),
+  n('/search', {
+    target: 'action',
+    borderWidth: 0,
+    icon: 'search-outline',
+    title: 'Search',
+    action: {
+      type: 'landing/ROUTE_VIEW',
+      payload: {
+        view: 'search',
+      },
+    },
+  }),
+  n('/profile', {
+    target: 'action',
+    icon: 'person-outline',
+    title: 'Profile',
+    action: {
+      type: 'landing/ROUTE_VIEW',
+      payload: {
+        view: 'profile',
+      },
+    },
+  }),
 ])
 
 // main

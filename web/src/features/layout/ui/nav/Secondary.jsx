@@ -69,7 +69,7 @@ export const NavSecondaryItem = task(
             <Icon
               name={alert.icon}
               size="xl"
-              color={icon.color || brand.secondary}
+              color={alert.color || brand.secondary}
               box={{ alignSelf: 'center', margin: { left: 2 } }}
             />
           </React.Fragment>

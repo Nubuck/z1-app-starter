@@ -25,7 +25,7 @@ export const Screen = task(
       ui: { VStack, HStack, Icon, Spacer, Text, toCss },
     })
     return connectState(stateQuery, makeMutations)(
-      ({ nav, brand, children, mutations }) => {
+      ({ nav, brand, children, mutations, dispatch }) => {
         return (
           <Box
             box={{
@@ -44,6 +44,7 @@ export const Screen = task(
           >
             <ScreenNavPrimary
               brand={brand}
+              dispatch={dispatch}
               {...nav.primary}
               left={t.eq(nav.status, 'closed') ? 0 - nav.primary.width : 0}
             />
@@ -63,7 +64,11 @@ export const Screen = task(
             />
             <ScreenBody
               paddingLeft={
-                t.or(t.eq(nav.size, 'sm'), t.eq(nav.size, 'xs')) ? 0 : nav.width
+                t.not(t.or(t.eq(nav.size, 'lg'), t.eq(nav.size, 'xl')))
+                  ? 0
+                  : t.eq(nav.status, 'closed')
+                  ? 0
+                  : nav.width
               }
             >
               {children}
