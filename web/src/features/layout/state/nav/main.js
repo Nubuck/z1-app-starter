@@ -83,7 +83,7 @@ export const navState = task((t, a) =>
             status: t.pathOr(state.status, ['payload', 'status'], action),
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
             width: t.pathOr(state.width, ['payload', 'width'], action),
-            size: t.pathOr(state.width, ['payload', 'size'], action),
+            size: t.pathOr(state.size, ['payload', 'size'], action),
           })
         }),
         m(['navMatch'], (state, action) => {
