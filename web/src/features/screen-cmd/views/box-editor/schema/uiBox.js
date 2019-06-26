@@ -1,5 +1,5 @@
 import { task } from '@z1/lib-feature-box'
-import { formSchema } from './formSchema'
+import { formSchema } from '@z1/lib-ui-schema'
 import { uiBoxEnums } from './enums'
 // main
 export const uiBoxSchema = task(t =>

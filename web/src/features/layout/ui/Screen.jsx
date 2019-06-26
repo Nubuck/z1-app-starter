@@ -11,15 +11,15 @@ import { Body } from './Body'
 // main
 export const Screen = task(
   t => ({
-    ui: { Box, VStack, HStack, Icon, Spacer, Text },
+    ui: { Box, VStack, HStack, Icon, Spacer, Text, toCss },
     mutationMakers,
   }) => {
     const ScreenBody = Body({ ui: { VStack } })
     const ScreenNavPrimary = NavPrimary({
-      ui: { VStack, HStack, Icon, Spacer },
+      ui: { VStack, HStack, Icon, Spacer, toCss },
     })
     const ScreenNavSecondary = NavSecondary({
-      ui: { VStack, HStack, Icon, Spacer, Text },
+      ui: { VStack, HStack, Icon, Spacer, Text, toCss },
     })
     return connectState(stateQuery, mutationMakers)(
       ({ nav, brand, children }) => {
@@ -47,7 +47,12 @@ export const Screen = task(
               icon={t.pathOr(null, ['matched', 'icon'], nav)}
               {...nav.secondary}
               left={
-                t.eq(nav.status, 'closed') ? 0 - nav.width : nav.primary.width
+                t.or(
+                  t.eq(nav.status, 'closed'),
+                  t.isZeroLen(nav.secondary.items)
+                )
+                  ? 0 - (nav.secondary.width + nav.primary.width)
+                  : nav.primary.width
               }
             />
             <ScreenBody

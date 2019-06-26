@@ -759,10 +759,10 @@
     "@z1/lib-state-box-core" "^0.2.10"
     redux-logger "^3.0.6"
 
-"@z1/lib-ui-box-elements@^0.2.19":
-  version "0.2.19"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-elements/-/lib-ui-box-elements-0.2.19.tgz#29195627f7814cc982d41affc781225ad2ce51af"
-  integrity sha512-6KA9XE8wcu6+GyziAXHqmCxFHINOIY35R2QE9fDg9+oQLAiVWoJTn25Y1F9TmYF6gUwP91AKB81Q0NKbROFXWw==
+"@z1/lib-ui-box-elements@^0.2.21":
+  version "0.2.21"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-elements/-/lib-ui-box-elements-0.2.21.tgz#979674dbb2fb545843d7e4002ce7675b56ee1691"
+  integrity sha512-bR/yRnhZ6IwpKlrmMpU0pg9rUsmXUFTeaMlLVhXs/SwIxQStB3b81wWJOLkEpodUVyj0V99SapjrEsOngI1Hcg==
   dependencies:
     "@z1/lib-ui-box-tailwind" "^0.2.18"
     "@z1/preset-task" "^0.2.9"
@@ -782,10 +782,10 @@
   dependencies:
     "@z1/preset-task" "^0.2.9"
 
-"@z1/lib-ui-schema@^0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-schema/-/lib-ui-schema-0.2.9.tgz#b949087eceaae1d03f06a740da597635347e013f"
-  integrity sha512-B8lRScChr/ZjbQE6kY65X/Tr6ynAoC8eQDq3i9pR/RbEZF4RuAivNXhhbT8JwVnEj/d/VdRap8hE3eiLGsF2/A==
+"@z1/lib-ui-schema@^0.2.22":
+  version "0.2.22"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-schema/-/lib-ui-schema-0.2.22.tgz#f5bfcf5a99e1240cf2815c695c3d044358087214"
+  integrity sha512-pIH/IcJFEtY6oUhoFh+JaSt9J/p8xdR6OxH6DTCK8M8B+7Ddzjq3oASeOf35WDCNxUwMhDROIcgqLNqLbvMd9Q==
   dependencies:
     "@z1/preset-task" "^0.2.9"
 

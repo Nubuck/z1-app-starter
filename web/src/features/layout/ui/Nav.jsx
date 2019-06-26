@@ -1,10 +1,12 @@
 import React from 'react'
-import { task } from '@z1/lib-feature-box'
+import { task, NavLink } from '@z1/lib-feature-box'
 
 // primary
-export const NavLogoItem = ({ ui: { HStack, Icon } }) => props => {
+export const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path }) => {
   return (
     <HStack
+      as={NavLink}
+      to={path || '/'}
       x="center"
       y="center"
       box={{
@@ -12,6 +14,7 @@ export const NavLogoItem = ({ ui: { HStack, Icon } }) => props => {
         bgColor: [null, { hover: 'gray-800' }],
         color: ['white', { hover: 'yellow-500' }],
       }}
+      exact={true}
     >
       <Icon
         name="flash-outline"
@@ -21,9 +24,14 @@ export const NavLogoItem = ({ ui: { HStack, Icon } }) => props => {
     </HStack>
   )
 }
-export const NavPrimaryItem = ({ ui: { HStack, Icon } }) => ({ icon }) => {
+export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
+  icon,
+  path,
+}) => {
   return (
     <HStack
+      as={NavLink}
+      to={path || '/'}
       x="center"
       y="center"
       box={{
@@ -31,12 +39,18 @@ export const NavPrimaryItem = ({ ui: { HStack, Icon } }) => ({ icon }) => {
         bgColor: [null, { hover: 'gray-800' }],
         color: ['white', { hover: 'yellow-500' }],
       }}
+      activeClassName={toCss({
+        color: 'yellow-500',
+      })}
     >
       <Icon name={icon} size="4xl" />
     </HStack>
   )
 }
-export const NavPrimaryAction = ({ ui: { HStack, Icon } }) => ({ icon }) => {
+export const NavPrimaryAction = ({ ui: { HStack, Icon } }) => ({
+  icon,
+  action,
+}) => {
   return (
     <HStack x="center" y="center" box={{ padding: { top: 2, bottom: 4 } }}>
       <Icon
@@ -54,10 +68,10 @@ export const NavPrimaryAction = ({ ui: { HStack, Icon } }) => ({ icon }) => {
   )
 }
 export const NavPrimary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer } }) => {
-    const LogoItem = NavLogoItem({ ui: { HStack, Icon } })
-    const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon } })
-    const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon } })
+  t => ({ ui: { VStack, HStack, Icon, Spacer, toCss } }) => {
+    const LogoItem = NavLogoItem({ ui: { HStack, Icon, toCss } })
+    const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon, toCss } })
+    const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon, toCss } })
     return ({ left, width, items, actions }) => {
       return (
         <VStack
@@ -106,12 +120,12 @@ export const NavSecondaryHeader = task(
         {t.isNil(icon) ? null : (
           <Icon
             name={icon}
-            size="4xl"
+            size="3xl"
             color="yellow-500"
             box={{ alignSelf: 'center', margin: { right: 3 } }}
           />
         )}
-        <Text size="3xl" color="yellow-500" family="mono">
+        <Text size="2xl" color="yellow-500" family="mono" lineHeight="tight">
           {title}
         </Text>
       </HStack>
@@ -119,25 +133,34 @@ export const NavSecondaryHeader = task(
   }
 )
 export const NavSecondaryItem = task(
-  t => ({ ui: { HStack, Icon, Spacer, Text } }) => ({ title, icon }) => {
+  t => ({ ui: { HStack, Icon, Spacer, Text, toCss } }) => ({
+    title,
+    icon,
+    path,
+  }) => {
     return (
       <HStack
+        as={NavLink}
+        to={path || '/'}
         x="center"
         y="left"
         box={{
+          color: 'white',
           padding: { y: 4, x: 4 },
           bgColor: [null, { hover: 'gray-900' }],
         }}
+        activeClassName={toCss({
+          bgColor: 'gray-900',
+        })}
       >
         {t.isNil(icon) ? null : (
           <Icon
             name={icon}
             size="2xl"
-            color="white"
-            box={{ alignSelf: 'center', margin: { right: 2 } }}
+            box={{ alignSelf: 'center', margin: { right: 3 } }}
           />
         )}
-        <Text size="lg" color="white" family="mono">
+        <Text size="xl" family="mono">
           {title}
         </Text>
         {/* <Spacer />
@@ -152,12 +175,12 @@ export const NavSecondaryItem = task(
   }
 )
 export const NavSecondary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, Text } }) => {
+  t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss } }) => {
     const SecondaryHeader = NavSecondaryHeader({
       ui: { HStack, Icon, Spacer, Text },
     })
     const SecondaryItem = NavSecondaryItem({
-      ui: { HStack, Icon, Spacer, Text },
+      ui: { HStack, Icon, Spacer, Text, toCss },
     })
     return ({ title, icon, width, left, items }) => {
       return (
@@ -172,9 +195,7 @@ export const NavSecondary = task(
           }}
           style={{ width, left }}
         >
-          {/* NavSecondaryHeader */}
           <SecondaryHeader title={title} icon={icon} />
-          {/* NavSecondaryItem */}
           {t.mapIndexed(
             (item, index) => (
               <SecondaryItem key={index} {...item} />
