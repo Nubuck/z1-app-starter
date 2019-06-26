@@ -127,7 +127,7 @@ export const navState = task((t, a) =>
           const state = getState()
           const status = t.pathOr(null, ['nav', 'status'], state)
           const size = t.pathOr('xs', ['screen', 'size'], state)
-          const nextStatus = t.eq(size, 'xs')
+          const nextStatus = t.or(t.eq(size, 'xs'), t.eq(size, 'sm'))
             ? t.eq(status, NAV_STATUS.INIT)
               ? NAV_STATUS.CLOSED
               : status
@@ -182,38 +182,39 @@ export const navState = task((t, a) =>
                 )
               )
             ) {
-            const nextMode = t.isNil(validMatch)
-              ? NAV_MODE.PRIMARY
-              : t.or(
-                  t.isNil(validMatch.children),
-                  t.isZeroLen(validMatch.children)
-                )
-              ? NAV_MODE.PRIMARY
-              : NAV_MODE.SECONDARY
+              const nextMode = t.isNil(validMatch)
+                ? NAV_MODE.PRIMARY
+                : t.or(
+                    t.isNil(validMatch.children),
+                    t.isZeroLen(validMatch.children)
+                  )
+                ? NAV_MODE.PRIMARY
+                : NAV_MODE.SECONDARY
 
-            const primary = {
-              items: schema,
-              actions: [],
-            }
-            const secondary = {
-              items: t.isNil(validMatch) ? [] : validMatch.children,
-              actions: [],
-            }
+              const primary = {
+                items: schema,
+                actions: [],
+              }
+              const secondary = {
+                items: t.isNil(validMatch) ? [] : validMatch.children,
+                actions: [],
+              }
 
-            // mutate
-            dispatch(
-              mutations.navMatch({
-                matched: validMatch,
-                mode: nextMode,
-                title: t.isNil(validMatch) ? title : validMatch.title,
-                width: t.getMatch(nextMode)({
-                  [NAV_MODE.PRIMARY]: NAV_WIDTH.PRIMARY,
-                  [NAV_MODE.SECONDARY]: NAV_WIDTH.PRIMARY + NAV_WIDTH.SECONDARY,
-                }),
-                primary,
-                secondary,
-              })
-            )
+              // mutate
+              dispatch(
+                mutations.navMatch({
+                  matched: validMatch,
+                  mode: nextMode,
+                  title: t.isNil(validMatch) ? title : validMatch.title,
+                  width: t.getMatch(nextMode)({
+                    [NAV_MODE.PRIMARY]: NAV_WIDTH.PRIMARY,
+                    [NAV_MODE.SECONDARY]:
+                      NAV_WIDTH.PRIMARY + NAV_WIDTH.SECONDARY,
+                  }),
+                  primary,
+                  secondary,
+                })
+              )
             }
             done()
           }

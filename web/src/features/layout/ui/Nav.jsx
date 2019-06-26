@@ -2,7 +2,7 @@ import React from 'react'
 import { task, NavLink } from '@z1/lib-feature-box'
 
 // primary
-export const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path }) => {
+export const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path, brand }) => {
   return (
     <HStack
       as={NavLink}
@@ -11,8 +11,11 @@ export const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path }) => {
       y="center"
       box={{
         padding: { top: 4, bottom: 6 },
-        bgColor: [null, { hover: 'gray-800' }],
-        color: ['white', { hover: 'yellow-500' }],
+        bgColor: [null, { hover: brand.nav.primary.bgHover }],
+        color: [
+          brand.nav.primary.color,
+          { hover: brand.nav.primary.colorHover },
+        ],
       }}
       exact={true}
     >
@@ -27,6 +30,7 @@ export const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path }) => {
 export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
   icon,
   path,
+  brand,
 }) => {
   return (
     <HStack
@@ -36,11 +40,15 @@ export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
       y="center"
       box={{
         padding: { y: 3 },
-        bgColor: [null, { hover: 'gray-800' }],
-        color: ['white', { hover: 'yellow-500' }],
+        bgColor: [null, { hover: brand.nav.primary.bgHover }],
+        color: [
+          brand.nav.primary.color,
+          { hover: brand.nav.primary.colorHover },
+        ],
       }}
       activeClassName={toCss({
-        color: 'yellow-500',
+        bgColor: brand.nav.primary.bgActive,
+        color: brand.nav.primary.colorActive,
       })}
     >
       <Icon name={icon} size="4xl" />
@@ -50,6 +58,7 @@ export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
 export const NavPrimaryAction = ({ ui: { HStack, Icon } }) => ({
   icon,
   action,
+  brand,
 }) => {
   return (
     <HStack x="center" y="center" box={{ padding: { top: 2, bottom: 4 } }}>
@@ -72,7 +81,7 @@ export const NavPrimary = task(
     const LogoItem = NavLogoItem({ ui: { HStack, Icon, toCss } })
     const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon, toCss } })
     const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon, toCss } })
-    return ({ left, width, items, actions }) => {
+    return ({ left, width, items, actions, brand }) => {
       return (
         <VStack
           x="left"
@@ -80,22 +89,22 @@ export const NavPrimary = task(
           box={{
             position: 'fixed',
             pin: { top: true, bottom: true, left: true },
-            bgColor: 'gray-900',
+            bgColor: brand.nav.primary.bg,
             zIndex: 30,
           }}
           style={{ width: width, left }}
         >
-          <LogoItem />
+          <LogoItem brand={brand} />
           {t.mapIndexed(
             (item, index) => (
-              <PrimaryItem key={index} {...item} />
+              <PrimaryItem key={index} brand={brand} {...item} />
             ),
             items || []
           )}
           {t.isZeroLen(actions || []) ? null : <Spacer />}
           {t.mapIndexed(
             (actions, index) => (
-              <PrimaryAction key={index} {...actions} />
+              <PrimaryAction key={index} brand={brand} {...actions} />
             ),
             actions || []
           )}
@@ -110,6 +119,7 @@ export const NavSecondaryHeader = task(
   t => ({ ui: { Box, VStack, HStack, Icon, Spacer, Text } }) => ({
     title,
     icon,
+    brand,
   }) => {
     return (
       <HStack
@@ -121,11 +131,16 @@ export const NavSecondaryHeader = task(
           <Icon
             name={icon}
             size="3xl"
-            color="yellow-500"
+            color={brand.nav.secondary.headerColor}
             box={{ alignSelf: 'center', margin: { right: 3 } }}
           />
         )}
-        <Text size="2xl" color="yellow-500" family="mono" lineHeight="tight">
+        <Text
+          size="2xl"
+          color={brand.nav.secondary.headerColor}
+          family={brand.fontFamily}
+          lineHeight="tight"
+        >
           {title}
         </Text>
       </HStack>
@@ -137,6 +152,7 @@ export const NavSecondaryItem = task(
     title,
     icon,
     path,
+    brand,
   }) => {
     return (
       <HStack
@@ -145,12 +161,12 @@ export const NavSecondaryItem = task(
         x="center"
         y="left"
         box={{
-          color: 'white',
+          color: brand.nav.secondary.color,
           padding: { y: 4, x: 4 },
-          bgColor: [null, { hover: 'gray-900' }],
+          bgColor: [null, { hover: brand.nav.secondary.bgHover }],
         }}
         activeClassName={toCss({
-          bgColor: 'gray-900',
+          bgColor: brand.nav.secondary.bgActive,
         })}
       >
         {t.isNil(icon) ? null : (
@@ -160,7 +176,7 @@ export const NavSecondaryItem = task(
             box={{ alignSelf: 'center', margin: { right: 3 } }}
           />
         )}
-        <Text size="xl" family="mono">
+        <Text size="xl" family={brand.fontFamily}>
           {title}
         </Text>
         {/* <Spacer />
@@ -182,7 +198,7 @@ export const NavSecondary = task(
     const SecondaryItem = NavSecondaryItem({
       ui: { HStack, Icon, Spacer, Text, toCss },
     })
-    return ({ title, icon, width, left, items }) => {
+    return ({ title, icon, width, left, items, brand }) => {
       return (
         <VStack
           x="left"
@@ -190,15 +206,15 @@ export const NavSecondary = task(
           box={{
             position: 'fixed',
             pin: { top: true, bottom: true },
-            bgColor: 'gray-800',
+            bgColor: brand.nav.secondary.bg,
             zIndex: 30,
           }}
           style={{ width, left }}
         >
-          <SecondaryHeader title={title} icon={icon} />
+          <SecondaryHeader title={title} icon={icon} brand={brand} />
           {t.mapIndexed(
             (item, index) => (
-              <SecondaryItem key={index} {...item} />
+              <SecondaryItem key={index} brand={brand} {...item} />
             ),
             items || []
           )}

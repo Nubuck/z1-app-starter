@@ -35,14 +35,17 @@ export const Screen = task(
               overflowY: 'auto',
               overflowX: 'hidden',
               zIndex: 0,
-              bgColor: 'gray-900',
+              bgColor: brand.screen.bg,
+              color: brand.screen.color,
             }}
           >
             <ScreenNavPrimary
+            brand={brand}
               {...nav.primary}
               left={t.eq(nav.status, 'closed') ? 0 - nav.primary.width : 0}
             />
             <ScreenNavSecondary
+              brand={brand}
               title={nav.title}
               icon={t.pathOr(null, ['matched', 'icon'], nav)}
               {...nav.secondary}
@@ -59,7 +62,7 @@ export const Screen = task(
               paddingLeft={
                 t.eq(nav.status, 'closed')
                   ? 0
-                  : t.and(t.eq(nav.status, 'open'), t.eq(nav.size, 'xs'))
+                  : t.and(t.eq(nav.status, 'open'), t.or(t.eq(nav.size, 'sm'),t.eq(nav.size, 'xs')))
                   ? 0
                   : nav.width
               }
