@@ -14,7 +14,7 @@ const homeSchema = navSchema(n => [
   ]),
   n('/chat', { icon: 'message-circle-outline', title: 'Chat' }),
   n('/accounts', { icon: 'people-outline', title: 'Accounts' }),
-  n('/search', {
+  n('#', {
     target: 'action',
     borderWidth: 0,
     icon: 'search-outline',
@@ -26,7 +26,7 @@ const homeSchema = navSchema(n => [
       },
     },
   }),
-  n('/profile', {
+  n('#', {
     target: 'action',
     icon: 'person-outline',
     title: 'Profile',

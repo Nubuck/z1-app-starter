@@ -34,12 +34,13 @@ export const Screen = task(
               flex: 1,
               flexDirection: 'col',
               width: 'full',
-              height: 'screen',
+              minHeight: 'screen',
               overflowY: 'auto',
               overflowX: 'hidden',
               zIndex: 0,
               bgColor: brand.screen.bg,
               color: brand.screen.color,
+              fontFamily: brand.fontFamily,
             }}
           >
             <ScreenNavPrimary

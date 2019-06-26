@@ -108,6 +108,8 @@ export const NavPrimary = task(
             pin: { top: true, bottom: true, left: true },
             bgColor: brand.nav.primary.bg,
             zIndex: 30,
+            overflowY: 'auto',
+            overflowX: 'hidden',
           }}
           style={{ width: width, left }}
         >

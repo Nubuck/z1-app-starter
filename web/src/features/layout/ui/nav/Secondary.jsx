@@ -97,6 +97,8 @@ export const NavSecondary = task(
             bgColor: brand.nav.secondary.bg,
             zIndex: 30,
             shadow: ['2xl', { md: 'none' }],
+            overflowY: 'auto',
+              overflowX: 'hidden',
           }}
           style={{ width, left }}
         >
