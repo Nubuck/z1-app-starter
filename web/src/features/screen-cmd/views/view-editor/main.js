@@ -77,10 +77,7 @@ export const viewEditor = task(t =>
       return (
         <div className={css.editor}>
           <div className={css.colLeft}>
-            <p>
-              <Link to="/">HOME</Link>
-            </p>
-            {/* <h2 className={css.title}>VIEW EDITOR</h2> */}
+                     {/* <h2 className={css.title}>VIEW EDITOR</h2> */}
             <Box
               as="h2"
               box={{
@@ -92,7 +89,7 @@ export const viewEditor = task(t =>
             >
               VIEW EDITOR
             </Box>
-            <div className={css.container} style={{ height: '86vh' }}>
+            <div className={css.container} style={{ height: '90vh' }}>
               <SortableTree
                 className="dark"
                 treeData={state.data}

@@ -21,7 +21,7 @@ const css = {
     display: 'flex',
     flexDirection: 'row',
     // fontFamily: 'mono',
-    bgColor: 'gray-800',
+ 
     color: 'gray-900',
   }),
   container: toCss({
@@ -29,12 +29,13 @@ const css = {
     flexDirection: 'col',
     // fontFamily: 'mono',
     height: '64',
+    bgColor: 'gray-700',
   }),
   colLeft: toCss({
     display: 'flex',
     flexDirection: 'col',
     width: '7/12',
-    overflowY: 'scroll',
+    overflowY: 'auto',
     maxHeight: 'screen',
   }),
   colRight: toCss({
