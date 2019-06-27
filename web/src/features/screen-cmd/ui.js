@@ -12,7 +12,7 @@ const css = {
     padding: 3,
   }),
   title: toCss({
-    color: 'gray-700',
+    color: 'gray-900',
     fontSize: '2xl',
     // fontFamily: 'mono',
     margin: { bottom: 3 },
@@ -21,6 +21,8 @@ const css = {
     display: 'flex',
     flexDirection: 'row',
     // fontFamily: 'mono',
+    bgColor: 'gray-800',
+    color: 'gray-900',
   }),
   container: toCss({
     display: 'flex',
@@ -39,6 +41,7 @@ const css = {
     display: 'flex',
     flexDirection: 'col',
     width: '5/12',
+    color: 'white',
   }),
   row: toCss({
     display: 'flex',

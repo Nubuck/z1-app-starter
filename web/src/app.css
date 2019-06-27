@@ -3,3 +3,23 @@
 @tailwind components;
 
 @tailwind utilities;
+
+.dark .rst__lineChildren::after {
+  @apply bg-white;
+}
+
+.dark .rst__lineHalfHorizontalRight::before,
+.dark .rst__lineFullVertical::after,
+.dark .rst__lineHalfVerticalTop::after,
+.dark .rst__lineHalfVerticalBottom::after {
+  @apply bg-white;
+}
+
+.dark .rst__moveHandle,
+.dark .rst__loadingHandle {
+  @apply bg-gray-900 shadow-none border-none;
+}
+
+.dark .rst__rowContents {
+  @apply bg-gray-900 text-white shadow-none border-none px-2;
+}

@@ -12,7 +12,7 @@ const homeSchema = navSchema(n => [
     n('/discover', { icon: 'radio-outline', title: 'Discover' }),
     n('/collections', { icon: 'grid-outline', title: 'Collections' }),
   ]),
-  n('/chat', { icon: 'message-circle-outline', title: 'Chat' }),
+  n('/screen-cmd/view-editor', { icon: 'code-outline', title: 'Screen CMD' }),
   n('/accounts', { icon: 'people-outline', title: 'Accounts' }),
   n('#', {
     target: 'action',

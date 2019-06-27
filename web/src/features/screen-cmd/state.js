@@ -7,5 +7,5 @@ import { views } from './views'
 // main
 const name = 'screenCmd'
 export const screenCmdState = composeStateBox({ name }, [
-  macroRouteViewState(name, { path: '/', views: views.state }),
+  macroRouteViewState(name, { path: '/screen-cmd/', views: views.state }),
 ])

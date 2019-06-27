@@ -94,39 +94,48 @@ export const viewEditor = task(t =>
             </Box>
             <div className={css.container} style={{ height: '86vh' }}>
               <SortableTree
+                className="dark"
                 treeData={state.data}
                 canNodeHaveChildren={() => true}
                 onChange={data => mutations.dataChange({ data })}
+                reactVirtualizedListProps={{ rowHeight: 70 }}
                 generateNodeProps={({ node, path }) => {
                   return {
                     title: (
                       <div className={css.row}>
                         <input
                           style={{ fontSize: '1.1rem' }}
+                          className={
+                            'form-input bg-gray-800 text-white rounded-none py-1 border-gray-900 focus:shadow-none mr-1'
+                          }
                           value={node.title}
                           onChange={event => {
-                            const title = event.target.value
                             mutations.dataChange({
                               data: changeNodeAtPath({
                                 treeData: state.data,
                                 path,
                                 getNodeKey,
-                                newNode: { ...node, title },
+                                newNode: { ...node, title: event.target.value },
                               }),
                             })
                           }}
                         />
                         <select
                           style={{ fontSize: '1.1rem' }}
+                          className={
+                            'form-select bg-gray-800 text-white rounded-none py-1 border-gray-900 focus:shadow-none'
+                          }
                           value={node.element || 'div'}
                           onChange={event => {
-                            const element = event.target.value
                             mutations.dataChange({
                               data: changeNodeAtPath({
                                 treeData: state.data,
                                 path,
                                 getNodeKey,
-                                newNode: { ...node, element },
+                                newNode: {
+                                  ...node,
+                                  element: event.target.value,
+                                },
                               }),
                             })
                           }}
@@ -144,8 +153,9 @@ export const viewEditor = task(t =>
                       </div>
                     ),
                     buttons: [
-                      <button>Props</button>,
+                      <button className='rounded-full mr-1 p-1 block outline-none'><i className='eva eva-settings-outline text-2xl'/></button>,
                       <button
+                      className='rounded-full mr-1 p-1 block outline-none'
                         onClick={() =>
                           mutations.dataChange({
                             data: addNodeUnderParent({
@@ -161,9 +171,10 @@ export const viewEditor = task(t =>
                           })
                         }
                       >
-                        Add
+                       <i className='eva eva-plus-outline text-2xl'/>
                       </button>,
                       <button
+                      className='rounded-full mr-1 p-1 block outline-none'
                         onClick={() =>
                           mutations.dataChange({
                             data: removeNodeAtPath({
@@ -174,7 +185,7 @@ export const viewEditor = task(t =>
                           })
                         }
                       >
-                        Remove
+                         <i className='eva eva-trash-outline text-2xl focus:border-none'/>
                       </button>,
                     ],
                   }
