@@ -80,7 +80,7 @@ export const NavPageItem = ({
   }
   export const NavPage = ({
     ui: { Box, VStack, HStack, Icon, Spacer, Text },
-  }) => ({ secondaryWidth, primaryWidth }) => {
+  }) => ({ left }) => {
     return (
       <HStack
         x="center"
@@ -92,9 +92,8 @@ export const NavPageItem = ({
           bgColor: 'gray-800',
           zIndex: 20,
           shadow: true,
-          margin: [{ left: -64 }, { sm: 0 }],
         }}
-        style={{ left: primaryWidth + secondaryWidth }}
+        style={{ left }}
       >
         {/* items */}
         <Spacer />
