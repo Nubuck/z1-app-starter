@@ -139,26 +139,8 @@ export const NavPrimary = task(
 )
 
 export const NavToggle = ({
-  ui: { Box, VStack, HStack, Icon, Spacer, Text },
+  ui: { HStack, Icon },
 }) => ({ open, brand, onClick }) => {
-  //   <HStack
-  //   x="center"
-  //   y="left"
-  //   box={{
-  //     padding: { x: 2 },
-  //   }}
-  // >
-  //   <Icon
-  //     name="search-outline"
-  //     size="3xl"
-  //     color="white"
-  //     box={{
-  //       padding: 2,
-  //       borderRadius: 'full',
-  //       bgColor: [null, { hover: 'gray-900' }],
-  //     }}
-  //   />
-  // </HStack>
   return (
     <HStack
       x="center"

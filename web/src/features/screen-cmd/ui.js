@@ -29,7 +29,7 @@ const css = {
     flexDirection: 'col',
     // fontFamily: 'mono',
     height: '64',
-    bgColor: 'gray-700',
+    bgColor: 'gray-800',
   }),
   colLeft: toCss({
     display: 'flex',

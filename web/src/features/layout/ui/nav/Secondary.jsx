@@ -8,7 +8,7 @@ export const NavSecondaryHeader = task(
       <HStack
         x="center"
         y="left"
-        box={{ padding: { top: 4, left: 3, right: 2, bottom: 5 } }}
+        box={{ padding: { top: 4, left: 3, right: 2, bottom: 6 } }}
       >
         {t.isNil(icon) ? null : (
           <Icon
@@ -37,6 +37,9 @@ export const NavSecondaryItem = task(
     path,
     brand,
     alert,
+    exact,
+    size,
+    color,
   }) => {
     return (
       <HStack
@@ -45,22 +48,23 @@ export const NavSecondaryItem = task(
         x="center"
         y="left"
         box={{
-          color: brand.nav.secondary.color,
+          color: t.isNil(color) ? brand.nav.secondary.color : color,
           padding: { y: 4, x: 4 },
           bgColor: [null, { hover: brand.nav.secondary.bgHover }],
         }}
         activeClassName={toCss({
           bgColor: brand.nav.secondary.bgActive,
         })}
+        exact={t.isNil(exact) ? false : exact}
       >
         {t.isNil(icon) ? null : (
           <Icon
             name={icon}
-            size="2xl"
+            size={t.isNil(size) ? '2xl' : size}
             box={{ alignSelf: 'center', margin: { right: 3 } }}
           />
         )}
-        <Text size="xl" family={brand.fontFamily}>
+        <Text size={t.isNil(size) ? 'xl' : size} family={brand.fontFamily}>
           {title}
         </Text>
         {t.isNil(alert) ? null : (
@@ -98,7 +102,7 @@ export const NavSecondary = task(
             zIndex: 30,
             shadow: ['2xl', { md: 'none' }],
             overflowY: 'auto',
-              overflowX: 'hidden',
+            overflowX: 'hidden',
           }}
           style={{ width, left }}
         >

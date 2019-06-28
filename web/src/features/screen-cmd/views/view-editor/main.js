@@ -77,7 +77,7 @@ export const viewEditor = task(t =>
       return (
         <div className={css.editor}>
           <div className={css.colLeft}>
-                     {/* <h2 className={css.title}>VIEW EDITOR</h2> */}
+            {/* <h2 className={css.title}>VIEW EDITOR</h2> */}
             <Box
               as="h2"
               box={{
@@ -100,27 +100,10 @@ export const viewEditor = task(t =>
                   return {
                     title: (
                       <div className={css.row}>
-                        <input
-                          style={{ fontSize: '1.1rem' }}
-                          className={
-                            'form-input bg-gray-800 text-white rounded-none py-1 border-gray-900 focus:shadow-none mr-1'
-                          }
-                          value={node.title}
-                          onChange={event => {
-                            mutations.dataChange({
-                              data: changeNodeAtPath({
-                                treeData: state.data,
-                                path,
-                                getNodeKey,
-                                newNode: { ...node, title: event.target.value },
-                              }),
-                            })
-                          }}
-                        />
                         <select
                           style={{ fontSize: '1.1rem' }}
                           className={
-                            'form-select bg-gray-800 text-white rounded-none py-1 border-gray-900 focus:shadow-none'
+                            'form-select bg-gray-700 text-white rounded-none py-1 border-gray-900 focus:shadow-none mr-1'
                           }
                           value={node.element || 'div'}
                           onChange={event => {
@@ -147,12 +130,31 @@ export const viewEditor = task(t =>
                           <option value="button">button</option>
                           <option value="img">img</option>
                         </select>
+                        <input
+                          style={{ fontSize: '1.1rem' }}
+                          className={
+                            'form-input bg-gray-700 text-white rounded-none py-1 border-gray-900 focus:shadow-none'
+                          }
+                          value={node.title}
+                          onChange={event => {
+                            mutations.dataChange({
+                              data: changeNodeAtPath({
+                                treeData: state.data,
+                                path,
+                                getNodeKey,
+                                newNode: { ...node, title: event.target.value },
+                              }),
+                            })
+                          }}
+                        />
                       </div>
                     ),
                     buttons: [
-                      <button className='rounded-full mr-1 p-1 block outline-none'><i className='eva eva-settings-outline text-2xl'/></button>,
+                      <button className="rounded-full mr-1 p-1 block outline-none">
+                        <i className="eva eva-settings-outline text-2xl" />
+                      </button>,
                       <button
-                      className='rounded-full mr-1 p-1 block outline-none'
+                        className="rounded-full mr-1 p-1 block outline-none"
                         onClick={() =>
                           mutations.dataChange({
                             data: addNodeUnderParent({
@@ -168,10 +170,16 @@ export const viewEditor = task(t =>
                           })
                         }
                       >
-                       <i className='eva eva-plus-outline text-2xl'/>
+                        <i className="eva eva-plus-outline text-2xl" />
                       </button>,
                       <button
-                      className='rounded-full mr-1 p-1 block outline-none'
+                        className=" mr-1 p-1 block outline-none border-l pl-3 border-gray-600"
+                        onClick={() => {}}
+                      >
+                        <i className="eva eva-save-outline text-2xl focus:border-none" />
+                      </button>,
+                      <button
+                        className="rounded-full mr-1 p-1 block outline-none"
                         onClick={() =>
                           mutations.dataChange({
                             data: removeNodeAtPath({
@@ -182,7 +190,7 @@ export const viewEditor = task(t =>
                           })
                         }
                       >
-                         <i className='eva eva-trash-outline text-2xl focus:border-none'/>
+                        <i className="eva eva-trash-outline text-2xl focus:border-none ml-1 " />
                       </button>,
                     ],
                   }

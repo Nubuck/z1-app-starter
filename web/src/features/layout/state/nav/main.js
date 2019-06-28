@@ -49,11 +49,27 @@ export const navState = task((t, a) =>
         left: 0,
       },
       body: {
+        height: 0,
         items: [],
         left: 0,
       },
     },
     mutations(m) {
+      const calcPrimaryLeft = status => {
+        return t.eq(status, 'closed') ? 0 - NAV_WIDTH.PRIMARY : 0
+      }
+      const calcSecondaryLeft = (status, secondaryItems) => {
+        return t.or(t.eq(status, 'closed'), t.isZeroLen(secondaryItems))
+          ? 0 - (NAV_WIDTH.SECONDARY + NAV_WIDTH.PRIMARY)
+          : NAV_WIDTH.PRIMARY
+      }
+      const calcBodyLeft = (status, size, width) => {
+        return t.not(t.or(t.eq(size, 'lg'), t.eq(size, 'xl')))
+          ? 0
+          : t.eq(status, 'closed')
+          ? 0
+          : width
+      }
       return [
         m(['navSchemaAdd'], (state, action) => {
           return t.merge(state, {
@@ -84,22 +100,43 @@ export const navState = task((t, a) =>
           })
         }),
         m(['navChange'], (state, action) => {
+          const status = t.pathOr(state.status, ['payload', 'status'], action)
+          const size = t.pathOr(state.size, ['payload', 'size'], action)
+          const width = t.pathOr(state.width, ['payload', 'width'], action)
+          const secondaryItems = t.pathOr([], ['secondary', 'items'], state)
           return t.merge(state, {
             title: t.pathOr(state.title, ['payload', 'title'], action),
-            status: t.pathOr(state.status, ['payload', 'status'], action),
+            status,
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
-            width: t.pathOr(state.width, ['payload', 'width'], action),
-            size: t.pathOr(state.size, ['payload', 'size'], action),
+            width,
+            size,
+            primary: t.merge(state.primary, {
+              left: calcPrimaryLeft(status),
+            }),
+            secondary: t.merge(state.secondary, {
+              left: calcSecondaryLeft(status, secondaryItems),
+            }),
+            body: t.merge(state.body, {
+              left: calcBodyLeft(status, size, width),
+            }),
           })
         }),
         m(['navMatch'], (state, action) => {
+          const status = t.pathOr(state.status, ['payload', 'status'], action)
+          const width = t.pathOr(state.width, ['payload', 'width'], action)
+          const secondaryItems = t.pathOr(
+            state.secondary.items,
+            ['payload', 'secondary', 'items'],
+            action
+          )
           return t.merge(state, {
             title: t.pathOr(state.title, ['payload', 'title'], action),
-            status: t.pathOr(state.status, ['payload', 'status'], action),
+            status,
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
-            width: t.pathOr(state.width, ['payload', 'width'], action),
+            width,
             matched: t.pathOr(state.matched, ['payload', 'matched'], action),
             primary: t.merge(state.primary, {
+              left: calcPrimaryLeft(status),
               items: t.pathOr(
                 state.primary.items,
                 ['payload', 'primary', 'items'],
@@ -112,18 +149,11 @@ export const navState = task((t, a) =>
               ),
             }),
             secondary: t.merge(state.secondary, {
-              items: t.pathOr(
-                state.secondary.items,
-                ['payload', 'secondary', 'items'],
-                action
-              ),
-              actions: t.pathOr(
-                state.secondary.actions,
-                ['payload', 'secondary', 'actions'],
-                action
-              ),
+              left: calcSecondaryLeft(status, secondaryItems),
+              items: secondaryItems,
             }),
             body: t.merge(state.body, {
+              left: calcBodyLeft(status, state.size, width),
               items: t.pathOr(
                 state.body.items,
                 ['payload', 'body', 'items'],
@@ -132,27 +162,50 @@ export const navState = task((t, a) =>
             }),
           })
         }),
+        m('navToggleStatus', state => {
+          const status = t.eq(state.status, 'open') ? 'closed' : 'open'
+          return t.merge(state, {
+            status,
+            primary: t.merge(state.primary, {
+              left: calcPrimaryLeft(status),
+            }),
+            secondary: t.merge(state.secondary, {
+              left: calcSecondaryLeft(status, state.secondary.items),
+            }),
+            body: t.merge(state.body, {
+              left: calcBodyLeft(status, state.size, state.width),
+            }),
+          })
+        }),
       ]
     },
     effects(fx, { actions, mutations }) {
       return [
-        fx(['screen/RESIZE'], async ({ getState }, dispatch, done) => {
-          const state = getState()
-          const status = t.pathOr(null, ['nav', 'status'], state)
-          const size = t.pathOr('xs', ['screen', 'size'], state)
-          const navSize = t.pathOr('xs', ['nav', 'size'], state)
-          const nextStatus = t.not(t.or(t.eq(size, 'lg'), t.eq(size, 'xl')))
-            ? t.eq(status, NAV_STATUS.INIT)
-              ? NAV_STATUS.CLOSED
-              : status
-            : NAV_STATUS.INIT
-          if (
-            t.or(t.not(t.eq(status, nextStatus)), t.not(t.eq(size, navSize)))
-          ) {
-            dispatch(mutations.navChange({ status: nextStatus, size }))
+        fx(
+          ['screen/RESIZE', actions.navToggleStatus],
+          async ({ getState }, dispatch, done) => {
+            const state = getState()
+            const status = t.pathOr(null, ['nav', 'status'], state)
+            const size = t.pathOr('xs', ['screen', 'size'], state)
+            const navSize = t.pathOr('xs', ['nav', 'size'], state)
+            const nextStatus = t.not(t.or(t.eq(size, 'lg'), t.eq(size, 'xl')))
+              ? t.eq(status, NAV_STATUS.INIT)
+                ? NAV_STATUS.CLOSED
+                : status
+              : NAV_STATUS.INIT
+            if (
+              t.or(t.not(t.eq(status, nextStatus)), t.not(t.eq(size, navSize)))
+            ) {
+              dispatch(
+                mutations.navChange({
+                  status: nextStatus,
+                  size,
+                })
+              )
+            }
+            done()
           }
-          done()
-        }),
+        ),
         fx(
           [
             t.globrex('*/ROUTE_*').regex,
@@ -190,7 +243,6 @@ export const navState = task((t, a) =>
               : nextMatch
 
             // compute layout
-
             const nextMode = t.isNil(validMatch)
               ? NAV_MODE.PRIMARY
               : t.or(
@@ -204,7 +256,7 @@ export const navState = task((t, a) =>
               (data, item) => {
                 const isAction = t.eq(
                   t.pathOr('nav', ['target'], item),
-                  'action'
+                  'primary-action'
                 )
                 return t.merge(data, {
                   items: isAction ? data.items : t.concat(data.items, [item]),
@@ -217,10 +269,38 @@ export const navState = task((t, a) =>
               schema
             )
 
-            const secondary = {
-              items: t.isNil(validMatch) ? [] : validMatch.children,
-              actions: [],
-            }
+            const secondary = t.reduce(
+              (data, item) => {
+                const isBodyItem = t.eq(
+                  t.pathOr('nav', ['target'], item),
+                  'body'
+                )
+                const isBodyAction = t.eq(
+                  t.pathOr('nav', ['target'], item),
+                  'body-action'
+                )
+                return t.merge(data, {
+                  items: t.or(isBodyItem, isBodyAction)
+                    ? data.items
+                    : t.concat(data.items, [item]),
+                  bodyItems: t.not(isBodyItem)
+                    ? data.bodyItems
+                    : t.concat(data.bodyItems, [item]),
+                  bodyActions: t.not(isBodyAction)
+                    ? data.bodyActions
+                    : t.concat(data.bodyActions, [item]),
+                })
+              },
+              { items: [], bodyItems: [], bodyActions: [] },
+              t.isNil(validMatch) ? [] : validMatch.children
+            )
+
+            // left compute
+            const secondaryItems = secondary.items
+            const nextWidth = t.getMatch(nextMode)({
+              [NAV_MODE.PRIMARY]: NAV_WIDTH.PRIMARY,
+              [NAV_MODE.SECONDARY]: NAV_WIDTH.PRIMARY + NAV_WIDTH.SECONDARY,
+            })
 
             // mutate
             dispatch(
@@ -228,14 +308,16 @@ export const navState = task((t, a) =>
                 matched: validMatch,
                 mode: nextMode,
                 title: t.isNil(validMatch) ? title : validMatch.title,
-                width: t.getMatch(nextMode)({
-                  [NAV_MODE.PRIMARY]: NAV_WIDTH.PRIMARY,
-                  [NAV_MODE.SECONDARY]: NAV_WIDTH.PRIMARY + NAV_WIDTH.SECONDARY,
-                }),
+                width: nextWidth,
                 primary,
-                secondary,
+                secondary: { items: secondaryItems },
+                body: {
+                  items: secondary.bodyItems,
+                  actions: secondary.bodyActions,
+                },
               })
             )
+
             // finally
             done()
           }

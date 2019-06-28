@@ -47,42 +47,18 @@ export const Screen = task(
               brand={brand}
               dispatch={dispatch}
               {...nav.primary}
-              left={t.eq(nav.status, 'closed') ? 0 - nav.primary.width : 0}
             />
             <ScreenNavSecondary
               brand={brand}
               title={nav.title}
               icon={t.pathOr(null, ['matched', 'icon'], nav)}
               {...nav.secondary}
-              left={
-                t.or(
-                  t.eq(nav.status, 'closed'),
-                  t.isZeroLen(nav.secondary.items)
-                )
-                  ? 0 - (nav.secondary.width + nav.primary.width)
-                  : nav.primary.width
-              }
             />
-            <ScreenBody
-              paddingLeft={
-                t.not(t.or(t.eq(nav.size, 'lg'), t.eq(nav.size, 'xl')))
-                  ? 0
-                  : t.eq(nav.status, 'closed')
-                  ? 0
-                  : nav.width
-              }
-            >
-              {children}
-            </ScreenBody>
+            <ScreenBody left={nav.body.left}>{children}</ScreenBody>
             <ScreenNavToggle
               brand={brand}
               open={t.eq(nav.status, 'open')}
-              onClick={() => {
-                console.log('CLick')
-                mutations.navChange({
-                  status: t.eq(nav.status, 'open') ? 'closed' : 'open',
-                })
-              }}
+              onClick={() => mutations.navToggleStatus()}
             />
           </Box>
         )
