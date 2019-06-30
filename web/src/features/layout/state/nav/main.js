@@ -263,29 +263,40 @@ export const navState = task((t, a) =>
             : t.eq(status, 'open')
             ? 'closed'
             : state.page.status
+          const nextStatus = t.and(
+            t.not(t.eq('nav', target)),
+            t.eq(pageStatus, 'open')
+          )
+            ? 'closed'
+            : status
           const pageItems = t.pathOr([], ['page', 'items'], state)
           return t.merge(state, {
-            status,
+            status: nextStatus,
             primary: t.merge(state.primary, {
-              left: calcPrimaryLeft(status),
+              left: calcPrimaryLeft(nextStatus),
             }),
             secondary: t.merge(state.secondary, {
-              left: calcSecondaryLeft(status, state.secondary.items),
+              left: calcSecondaryLeft(nextStatus, state.secondary.items),
             }),
             body: t.merge(state.body, {
               left: calcBodyLeft(
-                status,
+                nextStatus,
                 state.size,
                 state.width,
                 t.not(t.isZeroLen(pageItems))
               ),
-              navLeft: calcBodyLeft(status, state.size, state.width),
+              navLeft: calcBodyLeft(nextStatus, state.size, state.width),
               top: calcBodySpacing('top', state.body.items, state.size),
               bottom: calcBodySpacing('bottom', state.body.items, state.size),
             }),
             page: t.merge(state.page, {
               status: pageStatus,
-              left: calcPageLeft(status, state.size, state.width, pageStatus),
+              left: calcPageLeft(
+                nextStatus,
+                state.size,
+                state.width,
+                pageStatus
+              ),
               top: calcBodySpacing('top', state.body.items, state.size),
               bottom: calcBodySpacing('bottom', state.body.items, state.size),
             }),
