@@ -12,10 +12,36 @@ const homeSchema = navSchema(n => [
         alert: { color: 'red-500', icon: 'bell-outline' },
       },
       [
-        n('/', {
+        n(
+          '/activity/popular/favourites',
+          {
+            target: 'body',
+            icon: 'heart-outline',
+            title: 'Favourites',
+            exact: true,
+            size: 'xl',
+          },
+          [
+            n('/activity/popular/followers', {
+              target: 'body',
+              icon: 'flash-outline',
+              title: 'Followers',
+              exact: true,
+              size: 'xl',
+            }),
+          ]
+        ),
+        n('/activity/popular/latest', {
           target: 'body',
-          icon: 'arrow-back-outline',
-          title: 'Back to home',
+          icon: 'flash-outline',
+          title: 'Latest',
+          exact: true,
+          size: 'xl',
+        }),
+        n('/activity/search', {
+          target: 'body-action',
+          icon: 'search-outline',
+          title: 'Search',
           exact: true,
           size: 'xl',
           color: 'gray-500',
@@ -30,7 +56,7 @@ const homeSchema = navSchema(n => [
   n('/accounts', { icon: 'people-outline', title: 'Accounts' }),
   n('#', {
     target: 'primary-action',
-    borderWidth: 0,
+
     icon: 'search-outline',
     title: 'Search',
     action: {
@@ -42,6 +68,7 @@ const homeSchema = navSchema(n => [
   }),
   n('#', {
     target: 'primary-action',
+    borderWidth: 2,
     icon: 'person-outline',
     title: 'Profile',
     action: {

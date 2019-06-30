@@ -35,6 +35,24 @@ export const brandState = task((t, a) => (brand = {}) =>
             colorActive: 'yellow-500',
             headerColor: 'yellow-500',
           },
+          body: {
+            bg: 'gray-800',
+            bgHover: 'gray-900',
+            bgActive: 'gray-900',
+            color: 'gray-400',
+            colorHover: 'yellow-500',
+            colorActive: 'yellow-500',
+            headerColor: 'yellow-500',
+          },
+          page: {
+            bg: 'gray-600',
+            bgHover: 'gray-800',
+            bgActive: 'gray-800',
+            color: 'white',
+            colorHover: 'yellow-500',
+            colorActive: 'yellow-500',
+            headerColor: 'yellow-500',
+          },
         },
         buttons: {
           primary: {

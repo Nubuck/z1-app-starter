@@ -8,7 +8,7 @@ export const NavSecondaryHeader = task(
       <HStack
         x="center"
         y="left"
-        box={{ padding: { top: 4, left: 3, right: 2, bottom: 6 } }}
+        box={{ padding: { top: 6, left: 3, right: 2, bottom: 6 } }}
       >
         {t.isNil(icon) ? null : (
           <Icon
@@ -100,7 +100,7 @@ export const NavSecondary = task(
             pin: { top: true, bottom: true },
             bgColor: brand.nav.secondary.bg,
             zIndex: 30,
-            shadow: ['2xl', { md: 'none' }],
+            shadow: ['2xl', { lg: 'none' }],
             overflowY: 'auto',
             overflowX: 'hidden',
           }}

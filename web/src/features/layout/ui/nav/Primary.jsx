@@ -82,11 +82,12 @@ export const NavPrimaryAction = task(
           name={icon}
           size="4xl"
           box={{
+            color,
             padding: 1,
-            borderWidth: t.isNil(borderWidth) ? 2 : borderWidth,
+            borderWidth: t.isNil(borderWidth) ? 0 : borderWidth,
             borderColor: color,
             borderRadius: 'full',
-            color,
+            bgColor: [null, { hover: brand.nav.body.bgHover }],
           }}
         />
       </HStack>
@@ -138,9 +139,12 @@ export const NavPrimary = task(
   }
 )
 
-export const NavToggle = ({
-  ui: { HStack, Icon },
-}) => ({ open, brand, onClick }) => {
+export const NavToggle = ({ ui: { HStack, Icon } }) => ({
+  open,
+  brand,
+  pageNav,
+  onClick,
+}) => {
   return (
     <HStack
       x="center"
@@ -149,18 +153,17 @@ export const NavToggle = ({
         display: ['flex', { lg: 'hidden' }],
         position: 'fixed',
         zIndex: 40,
+        padding: [{ bottom: pageNav ? 20 : 0 }, { bottom: 0 }],
       }}
-      style={{ bottom: 20, right: 20 }}
+      style={{ bottom: 10, right: 12 }}
       onClick={() => onClick && onClick()}
     >
       <Icon
         name={open ? 'close-outline' : 'menu-outline'}
-        size="3xl"
+        size="4xl"
         color={[brand.screen.color, { hover: brand.primary }]}
         box={{
-          padding: 2,
-          borderWidth: 2,
-          borderColor: [brand.screen.color, { hover: brand.primary }],
+          padding: 3,
           borderRadius: 'full',
           bgColor: [null, { hover: 'gray-900' }],
         }}
