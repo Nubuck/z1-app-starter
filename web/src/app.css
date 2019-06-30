@@ -4,6 +4,16 @@
 
 @tailwind utilities;
 
+.hide-scroll {
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+
+.hide-scroll::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
+
 .dark .rst__lineChildren::after {
   @apply bg-white;
 }

@@ -24,6 +24,7 @@ export const PageItem = task(
           color: [brand.nav.body.color, { hover: brand.nav.body.colorHover }],
           flexDirection: ['col', { lg: 'row' }],
           justifyContent: ['center', { lg: 'start' }],
+          flexWrap: false,
         }}
         activeClassName={toCss({
           bgColor: brand.nav.body.bgActive,
@@ -45,6 +46,7 @@ export const PageItem = task(
           size={['md', { lg: 'xl' }]}
           color={t.isNil(color) ? brand.nav.body.color : color}
           family={brand.fontFamily}
+          box={{ whitespace: 'no-wrap' }}
         >
           {title}
         </Text>
@@ -114,37 +116,103 @@ export const NavPage = task(
             ],
             bgColor: brand.nav.body.bg,
             zIndex: 30,
-            overflowX: 'auto',
             padding: showPageMenu ? [{ right: 20 }, { lg: 0 }] : null,
           }}
           style={{ left, height }}
         >
-          {t.mapIndexed(
-            (item, index) => (
-              <NavPageItem key={index} brand={brand} {...item} />
-            ),
-            items || []
-          )}
-          {t.isZeroLen(actions || []) ? null : <Spacer />}
-          {t.mapIndexed(
-            (actionItem, index) => (
-              <NavPageAction
-                key={index}
-                brand={brand}
-                onAction={action => dispatch(action)}
-                {...actionItem}
-              />
-            ),
-            actions || []
-          )}
+          <HStack
+            x="center"
+            y="left"
+            box={{
+              overflowX: 'auto',
+              overflowY: 'hidden',
+            }}
+            className="hide-scroll"
+            stretch
+          >
+            {t.mapIndexed(
+              (item, index) => (
+                <NavPageItem key={index} brand={brand} {...item} />
+              ),
+              items || []
+            )}
+            {t.isZeroLen(actions || []) ? null : <Spacer />}
+            {t.mapIndexed(
+              (actionItem, index) => (
+                <NavPageAction
+                  key={index}
+                  brand={brand}
+                  onAction={action => dispatch(action)}
+                  {...actionItem}
+                />
+              ),
+              actions || []
+            )}
+          </HStack>
         </HStack>
       )
     }
   }
 )
 
+export const NavPageSecondaryItem = task(
+  t => ({ ui: { HStack, Icon, Spacer, Text, toCss } }) => ({
+    title,
+    icon,
+    path,
+    brand,
+    alert,
+    exact,
+    size,
+    color,
+  }) => {
+    return (
+      <HStack
+        as={NavLink}
+        to={path || '/'}
+        x="center"
+        y="left"
+        box={{
+          color: t.isNil(color) ? brand.nav.page.color : color,
+          padding: { y: 4, x: 4 },
+          bgColor: [null, { hover: brand.nav.page.bgHover }],
+        }}
+        activeClassName={toCss({
+          bgColor: brand.nav.page.bgActive,
+        })}
+        exact={t.isNil(exact) ? false : exact}
+      >
+        {t.isNil(icon) ? null : (
+          <Icon
+            name={icon}
+            size={t.isNil(size) ? '2xl' : size}
+            box={{ alignSelf: 'center', margin: { right: 3 } }}
+          />
+        )}
+        <Text size={t.isNil(size) ? 'xl' : size} family={brand.fontFamily}>
+          {title}
+        </Text>
+        {t.isNil(alert) ? null : (
+          <React.Fragment>
+            <Spacer />
+            <Icon
+              name={alert.icon}
+              size="xl"
+              color={alert.color || brand.secondary}
+              box={{ alignSelf: 'center', margin: { left: 2 } }}
+            />
+          </React.Fragment>
+        )}
+      </HStack>
+    )
+  }
+)
+
 export const NavPageSecondary = task(
   t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss } }) => {
+    const SecondaryItem = NavPageSecondaryItem({
+      ui: { HStack, Icon, Spacer, Text, toCss },
+    })
     return ({ left, top, bottom, width, brand, items }) => {
       return (
         <VStack
@@ -159,7 +227,14 @@ export const NavPageSecondary = task(
             left,
             bottom,
           }}
-        />
+        >
+           {t.mapIndexed(
+            (item, index) => (
+              <SecondaryItem key={index} brand={brand} {...item} />
+            ),
+            items || []
+          )}
+        </VStack>
       )
     }
   }
@@ -168,6 +243,7 @@ export const NavPageSecondary = task(
 export const NavPageToggle = ({ ui: { HStack, Icon } }) => ({
   open,
   brand,
+  actAsPrimary,
   onClick,
 }) => {
   return (
@@ -178,13 +254,21 @@ export const NavPageToggle = ({ ui: { HStack, Icon } }) => ({
         display: ['flex', { lg: 'hidden' }],
         position: 'fixed',
         zIndex: 40,
-        padding: [{ bottom:  0 }, { bottom: 0 }],
+        padding: [{ bottom: 0 }, { bottom: 0 }],
       }}
       style={{ bottom: 10, right: 12 }}
       onClick={() => onClick && onClick()}
     >
       <Icon
-        name={open ? 'more-vertical-outline' : 'more-horizontal-outline'}
+        name={
+          actAsPrimary
+            ? open
+              ? 'close-outline'
+              : 'menu-outline'
+            : open
+            ? 'more-vertical-outline'
+            : 'more-horizontal-outline'
+        }
         size="3xl"
         color={[brand.screen.color, { hover: brand.primary }]}
         box={{

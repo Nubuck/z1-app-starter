@@ -104,6 +104,7 @@ export const NavSecondary = task(
             overflowY: 'auto',
             overflowX: 'hidden',
           }}
+          className="hide-scroll"
           style={{ width, left }}
         >
           <SecondaryHeader title={title} icon={icon} brand={brand} />

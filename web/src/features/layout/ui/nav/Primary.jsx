@@ -112,6 +112,7 @@ export const NavPrimary = task(
             overflowY: 'auto',
             overflowX: 'hidden',
           }}
+          className="hide-scroll"
           style={{ width: width, left }}
         >
           <LogoItem brand={brand} />

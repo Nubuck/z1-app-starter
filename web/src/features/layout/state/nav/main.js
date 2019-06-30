@@ -12,6 +12,7 @@ import {
 const NAV_MODE = {
   PRIMARY: 'primary',
   SECONDARY: 'secondary',
+  PAGE: 'page',
 }
 
 const NAV_STATUS = {
@@ -37,7 +38,7 @@ export const navState = task((t, a) =>
       mode: NAV_MODE.PRIMARY,
       schema: [],
       matched: null,
-      width: NAV_SIZE.PRIMARY,
+      width: 0,
       size: 'xs',
       primary: {
         width: NAV_SIZE.PRIMARY,
@@ -69,8 +70,10 @@ export const navState = task((t, a) =>
       },
     },
     mutations(m) {
-      const calcPrimaryLeft = status => {
-        return t.eq(status, 'closed') ? 0 - NAV_SIZE.PRIMARY : 0
+      const calcPrimaryLeft = (status, primaryItems = []) => {
+        return t.or(t.eq(status, 'closed'), t.isZeroLen(primaryItems))
+          ? 0 - NAV_SIZE.PRIMARY
+          : 0
       }
       const calcSecondaryLeft = (status, secondaryItems) => {
         return t.or(t.eq(status, 'closed'), t.isZeroLen(secondaryItems))
@@ -154,7 +157,7 @@ export const navState = task((t, a) =>
             title: t.pathOr(state.title, ['payload', 'title'], action),
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
             primary: t.merge(state.primary, {
-              left: calcPrimaryLeft(status),
+              left: calcPrimaryLeft(status, state.primary.items),
             }),
             secondary: t.merge(state.secondary, {
               left: calcSecondaryLeft(status, secondaryItems),
@@ -180,8 +183,12 @@ export const navState = task((t, a) =>
         }),
         m(['navMatch'], (state, action) => {
           const status = t.pathOr(state.status, ['payload', 'status'], action)
-
           const width = t.pathOr(state.width, ['payload', 'width'], action)
+          const primaryItems = t.pathOr(
+            state.primary.items,
+            ['payload', 'primary', 'items'],
+            action
+          )
           const secondaryItems = t.pathOr(
             state.secondary.items,
             ['payload', 'secondary', 'items'],
@@ -207,12 +214,8 @@ export const navState = task((t, a) =>
             mode: t.pathOr(state.mode, ['payload', 'mode'], action),
             matched: t.pathOr(state.matched, ['payload', 'matched'], action),
             primary: t.merge(state.primary, {
-              left: calcPrimaryLeft(status),
-              items: t.pathOr(
-                state.primary.items,
-                ['payload', 'primary', 'items'],
-                action
-              ),
+              left: calcPrimaryLeft(status, primaryItems),
+              items: primaryItems,
               actions: t.pathOr(
                 state.primary.actions,
                 ['payload', 'primary', 'actions'],
@@ -273,7 +276,7 @@ export const navState = task((t, a) =>
           return t.merge(state, {
             status: nextStatus,
             primary: t.merge(state.primary, {
-              left: calcPrimaryLeft(nextStatus),
+              left: calcPrimaryLeft(nextStatus, state.primary.items),
             }),
             secondary: t.merge(state.secondary, {
               left: calcSecondaryLeft(nextStatus, state.secondary.items),
@@ -371,27 +374,28 @@ export const navState = task((t, a) =>
             const validMatch = t.not(checkMatch)
               ? checkMatch
               : t.not(t.eq('nav', t.pathOr('nav', ['target'], checkMatch)))
-              ? matchedNavItem(checkMatch.parentPath, schema)
+              ? t.or(
+                  t.isNil(checkMatch.children),
+                  t.isZeroLen(checkMatch.children || [])
+                )
+                ? matchedNavItem(checkMatch.parentPath, schema)
+                : checkMatch
               : checkMatch
 
             // compute layout
-            const nextMode = t.isNil(validMatch)
-              ? NAV_MODE.PRIMARY
-              : t.or(
-                  t.isNil(validMatch.children),
-                  t.isZeroLen(validMatch.children)
-                )
-              ? NAV_MODE.PRIMARY
-              : NAV_MODE.SECONDARY
-
             const primary = t.reduce(
               (data, item) => {
+                const isItem = t.eq(t.pathOr('nav', ['target'], item), 'nav')
                 const isAction = t.eq(
                   t.pathOr('nav', ['target'], item),
                   'primary-action'
                 )
                 return t.merge(data, {
-                  items: isAction ? data.items : t.concat(data.items, [item]),
+                  items: t.or(t.not(isItem), isAction)
+                    ? data.items
+                    : t.not(isItem)
+                    ? data.items
+                    : t.concat(data.items, [item]),
                   actions: t.not(isAction)
                     ? data.actions
                     : t.concat(data.actions, [item]),
@@ -401,37 +405,79 @@ export const navState = task((t, a) =>
               schema
             )
 
-            const secondary = t.reduce(
-              (data, item) => {
-                const isBodyItem = t.eq(
-                  t.pathOr('nav', ['target'], item),
-                  'body'
+            // mode
+            const nextMode = t.isZeroLen(primary.items)
+              ? NAV_MODE.PAGE
+              : t.isNil(validMatch)
+              ? NAV_MODE.PRIMARY
+              : t.or(
+                  t.isNil(validMatch.children),
+                  t.isZeroLen(validMatch.children)
                 )
-                const isBodyAction = t.eq(
-                  t.pathOr('nav', ['target'], item),
-                  'body-action'
+              ? NAV_MODE.PRIMARY
+              : NAV_MODE.SECONDARY
+
+            const secondary = t.eq(nextMode, NAV_MODE.PAGE)
+              ? { items: [], bodyItems: [], bodyActions: [] }
+              : t.reduce(
+                  (data, item) => {
+                    const isBodyItem = t.eq(
+                      t.pathOr('nav', ['target'], item),
+                      'body'
+                    )
+                    const isBodyAction = t.eq(
+                      t.pathOr('nav', ['target'], item),
+                      'body-action'
+                    )
+                    return t.merge(data, {
+                      items: t.or(isBodyItem, isBodyAction)
+                        ? data.items
+                        : t.concat(data.items, [item]),
+                      bodyItems: t.not(isBodyItem)
+                        ? data.bodyItems
+                        : t.concat(data.bodyItems, [item]),
+                      bodyActions: t.not(isBodyAction)
+                        ? data.bodyActions
+                        : t.concat(data.bodyActions, [item]),
+                    })
+                  },
+                  { items: [], bodyItems: [], bodyActions: [] },
+                  t.isNil(validMatch) ? [] : validMatch.children
                 )
-                return t.merge(data, {
-                  items: t.or(isBodyItem, isBodyAction)
-                    ? data.items
-                    : t.concat(data.items, [item]),
-                  bodyItems: t.not(isBodyItem)
-                    ? data.bodyItems
-                    : t.concat(data.bodyItems, [item]),
-                  bodyActions: t.not(isBodyAction)
-                    ? data.bodyActions
-                    : t.concat(data.bodyActions, [item]),
-                })
-              },
-              { items: [], bodyItems: [], bodyActions: [] },
-              t.isNil(validMatch) ? [] : validMatch.children
-            )
+
+            const nextBody = t.not(t.eq(nextMode, NAV_MODE.PAGE))
+              ? {
+                  items: secondary.bodyItems,
+                  actions: secondary.bodyActions,
+                }
+              : t.reduce(
+                  (data, item) => {
+                    const isBodyItem = t.eq(
+                      t.pathOr('nav', ['target'], item),
+                      'body'
+                    )
+                    const isBodyAction = t.eq(
+                      t.pathOr('nav', ['target'], item),
+                      'body-action'
+                    )
+                    return t.merge(data, {
+                      items: t.not(isBodyItem)
+                        ? data.items
+                        : t.concat(data.items, [item]),
+                      actions: t.not(isBodyAction)
+                        ? data.actions
+                        : t.concat(data.actions, [item]),
+                    })
+                  },
+                  { items: [], actions: [] },
+                  schema
+                )
 
             // page items
-            const matchedBodyItem = t.find(
-              item => t.eq(routePath, item.path),
-              secondary.bodyItems || []
-            )
+            const matchedBodyItem = t.not(t.eq(nextMode, NAV_MODE.PAGE))
+              ? t.find(item => t.eq(routePath, item.path), nextBody.items || [])
+              : validMatch
+
             const pageItems = t.isNil(matchedBodyItem)
               ? []
               : t.not(t.isZeroLen(t.pathOr([], ['children'], matchedBodyItem)))
@@ -445,15 +491,13 @@ export const navState = task((t, a) =>
                 mode: nextMode,
                 title: t.isNil(validMatch) ? title : validMatch.title,
                 width: t.getMatch(nextMode)({
+                  [NAV_MODE.PAGE]: 0,
                   [NAV_MODE.PRIMARY]: NAV_SIZE.PRIMARY,
                   [NAV_MODE.SECONDARY]: NAV_SIZE.PRIMARY + NAV_SIZE.SECONDARY,
                 }),
                 primary,
                 secondary: { items: secondary.items },
-                body: {
-                  items: secondary.bodyItems,
-                  actions: secondary.bodyActions,
-                },
+                body: nextBody,
                 page: {
                   items: pageItems,
                 },

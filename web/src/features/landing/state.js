@@ -3,60 +3,80 @@ import { navSchema } from '@z1/lib-ui-schema'
 
 // nav
 const homeSchema = navSchema(n => [
-  n('//', { icon: 'home-outline', title: 'Home' }, [
-    n(
-      '/activity',
-      {
-        icon: 'activity-outline',
-        title: 'Activity',
-        alert: { color: 'red-500', icon: 'bell-outline' },
-      },
-      [
-        n(
-          '/activity/popular/favourites',
-          {
-            target: 'body',
-            icon: 'heart-outline',
-            title: 'Favourites',
-            exact: true,
-            size: 'xl',
-          },
-          [
-            n('/activity/popular/followers', {
+  n(
+    '//',
+    { icon: 'home-outline', title: 'Home', target: 'body', exact: true },
+    [
+      n(
+        '/activity',
+        {
+          target: 'body',
+          icon: 'activity-outline',
+          title: 'Activity',
+          alert: { color: 'red-500', icon: 'bell-outline' },
+        },
+        [
+          n(
+            '/activity/popular/favourites',
+            {
               target: 'body',
-              icon: 'flash-outline',
-              title: 'Followers',
+              icon: 'heart-outline',
+              title: 'Favourites',
               exact: true,
               size: 'xl',
-            }),
-          ]
-        ),
-        n('/activity/popular/latest', {
-          target: 'body',
-          icon: 'flash-outline',
-          title: 'Latest',
-          exact: true,
-          size: 'xl',
-        }),
-        n('/activity/search', {
-          target: 'body-action',
-          icon: 'search-outline',
-          title: 'Search',
-          exact: true,
-          size: 'xl',
-          color: 'gray-500',
-        }),
-        n('/activity/popular', { icon: 'globe-2-outline', title: 'Popular' }),
-      ]
-    ),
-    n('/discover', { icon: 'radio-outline', title: 'Discover' }),
-    n('/collections', { icon: 'grid-outline', title: 'Collections' }),
-  ]),
-  n('/screen-cmd/view-editor', { icon: 'code-outline', title: 'Screen CMD' }),
-  n('/accounts', { icon: 'people-outline', title: 'Accounts' }),
+            },
+            [
+              n('/activity/popular/favourites/followers', {
+                target: 'body',
+                icon: 'flash-outline',
+                title: 'Followers',
+                exact: true,
+                size: 'xl',
+              }),
+            ]
+          ),
+          n('/activity/popular/latest', {
+            target: 'body',
+            icon: 'flash-outline',
+            title: 'Latest',
+            exact: true,
+            size: 'xl',
+          }),
+          n('/activity/search', {
+            target: 'body-action',
+            icon: 'search-outline',
+            title: 'Search',
+            exact: true,
+            size: 'xl',
+            color: 'gray-500',
+          }),
+          n('/activity/popular', {
+            icon: 'globe-2-outline',
+            title: 'Popular',
+            target: 'body',
+          }),
+        ]
+      ),
+      n('/discover', {
+        icon: 'radio-outline',
+        title: 'Discover',
+        target: 'body',
+      }),
+      n('/collections', {
+        icon: 'grid-outline',
+        title: 'Collections',
+        target: 'body',
+      }),
+    ]
+  ),
+  n('/screen-cmd/view-editor', {
+    icon: 'code-outline',
+    title: 'Screen CMD',
+    target: 'body',
+  }),
+  n('/accounts', { icon: 'people-outline', title: 'Accounts', target: 'body' }),
   n('#', {
-    target: 'primary-action',
-
+    target: 'body-action',
     icon: 'search-outline',
     title: 'Search',
     action: {
@@ -67,7 +87,7 @@ const homeSchema = navSchema(n => [
     },
   }),
   n('#', {
-    target: 'primary-action',
+    target: 'body-action',
     borderWidth: 2,
     icon: 'person-outline',
     title: 'Profile',

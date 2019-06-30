@@ -89,15 +89,19 @@ export const Screen = task(
             >
               {children}
             </ScreenBody>
-            <ScreenNavToggle
-              brand={brand}
-              pageNav={t.not(t.isZeroLen(nav.body.items))}
-              open={t.eq(nav.status, 'open')}
-              onClick={() => mutations.navToggleStatus()}
-            />
+            {t.eq(nav.mode, 'page') ? null : (
+              <ScreenNavToggle
+                brand={brand}
+                pageNav={t.not(t.isZeroLen(nav.body.items))}
+                open={t.eq(nav.status, 'open')}
+                onClick={() => mutations.navToggleStatus()}
+              />
+            )}
+
             {t.isZeroLen(nav.page.items) ? null : (
               <ScreenNavPageToggle
                 brand={brand}
+                actAsPrimary={t.eq(nav.mode, 'page')}
                 open={t.eq(nav.page.status, 'open')}
                 onClick={() => mutations.navToggleStatus({ target: 'page' })}
               />
