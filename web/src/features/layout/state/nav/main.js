@@ -371,17 +371,6 @@ export const navState = task((t, a) =>
                 : matchedNavItem(nextMatch.parentPath, schema)
               : nextMatch
 
-            const validMatch = t.not(checkMatch)
-              ? checkMatch
-              : t.not(t.eq('nav', t.pathOr('nav', ['target'], checkMatch)))
-              ? t.or(
-                  t.isNil(checkMatch.children),
-                  t.isZeroLen(checkMatch.children || [])
-                )
-                ? matchedNavItem(checkMatch.parentPath, schema)
-                : checkMatch
-              : checkMatch
-
             // compute layout
             const primary = t.reduce(
               (data, item) => {
@@ -405,19 +394,25 @@ export const navState = task((t, a) =>
               schema
             )
 
-            // mode
-            const nextMode = t.isZeroLen(primary.items)
-              ? NAV_MODE.PAGE
-              : t.isNil(validMatch)
-              ? NAV_MODE.PRIMARY
-              : t.or(
-                  t.isNil(validMatch.children),
-                  t.isZeroLen(validMatch.children)
-                )
-              ? NAV_MODE.PRIMARY
-              : NAV_MODE.SECONDARY
+            const validMatch = t.not(t.isZeroLen(primary.items))
+              ? t.not(checkMatch)
+                ? checkMatch
+                : t.not(t.eq('nav', t.pathOr('nav', ['target'], checkMatch)))
+                ? t.or(
+                    t.isNil(checkMatch.children),
+                    t.isZeroLen(
+                      t.filter(
+                        item => t.eq('nav', t.pathOr('nav', ['target'], item)),
+                        checkMatch.children || []
+                      )
+                    )
+                  )
+                  ? matchedNavItem(checkMatch.parentPath, schema)
+                  : checkMatch
+                : checkMatch
+              : checkMatch
 
-            const secondary = t.eq(nextMode, NAV_MODE.PAGE)
+            const secondary = t.isZeroLen(primary.items)
               ? { items: [], bodyItems: [], bodyActions: [] }
               : t.reduce(
                   (data, item) => {
@@ -444,6 +439,15 @@ export const navState = task((t, a) =>
                   { items: [], bodyItems: [], bodyActions: [] },
                   t.isNil(validMatch) ? [] : validMatch.children
                 )
+
+            // mode
+            const nextMode = t.isZeroLen(primary.items)
+              ? NAV_MODE.PAGE
+              : t.isNil(validMatch)
+              ? NAV_MODE.PRIMARY
+              : t.isZeroLen(secondary.items)
+              ? NAV_MODE.PRIMARY
+              : NAV_MODE.SECONDARY
 
             const nextBody = t.not(t.eq(nextMode, NAV_MODE.PAGE))
               ? {
@@ -478,25 +482,67 @@ export const navState = task((t, a) =>
               ? t.find(item => t.eq(routePath, item.path), nextBody.items || [])
               : validMatch
 
-            const pageItems = t.isNil(matchedBodyItem)
+            const checkBodyItem = t.not(t.eq(nextMode, NAV_MODE.PAGE))
+              ? t.and(
+                  t.isNil(matchedBodyItem),
+                  t.not(t.isZeroLen(nextBody.items))
+                )
+                ? matchedNavItem(routePath, nextBody.items)
+                : matchedBodyItem
+              : validMatch
+
+            const finalBodyItem = t.and(
+              t.not(t.isZeroLen(nextBody.items)),
+              t.and(t.isNil(matchedBodyItem), t.not(t.isNil(checkBodyItem)))
+            )
+              ? t.eq(checkBodyItem.path, routePath)
+                ? matchedNavItem(checkBodyItem.parentPath, schema)
+                : matchedBodyItem
+              : matchedBodyItem
+
+            const pageItems = t.isNil(finalBodyItem)
               ? []
-              : t.not(t.isZeroLen(t.pathOr([], ['children'], matchedBodyItem)))
-              ? matchedBodyItem.children
+              : t.not(t.isZeroLen(t.pathOr([], ['children'], finalBodyItem)))
+              ? finalBodyItem.children
               : []
+
+            const nextSecondaryItems = t.eq(nextMode, NAV_MODE.PAGE)
+              ? secondary.items
+              : t.and(
+                  t.not(t.isZeroLen(nextBody.items || [])),
+                  t.isZeroLen(secondary.items)
+                )
+              ? t.filter(
+                  item => t.eq('nav', t.pathOr('nav', ['target'], item)),
+                  t.pathOr(
+                    [],
+                    ['children'],
+                    matchedNavItem(validMatch.parentPath, schema) || {}
+                  )
+                )
+              : secondary.items
+
+            const finalMode = t.eq(nextMode, NAV_MODE.PAGE)
+              ? nextMode
+              : t.isNil(validMatch)
+              ? NAV_MODE.PRIMARY
+              : t.isZeroLen(nextSecondaryItems)
+              ? NAV_MODE.PRIMARY
+              : NAV_MODE.SECONDARY
 
             // mutate
             dispatch(
               mutations.navMatch({
                 matched: validMatch,
-                mode: nextMode,
+                mode: finalMode,
                 title: t.isNil(validMatch) ? title : validMatch.title,
-                width: t.getMatch(nextMode)({
+                width: t.getMatch(finalMode)({
                   [NAV_MODE.PAGE]: 0,
                   [NAV_MODE.PRIMARY]: NAV_SIZE.PRIMARY,
                   [NAV_MODE.SECONDARY]: NAV_SIZE.PRIMARY + NAV_SIZE.SECONDARY,
                 }),
                 primary,
-                secondary: { items: secondary.items },
+                secondary: { items: nextSecondaryItems },
                 body: nextBody,
                 page: {
                   items: pageItems,
