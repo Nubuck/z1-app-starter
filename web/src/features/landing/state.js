@@ -89,11 +89,11 @@ const homeSchema = navSchema(n => [
       target: 'nav',
     }),
   ]),
-  n('/screen-cmd/view-editor', {
-    icon: 'code-outline',
-    title: 'Screen CMD',
-    target: 'nav',
-  }),
+  // n('/screen-cmd/view-editor', {
+  //   icon: 'code-outline',
+  //   title: 'Screen CMD',
+  //   target: 'nav',
+  // }),
   n('/accounts', { icon: 'people-outline', title: 'Accounts', target: 'nav' }),
   n('#', {
     target: 'primary-action',

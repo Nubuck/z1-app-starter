@@ -3,8 +3,8 @@ import { task } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
 // main
-export const resetPassword = task((t, a) =>
-  createView('RESET_PASSWORD', {
+export const changePassword = task((t, a) =>
+  createView('CHANGE_PASSWORD', {
     data({ type, status, viewData, formData, error }) {
       return {
         status,
