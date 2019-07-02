@@ -2,6 +2,9 @@ import React from 'react'
 import { task } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
+// schema
+import { signInSchema } from './schema'
+
 // main
 export const signIn = task((t, a) =>
   createView('SIGN_IN', {
@@ -24,7 +27,7 @@ export const signIn = task((t, a) =>
         {
           data: formData,
         },
-        uiBoxSchema
+        signInSchema({ disabled: false })
       )
     },
     async transmit({ type, status, state, api, viewData, formData }) {

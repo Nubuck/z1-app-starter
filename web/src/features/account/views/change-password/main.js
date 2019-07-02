@@ -2,6 +2,9 @@ import React from 'react'
 import { task } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
+// schema
+import { changePasswordSchema } from './schema'
+
 // main
 export const changePassword = task((t, a) =>
   createView('CHANGE_PASSWORD', {
@@ -24,7 +27,7 @@ export const changePassword = task((t, a) =>
         {
           data: formData,
         },
-        uiBoxSchema
+        changePasswordSchema({ disabled: false })
       )
     },
     async transmit({ type, status, state, api, viewData, formData }) {
