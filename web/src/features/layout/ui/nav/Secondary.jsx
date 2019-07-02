@@ -90,7 +90,7 @@ export const NavSecondary = task(
     const SecondaryItem = NavSecondaryItem({
       ui: { HStack, Icon, Spacer, Text, toCss },
     })
-    return ({ title, icon, width, left, items, brand }) => {
+    return ({ title, icon, width, left, bottom, items, brand }) => {
       return (
         <VStack
           x="left"
@@ -105,7 +105,7 @@ export const NavSecondary = task(
             overflowX: 'hidden',
           }}
           className="hide-scroll"
-          style={{ width, left }}
+          style={{ width, left,bottom }}
         >
           <SecondaryHeader title={title} icon={icon} brand={brand} />
           {t.mapIndexed(

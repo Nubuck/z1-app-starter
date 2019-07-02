@@ -19,7 +19,6 @@ const homeSchema = navSchema(n => [
             target: 'nav',
             icon: 'heart-outline',
             title: 'Favourites',
-            exact: true,
             size: 'xl',
           },
           [
@@ -29,7 +28,6 @@ const homeSchema = navSchema(n => [
                 target: 'body',
                 icon: 'flash-outline',
                 title: 'Followers',
-                exact: true,
                 size: 'xl',
               },
               [

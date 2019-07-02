@@ -46,9 +46,9 @@ export const brandState = task((t, a) => (brand = {}) =>
           },
           page: {
             bg: 'gray-600',
-            bgHover: 'gray-800',
-            bgActive: 'gray-800',
-            color: 'white',
+            bgHover: 'gray-500',
+            bgActive: 'gray-500',
+            color: 'gray-900',
             colorHover: 'yellow-500',
             colorActive: 'yellow-500',
             headerColor: 'yellow-500',

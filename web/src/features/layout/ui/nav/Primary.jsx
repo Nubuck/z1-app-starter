@@ -99,7 +99,7 @@ export const NavPrimary = task(
     const LogoItem = NavLogoItem({ ui: { HStack, Icon, toCss } })
     const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon, toCss } })
     const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon, toCss } })
-    return ({ left, width, items, actions, brand, dispatch }) => {
+    return ({ left, bottom, width, items, actions, brand, dispatch }) => {
       return (
         <VStack
           x="left"
@@ -113,7 +113,7 @@ export const NavPrimary = task(
             overflowX: 'hidden',
           }}
           className="hide-scroll"
-          style={{ width: width, left }}
+          style={{ width, left, bottom }}
         >
           <LogoItem brand={brand} />
           {t.mapIndexed(
