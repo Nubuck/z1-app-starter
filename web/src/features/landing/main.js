@@ -1,10 +1,10 @@
 import { createFeature } from '@z1/lib-feature-box'
 
-// ui
-import { LandingPage } from './ui'
-
 // state
 import { landingState } from './state'
+
+// ui
+import { LandingPage } from './ui'
 
 // exports
 export const landing = createFeature(({ ui }) => {

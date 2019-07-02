@@ -1,10 +1,10 @@
 import { NOT_FOUND, createFeature } from '@z1/lib-feature-box'
 
-// ui
-import { Screen, PageNotFound } from './ui'
-
 // state
 import { brandState, navState, screenState } from './state'
+
+// ui
+import { Screen, PageNotFound } from './ui'
 
 // exports
 export const layout = createFeature(
