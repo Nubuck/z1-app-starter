@@ -4,12 +4,12 @@
 
 @tailwind utilities;
 
-.hide-scroll {
+.scroll-hide {
   overflow: -moz-scrollbars-none;
   -ms-overflow-style: none;
 }
 
-.hide-scroll::-webkit-scrollbar {
+.scroll-hide::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
 }

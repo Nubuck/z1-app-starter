@@ -1,8 +1,8 @@
 import React from 'react'
 import { task, NavLink } from '@z1/lib-feature-box'
 
-// main
-export const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path, brand }) => {
+// elements
+const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path, brand }) => {
   return (
     <HStack
       as={NavLink}
@@ -22,7 +22,8 @@ export const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path, brand }) => {
     </HStack>
   )
 }
-export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
+
+const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
   icon,
   path,
   brand,
@@ -34,7 +35,7 @@ export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
       x="center"
       y="center"
       box={{
-        padding: { y: 4 },
+        padding: { y: 5 },
         bgColor: [null, { hover: brand.nav.primary.bgHover }],
         color: [
           brand.nav.primary.color,
@@ -50,9 +51,11 @@ export const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
     </HStack>
   )
 }
-export const NavPrimaryAction = task(
+
+const NavPrimaryAction = task(
   t => ({ ui: { HStack, Icon } }) => ({
     icon,
+    to,
     action,
     onAction,
     borderWidth,
@@ -62,6 +65,17 @@ export const NavPrimaryAction = task(
       brand.nav.primary.color,
       { hover: brand.nav.primary.colorHover },
     ]
+    const actionProps = t.and(t.isNil(action), t.not(t.isNil(to)))
+      ? { as: NavLink, to }
+      : {
+          onClick() {
+            if (
+              t.and(t.isType(onAction, 'Function'), t.isType(action, 'Object'))
+            ) {
+              onAction(action)
+            }
+          },
+        }
     return (
       <HStack
         x="center"
@@ -70,13 +84,7 @@ export const NavPrimaryAction = task(
           padding: { top: 2, bottom: 4 },
           cursor: 'pointer',
         }}
-        onClick={() => {
-          if (
-            t.and(t.isType(onAction, 'Function'), t.isType(action, 'Object'))
-          ) {
-            onAction(action)
-          }
-        }}
+        {...actionProps}
       >
         <Icon
           name={icon}
@@ -94,6 +102,8 @@ export const NavPrimaryAction = task(
     )
   }
 )
+
+// main
 export const NavPrimary = task(
   t => ({ ui: { VStack, HStack, Icon, Spacer, toCss } }) => {
     const LogoItem = NavLogoItem({ ui: { HStack, Icon, toCss } })
@@ -112,7 +122,7 @@ export const NavPrimary = task(
             overflowY: 'auto',
             overflowX: 'hidden',
           }}
-          className="hide-scroll"
+          className="scroll-hide"
           style={{ width, left, bottom }}
         >
           <LogoItem brand={brand} />
@@ -154,9 +164,9 @@ export const NavToggle = ({ ui: { HStack, Icon } }) => ({
         display: ['flex', { lg: 'hidden' }],
         position: 'fixed',
         zIndex: 40,
-        padding: [{ bottom: pageNav ? 20 : 0 }, { bottom: 0 }],
+        padding: [{ bottom: pageNav ? 16 : 0 }, { bottom: 0 }],
       }}
-      style={{ bottom: 10, right: 12 }}
+      style={{ bottom: 10, right: 10 }}
       onClick={() => onClick && onClick()}
     >
       <Icon

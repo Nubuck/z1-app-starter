@@ -1,18 +1,13 @@
 import React from 'react'
-import { connectState, renderRoute } from '@z1/lib-feature-box'
-
-// state
-const stateQuery = ({ location }) => ({
-  location,
-})
+import { renderRoute } from '@z1/lib-feature-box'
 
 // hot
 import features from './features'
 const { Screen } = features.ui.layout
 
 // main
-const App = connectState(stateQuery)(({ routes, location }) => {
-  return <Screen>{renderRoute(location.type, routes)}</Screen>
-})
+const App = ({ routes }) => {
+  return <Screen>{({ type }) => renderRoute(type, routes)}</Screen>
+}
 
 export default App

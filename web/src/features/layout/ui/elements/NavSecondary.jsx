@@ -1,8 +1,8 @@
 import React from 'react'
 import { task, NavLink } from '@z1/lib-feature-box'
 
-// main
-export const NavSecondaryHeader = task(
+// elements
+const NavSecondaryHeader = task(
   t => ({ ui: { HStack, Icon, Text } }) => ({ title, icon, brand }) => {
     return (
       <HStack
@@ -30,7 +30,7 @@ export const NavSecondaryHeader = task(
     )
   }
 )
-export const NavSecondaryItem = task(
+const NavSecondaryItem = task(
   t => ({ ui: { HStack, Icon, Spacer, Text, toCss } }) => ({
     title,
     icon,
@@ -49,7 +49,7 @@ export const NavSecondaryItem = task(
         y="left"
         box={{
           color: t.isNil(color) ? brand.nav.secondary.color : color,
-          padding: { y: 4, x: 4 },
+          padding: { y: 5, x: 4 },
           bgColor: [null, { hover: brand.nav.secondary.bgHover }],
         }}
         activeClassName={toCss({
@@ -82,6 +82,8 @@ export const NavSecondaryItem = task(
     )
   }
 )
+
+// main
 export const NavSecondary = task(
   t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss } }) => {
     const SecondaryHeader = NavSecondaryHeader({
@@ -104,8 +106,8 @@ export const NavSecondary = task(
             overflowY: 'auto',
             overflowX: 'hidden',
           }}
-          className="hide-scroll"
-          style={{ width, left,bottom }}
+          className="scroll-hide"
+          style={{ width, left, bottom }}
         >
           <SecondaryHeader title={title} icon={icon} brand={brand} />
           {t.mapIndexed(

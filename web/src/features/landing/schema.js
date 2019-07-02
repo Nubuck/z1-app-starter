@@ -53,6 +53,43 @@ export const homeSchema = navSchema(n => [
                 exact: true,
                 size: 'xl',
               }),
+              n('/activity/favourites/winners', {
+                target: 'body',
+                icon: 'flash-outline',
+                title: 'Winners',
+                exact: true,
+                size: 'xl',
+              }),
+              n('/activity/favourites/prizes', {
+                target: 'body',
+                icon: 'flash-outline',
+                title: 'Prizes',
+                exact: true,
+                size: 'xl',
+              }),
+              n('#', {
+                target: 'body-action',
+                icon: 'search-outline',
+                title: 'Search',
+                action: {
+                  type: 'landing/ROUTE_VIEW',
+                  payload: {
+                    view: 'search',
+                  },
+                },
+              }),
+              n('#', {
+                target: 'body-action',
+                borderWidth: 2,
+                icon: 'person-outline',
+                title: 'Profile',
+                action: {
+                  type: 'landing/ROUTE_VIEW',
+                  payload: {
+                    view: 'profile',
+                  },
+                },
+              }),
             ]
           ),
           n('/activity/latest', {
@@ -75,6 +112,7 @@ export const homeSchema = navSchema(n => [
             title: 'Popular',
             target: 'nav',
           }),
+          
         ]
       ),
       n('/discover', {

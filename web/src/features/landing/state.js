@@ -1,5 +1,8 @@
 import { task, createStateBox } from '@z1/lib-feature-box'
 
+// schema
+import { homeSchema } from './schema'
+
 // main
 export const landingState = task((t, a) =>
   createStateBox({
@@ -19,12 +22,12 @@ export const landingState = task((t, a) =>
       ]
     },
     onInit({ dispatch }) {
-      // dispatch({
-      //   type: 'nav/NAV_SCHEMA_ADD',
-      //   payload: {
-      //     schema: homeSchema,
-      //   },
-      // })
+      dispatch({
+        type: 'nav/NAV_SCHEMA_ADD',
+        payload: {
+          schema: homeSchema,
+        },
+      })
     },
   })
 )

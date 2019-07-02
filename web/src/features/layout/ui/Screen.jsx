@@ -2,113 +2,95 @@ import React from 'react'
 import { task, connectState } from '@z1/lib-feature-box'
 
 // state
-const stateQuery = ({ nav, brand }) => ({ nav, brand })
+const stateQuery = ({ nav, brand, location }) => ({ nav, brand, location })
 
-// ui
-import {
-  NavPrimary,
-  NavSecondary,
-  NavToggle,
-  NavPage,
-  NavPageSecondary,
-  NavPageToggle,
-} from './nav'
-import { Body } from './Body'
+// elements
+import { elements } from './elements'
 
 // main
-export const Screen = task(
-  t => ({
-    ui: { Box, VStack, HStack, Icon, Spacer, Text, toCss },
-    makeMutations,
-  }) => {
-    const ScreenBody = Body({ ui: { VStack } })
-    const ScreenNavPrimary = NavPrimary({
-      ui: { VStack, HStack, Icon, Spacer, toCss },
-    })
-    const ScreenNavToggle = NavToggle({
-      ui: { VStack, HStack, Icon, Spacer, toCss },
-    })
-
-    const ScreenNavSecondary = NavSecondary({
-      ui: { VStack, HStack, Icon, Spacer, Text, toCss },
-    })
-    const ScreenNavPage = NavPage({
-      ui: { VStack, HStack, Icon, Spacer, Text, toCss },
-    })
-    const ScreenNavPageSecondary = NavPageSecondary({
-      ui: { VStack, HStack, Icon, Spacer, Text, toCss },
-    })
-    const ScreenNavPageToggle = NavPageToggle({
-      ui: { VStack, HStack, Icon, Spacer, toCss },
-    })
-    return connectState(stateQuery, makeMutations)(
-      ({ nav, brand, children, mutations, dispatch }) => {
-        return (
-          <Box
-            box={{
-              position: 'relative',
-              display: 'flex',
-              flex: 1,
-              flexDirection: 'col',
-              width: 'full',
-              minHeight: 'screen',
-              overflowY: 'auto',
-              overflowX: 'hidden',
-              zIndex: 0,
-              bgColor: brand.screen.bg,
-              color: brand.screen.color,
-              fontFamily: brand.fontFamily,
-            }}
-          >
-            <ScreenNavPrimary
-              brand={brand}
-              dispatch={dispatch}
-              {...nav.primary}
-            />
-            <ScreenNavSecondary
+export const Screen = task(t => ({ ui: { Box, ...ui }, makeMutations }) => {
+  const {
+    Body,
+    NavPrimary,
+    NavToggle,
+    NavSecondary,
+    NavPage,
+    NavPageSecondary,
+    NavPageToggle,
+  } = elements({ ui: { Box, ...ui } })
+  const renderChildren = (children, type) =>
+    t.isNil(children)
+      ? null
+      : t.isType(children, 'Function')
+      ? children({ type })
+      : children
+  return connectState(stateQuery, makeMutations)(
+    ({ nav, brand, location, children, mutations, dispatch }) => {
+      return (
+        <Box
+          box={{
+            position: 'relative',
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'col',
+            width: 'full',
+            minHeight: 'screen',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            zIndex: 0,
+            bgColor: brand.screen.bg,
+            color: brand.screen.color,
+            fontFamily: brand.fontFamily,
+          }}
+        >
+          {t.isZeroLen(nav.primary.items) ? null : (
+            <NavPrimary {...nav.primary} brand={brand} dispatch={dispatch} />
+          )}
+          {t.isZeroLen(nav.secondary.items) ? null : (
+            <NavSecondary
+              {...nav.secondary}
               brand={brand}
               title={nav.title}
               icon={t.pathOr(null, ['matched', 'icon'], nav)}
-              {...nav.secondary}
             />
-            {t.isZeroLen(nav.body.items) ? null : (
-              <ScreenNavPage
-                brand={brand}
-                {...nav.body}
-                left={nav.body.navLeft}
-                showPageMenu={t.not(t.isZeroLen(nav.page.items))}
-              />
-            )}
-            {t.isZeroLen(nav.page.items) ? null : (
-              <ScreenNavPageSecondary brand={brand} {...nav.page} />
-            )}
-            <ScreenBody
-              left={nav.body.left}
-              top={nav.body.top}
-              bottom={nav.body.bottom}
-            >
-              {children}
-            </ScreenBody>
-            {t.eq(nav.mode, 'page') ? null : (
-              <ScreenNavToggle
-                brand={brand}
-                pageNav={t.not(t.isZeroLen(nav.body.items))}
-                open={t.eq(nav.status, 'open')}
-                onClick={() => mutations.navToggleStatus()}
-              />
-            )}
-
-            {t.isZeroLen(nav.page.items) ? null : (
-              <ScreenNavPageToggle
-                brand={brand}
-                actAsPrimary={t.eq(nav.mode, 'page')}
-                open={t.eq(nav.page.status, 'open')}
-                onClick={() => mutations.navToggleStatus({ target: 'page' })}
-              />
-            )}
-          </Box>
-        )
-      }
-    )
-  }
-)
+          )}
+          {t.isZeroLen(nav.body.items) ? null : (
+            <NavPage
+              {...nav.body}
+              brand={brand}
+              dispatch={dispatch}
+              left={nav.body.navLeft}
+              showPageMenu={t.not(t.isZeroLen(nav.page.items))}
+            />
+          )}
+          {t.isZeroLen(nav.page.items) ? null : (
+            <NavPageSecondary {...nav.page} brand={brand} />
+          )}
+          <Body
+            left={nav.body.left}
+            top={nav.body.top}
+            bottom={nav.body.bottom}
+          >
+            {renderChildren(children, location.type)}
+          </Body>
+          {t.eq(nav.mode, 'page') ? null : (
+            <NavToggle
+              brand={brand}
+              pageNav={t.not(t.isZeroLen(nav.body.items))}
+              open={t.eq(nav.status, 'open')}
+              onClick={() => mutations.navToggleStatus()}
+            />
+          )}
+          {t.isZeroLen(nav.page.items) ? null : (
+            <NavPageToggle
+              brand={brand}
+              actAsPrimary={t.eq(nav.mode, 'page')}
+              open={t.eq(nav.page.status, 'open')}
+              onClick={() => mutations.navToggleStatus({ target: 'page' })}
+            />
+          )}
+        </Box>
+      )
+    }
+  )
+})
