@@ -2,27 +2,6 @@ import React from 'react'
 import { task, NavLink } from '@z1/lib-feature-box'
 
 // elements
-const NavLogoItem = ({ ui: { HStack, Icon } }) => ({ path, brand }) => {
-  return (
-    <HStack
-      as={NavLink}
-      to={path || '/'}
-      x="center"
-      y="center"
-      box={{
-        padding: { top: 4, bottom: 6 },
-      }}
-      exact={true}
-    >
-      <Icon
-        name="flash-outline"
-        size="5xl"
-        style={{ transform: 'scaleX(-1)' }}
-      />
-    </HStack>
-  )
-}
-
 const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
   icon,
   path,
@@ -55,7 +34,7 @@ const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
 const NavPrimaryAction = task(
   t => ({ ui: { HStack, Icon } }) => ({
     icon,
-    to,
+    path,
     action,
     onAction,
     borderWidth,
@@ -65,8 +44,15 @@ const NavPrimaryAction = task(
       brand.nav.primary.color,
       { hover: brand.nav.primary.colorHover },
     ]
-    const actionProps = t.and(t.isNil(action), t.not(t.isNil(to)))
-      ? { as: NavLink, to }
+    const actionProps = t.and(t.isNil(action), t.not(t.isNil(path)))
+      ? {
+          as: NavLink,
+          to: path,
+          activeClassName: toCss({
+            bgColor: brand.nav.primary.bgActive,
+            color: brand.nav.parimary.colorActive,
+          }),
+        }
       : {
           onClick() {
             if (
@@ -90,7 +76,6 @@ const NavPrimaryAction = task(
           name={icon}
           size="4xl"
           box={{
-            color,
             padding: 1,
             borderWidth: t.isNil(borderWidth) ? 0 : borderWidth,
             borderColor: color,
@@ -105,8 +90,7 @@ const NavPrimaryAction = task(
 
 // main
 export const NavPrimary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, toCss } }) => {
-    const LogoItem = NavLogoItem({ ui: { HStack, Icon, toCss } })
+  t => ({ ui: { VStack, HStack, Icon, Spacer, toCss, LogoItem } }) => {
     const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon, toCss } })
     const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon, toCss } })
     return ({ left, bottom, width, items, actions, brand, dispatch }) => {

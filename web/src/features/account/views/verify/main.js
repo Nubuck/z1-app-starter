@@ -4,35 +4,29 @@ import { createView } from '@z1/lib-feature-macros'
 
 // main
 export const verify = task((t, a) =>
-  createView('VERIFY', {
-    data({ type, status, viewData, formData, error }) {
-      return {
-        status,
-        data: viewData,
-        error,
-      }
-    },
-    async load({ type, status, state, api, detailKey, viewData, formData }) {
-      return {
-        status,
-        data: viewData,
-        error: null,
-      }
-    },
-    form({ type, status, viewData, formData }) {
-      return t.merge(
-        {
+  createView('verify', {
+    state: {
+      data({ type, status, viewData, formData, error }) {
+        return {
+          status,
+          data: viewData,
+          error,
+        }
+      },
+      async load({ type, status, state, api, detailKey, viewData, formData }) {
+        return {
+          status,
+          data: viewData,
+          error: null,
+        }
+      },
+      async transmit({ type, status, state, api, viewData, formData }) {
+        return {
+          status,
           data: formData,
-        },
-        uiBoxSchema
-      )
-    },
-    async transmit({ type, status, state, api, viewData, formData }) {
-      return {
-        status,
-        data: formData,
-        error: null,
-      }
+          error: null,
+        }
+      },
     },
     ui: ({ ui }) => ({ state, mutations }) => {
       return <div />

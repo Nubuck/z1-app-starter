@@ -3,10 +3,14 @@ import { task, VIEW_STATUS } from '@z1/lib-feature-box'
 // ctx
 export const ACCOUNT_STATUS = {
   INIT: 'init',
+  AUTH_WAITING: 'auth-waiting',
   AUTH_LOADING: 'auth-loading',
   AUTH_SUCCESS: 'auth-success',
   AUTH_FAIL: 'auth-fail',
 }
+
+// schema
+import { authNav } from './schema'
 
 // main
 export const auth = task((t, a) => ({
@@ -21,7 +25,7 @@ export const auth = task((t, a) => ({
     return [
       m('authenticate', state => {
         return t.merge(state, {
-          status: ACCOUNT_STATUS.AUTH_LOADING,
+          status: ACCOUNT_STATUS.AUTH_WAITING,
           error: null,
         })
       }),
@@ -54,7 +58,7 @@ export const auth = task((t, a) => ({
       }),
     ]
   },
-  guards(g, box) {
+  guards(g, { actions, mutations }) {
     return [
       g(
         [t.globrex('*/ROUTE_*').regex],
@@ -94,7 +98,7 @@ export const auth = task((t, a) => ({
                 // reject invalid account -> redirect to login
                 reject(
                   redirect(
-                    box.mutations.routeSignIn({
+                    mutations.routeSignIn({
                       redirectBackTo: t.omit(['meta'], action),
                     })
                   )
@@ -118,7 +122,7 @@ export const auth = task((t, a) => ({
                   // reject invalid role -> redirect 401
                   reject(
                     redirect(
-                      box.mutations.routeNotAuthorized({
+                      mutations.routeNotAuthorized({
                         redirectBackTo: t.omit(['meta'], action),
                       })
                     )
@@ -130,7 +134,7 @@ export const auth = task((t, a) => ({
         }
       ),
       g(
-        [box.actions.routeView],
+        [actions.routeView],
         async ({ getState, action, redirect }, allow, reject) => {
           const state = getState()
           const accountStatus = t.path(['account', 'status'], state)
@@ -149,16 +153,16 @@ export const auth = task((t, a) => ({
       ),
     ]
   },
-  effects(fx, box) {
+  effects(fx, { actions, mutations }) {
     return [
       fx(
-        [box.actions.authenticate],
+        [actions.authenticate],
         async ({ api, getState, redirect }, dispatch, done) => {
           // check stored sign-in
           const [error, result] = await a.of(api.authenticate())
           // auth failed
           if (error) {
-            dispatch(box.mutations.authenticateFail({ error }))
+            dispatch(mutations.authenticateFail({ error }))
             done()
           } else {
             // auth succeeded -> verify token
@@ -166,7 +170,7 @@ export const auth = task((t, a) => ({
             // token failed
             if (t.not(token)) {
               dispatch(
-                box.mutations.authenticateFail({
+                mutations.authenticateFail({
                   error: new Error('Access Token not found'),
                 })
               )
@@ -179,7 +183,7 @@ export const auth = task((t, a) => ({
               // verify failed
               if (verifyError) {
                 dispatch(
-                  box.mutations.authenticateFail({
+                  mutations.authenticateFail({
                     error: verifyError,
                   })
                 )
@@ -192,14 +196,14 @@ export const auth = task((t, a) => ({
                 // get user failed
                 if (userError) {
                   dispatch(
-                    box.mutations.authenticateFail({
+                    mutations.authenticateFail({
                       error: userError,
                     })
                   )
                   done()
                 } else {
                   // get user success
-                  dispatch(box.mutations.authenticateSuccess({ user }))
+                  dispatch(mutations.authenticateSuccess({ user }))
                   const state = getState()
                   if (state.account.redirectBackTo) {
                     dispatch(redirect(state.account.redirectBackTo))
@@ -220,7 +224,7 @@ export const auth = task((t, a) => ({
         }
       ),
       fx(
-        [box.actions.authenticateSuccess],
+        [actions.authenticateSuccess],
         task((t, a) => async ({ getState, api }, dispatch, done) => {
           const state = getState()
           if (t.not(state.account.user)) {
@@ -234,12 +238,27 @@ export const auth = task((t, a) => ({
             if (error) {
               console.log('ERROR PATCHING USER STATUS', error)
             }
+            dispatch({
+              type: 'layout/NAV_SCHEMA_REMOVE',
+              payload: {
+                schema: ['/account/sign-up', '/account/sign-in'],
+              },
+            })
             done()
           }
         })
       ),
+      fx([actions.authenticateFail], async (_, dispatch, done) => {
+        dispatch({
+          type: 'nav/NAV_SCHEMA_ADD',
+          payload: {
+            schema: authNav,
+          },
+        })
+        done()
+      }),
       fx(
-        [box.actions.signOut],
+        [actions.signOut],
         async ({ api, getState, redirect }, dispatch, done) => {
           const state = getState()
           if (state.account.user) {
@@ -252,12 +271,12 @@ export const auth = task((t, a) => ({
               console.log('ERROR PATCHING USER STATUS', error)
             }
             api.logout()
-            dispatch(box.mutations.signOutComplete({}))
-            // dispatch(redirect(box.mutations.routeSignIn({})))
+            dispatch(mutations.signOutComplete({}))
+            // dispatch(redirect(mutations.routeSignIn({})))
             done()
           } else {
             api.logout()
-            // dispatch(redirect(box.mutations.routeSignIn({})))
+            // dispatch(redirect(mutations.routeSignIn({})))
             done()
           }
         }

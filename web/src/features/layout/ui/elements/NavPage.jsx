@@ -35,7 +35,6 @@ const PageItem = task(
           <Icon
             name={icon}
             size={t.isNil(size) ? '2xl' : size}
-            color={t.isNil(color) ? brand.nav.body.color : color}
             box={{
               alignSelf: 'center',
               margin: [null, { lg: { right: 2 } }],
@@ -45,7 +44,6 @@ const PageItem = task(
         <Text
           size={['sm', { lg: 'xl' }]}
           x="center"
-          color={t.isNil(color) ? brand.nav.body.color : color}
           family={brand.fontFamily}
           box={{
             whitespace: 'no-wrap',
@@ -60,17 +58,25 @@ const PageItem = task(
 )
 
 const PageAction = task(
-  t => ({ ui: { HStack, Icon } }) => ({
+  t => ({ ui: { HStack, Icon, Text, toCss } }) => ({
     icon,
+    title,
     action,
-    to,
+    path,
     onAction,
     borderWidth,
     brand,
   }) => {
     const color = [brand.nav.body.color, { hover: brand.nav.body.colorHover }]
-    const actionProps = t.and(t.isNil(action), t.not(t.isNil(to)))
-      ? { as: NavLink, to }
+    const actionProps = t.and(t.isNil(action), t.not(t.isNil(path)))
+      ? {
+          as: NavLink,
+          to: path,
+          activeClassName: toCss({
+            bgColor: brand.nav.body.bgActive,
+            color: brand.nav.body.colorActive,
+          }),
+        }
       : {
           onClick() {
             if (
@@ -85,23 +91,45 @@ const PageAction = task(
         x="center"
         y="left"
         box={{
-          padding: { right: 4, left: 2 },
+          padding: { x: 5 },
+          bgColor: [null, { hover: brand.nav.body.bgHover }],
+          color: [brand.nav.body.color, { hover: brand.nav.body.colorHover }],
+          flexDirection: ['col', { lg: 'row' }],
+          justifyContent: ['center', { lg: 'start' }],
+          flexWrap: false,
           cursor: 'pointer',
         }}
         {...actionProps}
       >
-        <Icon
-          name={icon}
-          size="3xl"
-          box={{
-            color,
-            padding: 2,
-            borderWidth: t.isNil(borderWidth) ? 0 : borderWidth,
-            borderColor: color,
-            borderRadius: 'full',
-            bgColor: [null, { hover: brand.nav.body.bgHover }],
-          }}
-        />
+        {t.isNil(icon) ? null : (
+          <Icon
+            name={icon}
+            size="3xl"
+            box={{
+              padding: 2,
+              borderWidth: t.isNil(borderWidth) ? 0 : borderWidth,
+              borderColor: color,
+              borderRadius: 'full',
+              bgColor: [
+                null,
+                { hover: t.isNil(title) ? brand.nav.body.bgHover : null },
+              ],
+            }}
+          />
+        )}
+        {t.isNil(title) ? null : (
+          <Text
+            size={['sm', { lg: 'lg' }]}
+            x="center"
+            family={brand.fontFamily}
+            box={{
+              whitespace: 'no-wrap',
+              padding: [null, { lg: { right: t.isNil(icon) ? 0 : 2 } }],
+            }}
+          >
+            {title}
+          </Text>
+        )}
       </HStack>
     )
   }
@@ -163,12 +191,14 @@ const NavPageSecondaryItem = task(
 
 // main
 export const NavPage = task(
-  t => ({ ui: { Box, VStack, HStack, Icon, Spacer, Text, toCss } }) => {
+  t => ({
+    ui: { Box, VStack, HStack, Icon, Spacer, Text, toCss, NavLogoItem },
+  }) => {
     const NavPageItem = PageItem({
       ui: { HStack, Icon, Text, toCss },
     })
     const NavPageAction = PageAction({
-      ui: { HStack, Icon, Text },
+      ui: { HStack, Icon, Text, toCss },
     })
     return ({
       left,
@@ -177,6 +207,7 @@ export const NavPage = task(
       actions,
       brand,
       showPageMenu,
+      actAsPrimary,
       dispatch,
     }) => {
       return (
@@ -205,6 +236,7 @@ export const NavPage = task(
             className="scroll-hide"
             stretch
           >
+            {t.not(actAsPrimary) ? null : <NavLogoItem align="x" />}
             {t.mapIndexed(
               (item, index) => (
                 <NavPageItem key={index} brand={brand} {...item} />

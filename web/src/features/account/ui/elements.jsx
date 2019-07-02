@@ -15,12 +15,14 @@ export const elements = task(
     ViewHeading({ title, text, icon }) {
       return (
         <VStack>
-          <HStack>
+          <HStack x="center" y="center">
             {t.isNil(icon) ? null : <Icon name={icon} />}
-            <Text>{title}</Text>
+            <Text size="5xl" x="center">
+              {title}
+            </Text>
           </HStack>
-          <HStack>
-            <Text>{text}</Text>
+          <HStack x="center" y="center">
+            <Text x="center">{text}</Text>
           </HStack>
         </VStack>
       )

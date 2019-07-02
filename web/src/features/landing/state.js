@@ -1,7 +1,7 @@
 import { task, createStateBox } from '@z1/lib-feature-box'
 
 // schema
-import { homeSchema } from './schema'
+// import { homeSchema } from './schema'
 
 // main
 export const landingState = task((t, a) =>
@@ -21,13 +21,13 @@ export const landingState = task((t, a) =>
         r(a.routeView, '/:view', { authenticate: false }),
       ]
     },
-    onInit({ dispatch }) {
-      dispatch({
-        type: 'nav/NAV_SCHEMA_ADD',
-        payload: {
-          schema: homeSchema,
-        },
-      })
-    },
+    // onInit({ dispatch }) {
+    //   dispatch({
+    //     type: 'nav/NAV_SCHEMA_ADD',
+    //     payload: {
+    //       schema: homeSchema,
+    //     },
+    //   })
+    // },
   })
 )

@@ -15,5 +15,5 @@ export const views = combineViews([
   resetPassword,
   signIn,
   signUp,
-  verify,
+  // verify,
 ])
