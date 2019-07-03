@@ -39,16 +39,28 @@ export const signUp = task((t, a) =>
         }
       },
     },
-    ui: ({ ui: { VStack, HStack, ViewHeading } }) => ({ state, mutations }) => {
+    ui: ({
+      ui: { HStack, ViewContainer, ViewHeading, ViewButton, ViewForm },
+    }) => ({ state, mutations }) => {
       return (
-        <VStack x="center" y="center">
-          <HStack x="center" y="center" box={{ padding: { x: 2 } }}>
-            <ViewHeading
-              title="Sign-up for a Z1 Account"
-              text="Enter your new account details below."
-            />
-          </HStack>
-        </VStack>
+        <ViewContainer>
+          <ViewHeading
+            title="Sign-up for a Z1 Account"
+            text="Enter your new account details below."
+          />
+          <ViewForm
+            schema={state.form.schema}
+            uiSchema={state.form.uiSchema}
+            formData={state.form.data}
+            onSubmit={({ formData }) =>
+              mutations.formTransmit({ data: formData })
+            }
+          >
+            <HStack box={{ padding: { y: 4 } }}>
+              <ViewButton type="submit">Sign-up</ViewButton>
+            </HStack>
+          </ViewForm>
+        </ViewContainer>
       )
     },
   })

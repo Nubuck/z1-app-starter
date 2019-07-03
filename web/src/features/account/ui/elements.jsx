@@ -3,7 +3,20 @@ import { task, Link } from '@z1/lib-feature-box'
 
 // main
 export const elements = task(
-  t => ({ ui: { Button, VStack, HStack, Icon, Spinner, Text } }) => ({
+  t => ({
+    ui: { Box, Button, VStack, HStack, Icon, Spinner, Text, SchemaForm },
+  }) => ({
+    ViewContainer({ children }) {
+      return (
+        <VStack
+          x="center"
+          y="top"
+          box={{ padding: { x: 3, top: 5, bottom: 4 } }}
+        >
+          {children}
+        </VStack>
+      )
+    },
     ViewSpinner({ text }) {
       return (
         <VStack>
@@ -14,25 +27,51 @@ export const elements = task(
     },
     ViewHeading({ title, text, icon }) {
       return (
-        <VStack>
+        <VStack box={{ padding: { bottom: 4 } }}>
           <HStack x="center" y="center">
             {t.isNil(icon) ? null : <Icon name={icon} />}
-            <Text size="5xl" x="center">
+            <Text size={['2xl', { lg: '5xl' }]} x="center">
               {title}
             </Text>
           </HStack>
           <HStack x="center" y="center">
-            <Text x="center">{text}</Text>
+            <Text x="center" size={['xl', { lg: '2xl' }]}>
+              {text}
+            </Text>
           </HStack>
         </VStack>
       )
     },
-    ViewButton({ type, text, icon, onClick }) {
+    ViewForm(props) {
+      return (
+        <Box
+          as={SchemaForm}
+          box={{
+            display: 'block',
+            width: 64,
+            color: 'white',
+            padding: { top: 3 },
+          }}
+          className="form-dark"
+          {...props}
+        />
+      )
+    },
+    ViewButton({ type, text, children, icon, onClick }) {
       const buttonProps = t.isNil(onClick) ? { type } : { type, onClick }
       return (
-        <Button {...buttonProps}>
+        <Button
+          {...buttonProps}
+          bg={[null, { hover: 'green-500' }]}
+          size="lg"
+          color={['green-500', { hover: 'white' }]}
+          radius="lg"
+          border={['green-500', { hover: 'green-500' }]}
+          borderWidth={2}
+          box={{ width: 'full' }}
+        >
           {t.isNil(icon) ? null : <Icon name={icon} />}
-          <Text>{text}</Text>
+          <Text>{text || children}</Text>
         </Button>
       )
     },

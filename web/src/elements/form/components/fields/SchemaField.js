@@ -65,7 +65,7 @@ function Label(props) {
     return null
   }
   return (
-    <label className="control-label block text-gray-700 font-medium" htmlFor={id}>
+    <label className="control-label block font-medium" htmlFor={id}>
       {label}
       {required && <span className="required text-red-500 text-xs">{REQUIRED_FIELD_SYMBOL}</span>}
     </label>
@@ -309,7 +309,7 @@ function SchemaFieldRender(props) {
   const classNames = [
     // tw
     'block',
-    'mb-1',
+    'mb-2',
     'form-group',
     'field',
     `field-${type}`,

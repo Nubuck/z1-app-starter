@@ -55,13 +55,15 @@ export const mutations = task(t => m => {
       const secondaryItems = t.pathOr([], ['secondary', 'items'], state)
       const pageItems = t.pathOr([], ['page', 'items'], state)
       const bodyItems = t.pathOr([], ['body', 'items'], state)
+      const bodyActions = t.pathOr([], ['body', 'actions'], state)
+      const body = t.concat(bodyItems, bodyActions)
       const pageStatus = t.pathOr(
         state.page.status,
         ['payload', 'pageStatus'],
         action
       )
-      const bottom = calcBodySpacing('bottom', bodyItems, size, bodyHeight)
-      const top = calcBodySpacing('top', bodyItems, size, bodyHeight)
+      const bottom = calcBodySpacing('bottom', body, size, bodyHeight)
+      const top = calcBodySpacing('top', body, size, bodyHeight)
       return t.merge(state, {
         status,
         width,
@@ -113,6 +115,12 @@ export const mutations = task(t => m => {
         ['payload', 'body', 'items'],
         action
       )
+      const bodyActions = t.pathOr(
+        state.body.actions,
+        ['payload', 'body', 'actions'],
+        action
+      )
+      const body = t.concat(bodyItems, bodyActions)
       const pageItems = t.pathOr(
         state.page.items,
         ['payload', 'page', 'items'],
@@ -121,13 +129,13 @@ export const mutations = task(t => m => {
       const pageStatus = t.isZeroLen(pageItems) ? 'closed' : state.page.status
       const bottom = calcBodySpacing(
         'bottom',
-        bodyItems,
+        body,
         state.size,
         state.body.height
       )
       const top = calcBodySpacing(
         'top',
-        bodyItems,
+        body,
         state.size,
         state.body.height
       )
@@ -198,15 +206,16 @@ export const mutations = task(t => m => {
         ? 'closed'
         : status
       const pageItems = t.pathOr([], ['page', 'items'], state)
+      const body = t.concat(state.body.items, state.body.actions)
       const bottom = calcBodySpacing(
         'bottom',
-        state.body.items,
+        body,
         state.size,
         state.body.height
       )
       const top = calcBodySpacing(
         'top',
-        state.body.items,
+        body,
         state.size,
         state.body.height
       )

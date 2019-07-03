@@ -55,7 +55,7 @@ function BaseInput(props) {
 
   return (
     <input
-      className="form-control form-input mt-1 block"
+      className="form-control form-input mt-1 block w-full"
       readOnly={readonly}
       disabled={disabled}
       autoFocus={autofocus}

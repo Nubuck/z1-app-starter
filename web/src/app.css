@@ -13,3 +13,7 @@
   width: 0 !important;
   height: 0 !important;
 }
+
+.form-dark .form-input {
+  @apply bg-gray-900;
+}

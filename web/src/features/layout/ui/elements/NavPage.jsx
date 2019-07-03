@@ -106,7 +106,7 @@ const PageAction = task(
             name={icon}
             size="3xl"
             box={{
-              padding: 2,
+              padding: [0, { lg: 2 }],
               borderWidth: t.isNil(borderWidth) ? 0 : borderWidth,
               borderColor: color,
               borderRadius: 'full',
