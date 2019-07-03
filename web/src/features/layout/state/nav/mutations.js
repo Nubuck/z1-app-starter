@@ -71,7 +71,10 @@ export const mutations = task(t => m => {
         title: t.pathOr(state.title, ['payload', 'title'], action),
         mode: t.pathOr(state.mode, ['payload', 'mode'], action),
         primary: t.merge(state.primary, {
-          left: calcPrimaryLeft(status, state.primary.items),
+          left: calcPrimaryLeft(
+            status,
+            t.concat(state.primary.items, state.primary.actions)
+          ),
           bottom,
         }),
         secondary: t.merge(state.secondary, {
@@ -105,6 +108,11 @@ export const mutations = task(t => m => {
         ['payload', 'primary', 'items'],
         action
       )
+      const primaryActions = t.pathOr(
+        state.primary.actions,
+        ['payload', 'primary', 'actions'],
+        action
+      )
       const secondaryItems = t.pathOr(
         state.secondary.items,
         ['payload', 'secondary', 'items'],
@@ -133,26 +141,20 @@ export const mutations = task(t => m => {
         state.size,
         state.body.height
       )
-      const top = calcBodySpacing(
-        'top',
-        body,
-        state.size,
-        state.body.height
-      )
+      const top = calcBodySpacing('top', body, state.size, state.body.height)
       return t.merge(state, {
         width,
         title: t.pathOr(state.title, ['payload', 'title'], action),
         mode: t.pathOr(state.mode, ['payload', 'mode'], action),
         matched: t.pathOr(state.matched, ['payload', 'matched'], action),
         primary: t.merge(state.primary, {
-          left: calcPrimaryLeft(state.status, primaryItems),
+          left: calcPrimaryLeft(
+            state.status,
+            t.concat(primaryItems, primaryActions)
+          ),
           bottom,
           items: primaryItems,
-          actions: t.pathOr(
-            state.primary.actions,
-            ['payload', 'primary', 'actions'],
-            action
-          ),
+          actions: primaryActions,
         }),
         secondary: t.merge(state.secondary, {
           left: calcSecondaryLeft(state.status, secondaryItems),
@@ -213,16 +215,14 @@ export const mutations = task(t => m => {
         state.size,
         state.body.height
       )
-      const top = calcBodySpacing(
-        'top',
-        body,
-        state.size,
-        state.body.height
-      )
+      const top = calcBodySpacing('top', body, state.size, state.body.height)
       return t.merge(state, {
         status: nextStatus,
         primary: t.merge(state.primary, {
-          left: calcPrimaryLeft(nextStatus, state.primary.items),
+          left: calcPrimaryLeft(
+            nextStatus,
+            t.concat(state.primary.items, state.primary.actions)
+          ),
           bottom,
         }),
         secondary: t.merge(state.secondary, {

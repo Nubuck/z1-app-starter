@@ -1,5 +1,5 @@
 import React from 'react'
-import { task } from '@z1/lib-feature-box'
+import { task, VIEW_STATUS } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
 // schema
@@ -15,24 +15,6 @@ export const signIn = task((t, a) =>
           status,
           data: viewData,
           error,
-        }
-      },
-      async load({
-        type,
-        status,
-        api,
-        detailKey,
-        viewData,
-        formData,
-        getState,
-        dispatch,
-        mutations,
-      }) {
-        console.log('sign-in load type:', type)
-        return {
-          status,
-          data: viewData,
-          error: null,
         }
       },
       form({ type, status, viewData, formData }) {
@@ -52,6 +34,7 @@ export const signIn = task((t, a) =>
         formData,
         getState,
         dispatch,
+        redirect,
         mutations,
       }) {
         console.log('sign-in transmit type:', type)
@@ -127,7 +110,6 @@ export const signIn = task((t, a) =>
         }
         // get user success
         dispatch(mutations.authenticateSuccess({ user }))
-        // dispatch(updateAccountNav('private', VIEW_CONTENT))
         // NOTE: redirect back or to home
         const state = getState()
         if (state.account.redirectBackTo) {
@@ -152,7 +134,7 @@ export const signIn = task((t, a) =>
       },
     },
     ui: ({
-      ui: { HStack, ViewContainer, ViewHeading, ViewButton, ViewForm },
+      ui: { HStack, ViewContainer, ViewHeading, ViewButton, ViewForm, Spinner },
     }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
@@ -169,7 +151,11 @@ export const signIn = task((t, a) =>
             }
           >
             <HStack box={{ padding: { y: 4 } }}>
-              <ViewButton type="submit">Sign-in</ViewButton>
+              <ViewButton
+                type="submit"
+                text={'Sign-in'}
+                loading={t.eq(state.status, VIEW_STATUS.LOADING)}
+              />
             </HStack>
           </ViewForm>
         </ViewContainer>

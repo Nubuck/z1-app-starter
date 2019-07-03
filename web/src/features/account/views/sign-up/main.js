@@ -1,5 +1,5 @@
 import React from 'react'
-import { task } from '@z1/lib-feature-box'
+import { task, VIEW_STATUS } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
 // schema
@@ -10,30 +10,15 @@ export const signUp = task((t, a) =>
   createView('sign-up', {
     state: {
       data({ type, status, viewData, formData, error }) {
+        console.log('sign-up data type:', type)
         return {
           status,
           data: viewData,
           error,
         }
       },
-      async load({
-        type,
-        status,
-        api,
-        detailKey,
-        viewData,
-        formData,
-        getState,
-        dispatch,
-        mutations,
-      }) {
-        return {
-          status,
-          data: viewData,
-          error: null,
-        }
-      },
       form({ type, status, viewData, formData }) {
+        console.log('sign-up form type:', type)
         return t.merge(
           {
             data: formData,
@@ -51,9 +36,63 @@ export const signUp = task((t, a) =>
         dispatch,
         mutations,
       }) {
+        console.log('sign-up transmit type:', type)
+        const [checkError] = await a.of(
+          api.service('auth-management').create({
+            action: 'checkUnique',
+            value: {
+              email: formData.email,
+            },
+          })
+        )
+        if (checkError) {
+          // dispatch(
+          //   mutations.signUpFail({
+          //     error: checkError,
+          //     // message: VIEW_CONTENT.SIGN_UP_CHECK_FAIL.MESSAGES,
+          //   })
+          // )
+          // done()
+          return {
+            status,
+            data: null,
+            error: checkError,
+          }
+        }
+        const [userError, userResult] = await a.of(
+          api.service('users').create(
+            t.mergeAll([
+              formData,
+              {
+                role: 'user',
+                status: 'offline',
+              },
+            ])
+          )
+        )
+        if (userError) {
+          // dispatch(
+          //   mutations.signUpFail({
+          //     error: userError,
+          //     // message: VIEW_CONTENT.SIGN_UP_FAIL.MESSAGES,
+          //   })
+          // )
+          // done()
+          return {
+            status,
+            data: null,
+            error: userError,
+          }
+        }
+        // dispatch(
+        //   mutations.signUpSuccess({
+        //     result: userResult,
+        //   })
+        // )
+        // done()
         return {
           status,
-          data: formData,
+          data: userResult,
           error: null,
         }
       },
@@ -76,7 +115,11 @@ export const signUp = task((t, a) =>
             }
           >
             <HStack box={{ padding: { y: 4 } }}>
-              <ViewButton type="submit">Sign-up</ViewButton>
+              <ViewButton
+                type="submit"
+                text="Sign-up"
+                loading={t.eq(state.status, VIEW_STATUS.LOADING)}
+              />
             </HStack>
           </ViewForm>
         </ViewContainer>

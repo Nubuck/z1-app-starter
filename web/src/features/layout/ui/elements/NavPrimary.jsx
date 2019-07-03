@@ -90,7 +90,7 @@ const NavPrimaryAction = task(
 
 // main
 export const NavPrimary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, toCss, LogoItem } }) => {
+  t => ({ ui: { VStack, HStack, Icon, Spacer, toCss, NavLogoItem } }) => {
     const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon, toCss } })
     const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon, toCss } })
     return ({ left, bottom, width, items, actions, brand, dispatch }) => {
@@ -109,7 +109,7 @@ export const NavPrimary = task(
           className="scroll-hide"
           style={{ width, left, bottom }}
         >
-          <LogoItem brand={brand} />
+          <NavLogoItem brand={brand} />
           {t.mapIndexed(
             (item, index) => (
               <PrimaryItem key={index} brand={brand} {...item} />

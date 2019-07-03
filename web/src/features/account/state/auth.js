@@ -10,7 +10,7 @@ export const ACCOUNT_STATUS = {
 }
 
 // schema
-import { authNav } from './schema'
+import { authNav, secureNav } from './schema'
 
 // main
 export const auth = task((t, a) => ({
@@ -52,7 +52,7 @@ export const auth = task((t, a) => ({
           hash: null,
         })
       }),
-      m('signOut', state => {
+      m('signOutComplete', state => {
         return t.merge(state, {
           user: null,
         })
@@ -239,35 +239,51 @@ export const auth = task((t, a) => ({
             const [error] = await a.of(
               api
                 .service('users')
-                .patch(state.account.user.id, { status: 'online' })
+                .patch(state.account.user._id, { status: 'online' })
             )
             if (error) {
               console.log('ERROR PATCHING USER STATUS', error)
             }
             dispatch({
-              type: 'layout/NAV_SCHEMA_REMOVE',
+              type: 'nav/NAV_SCHEMA_REMOVE',
               payload: {
                 schema: ['/account/sign-up', '/account/sign-in'],
               },
             })
-            dispatch(mutations.navRegistered(false))
+            dispatch({
+              type: 'nav/NAV_SCHEMA_ADD',
+              payload: {
+                schema: secureNav,
+              },
+            })
+            dispatch(mutations.navRegistered(true))
+            // dispatch(mutations.navRegistered(false))
             done()
           }
         })
       ),
-      fx([actions.authenticateFail], async ({ getState }, dispatch, done) => {
-        const state = getState()
-        if (t.not(state.account.navRegistered)) {
-          dispatch({
-            type: 'nav/NAV_SCHEMA_ADD',
-            payload: {
-              schema: authNav,
-            },
-          })
-          dispatch(mutations.navRegistered(true))
+      fx(
+        [actions.authenticateFail, actions.signOutComplete],
+        async ({ getState }, dispatch, done) => {
+          const state = getState()
+          if (t.not(state.account.navRegistered)) {
+            dispatch({
+              type: 'nav/NAV_SCHEMA_REMOVE',
+              payload: {
+                schema: ['/#sign-out'],
+              },
+            })
+            dispatch({
+              type: 'nav/NAV_SCHEMA_ADD',
+              payload: {
+                schema: authNav,
+              },
+            })
+            dispatch(mutations.navRegistered(true))
+          }
+          done()
         }
-        done()
-      }),
+      ),
       fx(
         [actions.signOut],
         async ({ api, getState, redirect }, dispatch, done) => {
@@ -276,17 +292,19 @@ export const auth = task((t, a) => ({
             const [error] = await a.of(
               api
                 .service('users')
-                .patch(state.account.user.id, { status: 'offline' })
+                .patch(state.account.user._id, { status: 'offline' })
             )
             if (error) {
               console.log('ERROR PATCHING USER STATUS', error)
             }
             api.logout()
+            dispatch(mutations.navRegistered(false))
             dispatch(mutations.signOutComplete({}))
             // dispatch(redirect(mutations.routeSignIn({})))
             done()
           } else {
             api.logout()
+            dispatch(mutations.navRegistered(false))
             // dispatch(redirect(mutations.routeSignIn({})))
             done()
           }

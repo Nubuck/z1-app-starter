@@ -57,7 +57,7 @@ export const elements = task(
         />
       )
     },
-    ViewButton({ type, text, children, icon, onClick }) {
+    ViewButton({ type, text, children, icon, onClick, loading }) {
       const buttonProps = t.isNil(onClick) ? { type } : { type, onClick }
       return (
         <Button
@@ -69,9 +69,17 @@ export const elements = task(
           border={['green-500', { hover: 'green-500' }]}
           borderWidth={2}
           box={{ width: 'full' }}
+          style={{ minHeight: 55 }}
         >
-          {t.isNil(icon) ? null : <Icon name={icon} />}
-          <Text>{text || children}</Text>
+          {t.not(loading) ? (
+            <React.Fragment>
+              {t.isNil(icon) ? null : <Icon name={icon} />}
+              {t.isNil(text) ? null : <Text>{text}</Text>}
+              {children}
+            </React.Fragment>
+          ) : (
+            <Spinner size="xs" box={{ height: 6, padding: { y: 1 } }} />
+          )}
         </Button>
       )
     },
