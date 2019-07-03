@@ -16,7 +16,17 @@ export const signUp = task((t, a) =>
           error,
         }
       },
-      async load({ type, status, state, api, detailKey, viewData, formData }) {
+      async load({
+        type,
+        status,
+        api,
+        detailKey,
+        viewData,
+        formData,
+        getState,
+        dispatch,
+        mutations,
+      }) {
         return {
           status,
           data: viewData,
@@ -28,10 +38,19 @@ export const signUp = task((t, a) =>
           {
             data: formData,
           },
-          signUpSchema({ disabled: false })
+          signUpSchema({ disabled: t.eq(type, 'form-transmit') })
         )
       },
-      async transmit({ type, status, state, api, viewData, formData }) {
+      async transmit({
+        type,
+        status,
+        api,
+        viewData,
+        formData,
+        getState,
+        dispatch,
+        mutations,
+      }) {
         return {
           status,
           data: formData,

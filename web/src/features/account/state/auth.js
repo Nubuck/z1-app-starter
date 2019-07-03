@@ -20,6 +20,7 @@ export const auth = task((t, a) => ({
     error: null,
     redirectBackTo: null,
     hash: null,
+    navRegistered: false,
   },
   mutations(m) {
     return [
@@ -54,6 +55,11 @@ export const auth = task((t, a) => ({
       m('signOut', state => {
         return t.merge(state, {
           user: null,
+        })
+      }),
+      m('navRegistered', (state, action) => {
+        return t.merge(state, {
+          navRegistered: action.payload,
         })
       }),
     ]
@@ -244,17 +250,22 @@ export const auth = task((t, a) => ({
                 schema: ['/account/sign-up', '/account/sign-in'],
               },
             })
+            dispatch(mutations.navRegistered(false))
             done()
           }
         })
       ),
-      fx([actions.authenticateFail], async (_, dispatch, done) => {
-        dispatch({
-          type: 'nav/NAV_SCHEMA_ADD',
-          payload: {
-            schema: authNav,
-          },
-        })
+      fx([actions.authenticateFail], async ({ getState }, dispatch, done) => {
+        const state = getState()
+        if (t.not(state.account.navRegistered)) {
+          dispatch({
+            type: 'nav/NAV_SCHEMA_ADD',
+            payload: {
+              schema: authNav,
+            },
+          })
+          dispatch(mutations.navRegistered(true))
+        }
         done()
       }),
       fx(

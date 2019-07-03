@@ -15,5 +15,5 @@
 }
 
 .form-dark .form-input {
-  @apply bg-gray-900;
+  @apply bg-transparent;
 }

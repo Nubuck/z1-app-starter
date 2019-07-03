@@ -16,7 +16,17 @@ export const resetPassword = task((t, a) =>
           error,
         }
       },
-      async load({ type, status, state, api, detailKey, viewData, formData }) {
+      async load({
+        type,
+        status,
+        api,
+        detailKey,
+        viewData,
+        formData,
+        getState,
+        dispatch,
+        mutations,
+      }) {
         return {
           status,
           data: viewData,
@@ -31,7 +41,16 @@ export const resetPassword = task((t, a) =>
           resetPasswordSchema({ disabled: false })
         )
       },
-      async transmit({ type, status, state, api, viewData, formData }) {
+      async transmit({
+        type,
+        status,
+        api,
+        viewData,
+        formData,
+        getState,
+        dispatch,
+        mutations,
+      }) {
         return {
           status,
           data: formData,
