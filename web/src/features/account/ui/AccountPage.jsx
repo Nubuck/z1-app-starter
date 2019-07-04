@@ -14,9 +14,8 @@ const stateQuery = ({ account, brand }) => ({ brand, state: account })
 // main
 export const AccountPage = task(
   t => ({ ui: { VStack, ...ui }, mutationCreators }) => {
-    const Elements = elements({ ui: { VStack, ...ui } })
-    const Views = views.ui({ ui: { VStack, ...ui, ...Elements } })
-    console.log('VIEWS', Views)
+    const Elements = elements({ VStack, ...ui })
+    const Views = views.ui({ VStack, ...ui, ...Elements })
     return connectState(stateQuery, mutationCreators)(
       ({ brand, state, mutations }) => {
         return (

@@ -98,7 +98,14 @@ export const signUp = task((t, a) =>
       },
     },
     ui: ({
-      ui: { HStack, ViewContainer, ViewHeading, ViewButton, ViewForm },
+      HStack,
+      ViewContainer,
+      ViewHeading,
+      ViewButton,
+      ViewForm,
+      Text,
+      ViewLink,
+      ViewAlert,
     }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
@@ -106,6 +113,15 @@ export const signUp = task((t, a) =>
             title="Sign-up for a Z1 Account"
             text="Enter your new account details below."
           />
+          {t.isNil(state.error) ? null : (
+            <ViewAlert
+              icon="alert-triangle-outline"
+              text="Email address already registered"
+              color="orange-500"
+              bgColor={null}
+              box={{ borderWidth: 2, borderColor: 'orange-500' }}
+            />
+          )}
           <ViewForm
             schema={state.form.schema}
             uiSchema={state.form.uiSchema}
@@ -119,7 +135,29 @@ export const signUp = task((t, a) =>
                 type="submit"
                 text="Sign-up"
                 loading={t.eq(state.status, VIEW_STATUS.LOADING)}
+                radius="full"
               />
+            </HStack>
+            <HStack
+              x="center"
+              y="center"
+              box={{
+                padding: { bottom: 4 },
+                flexDirection: ['col', { lg: 'row' }],
+              }}
+            >
+              <Text
+                as={'div'}
+                x="center"
+                size="lg"
+                color={'gray-500'}
+                box={{ margin: { y: 2 } }}
+              >
+                Already have an account?
+              </Text>
+              <ViewLink to={'/account/sign-in'} textBox={{ width: 'full' }}>
+                Sign-in to Z1
+              </ViewLink>
             </HStack>
           </ViewForm>
         </ViewContainer>

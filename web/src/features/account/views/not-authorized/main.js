@@ -14,7 +14,7 @@ export const notAuthorized = task((t, a) =>
         }
       },
     },
-    ui: ({ ui }) => ({ state, mutations }) => {
+    ui: ({  }) => ({ state, mutations }) => {
       return <div />
     },
   })

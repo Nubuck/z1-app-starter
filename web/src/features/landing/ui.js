@@ -13,14 +13,24 @@ export const LandingPage = ({ ui: { VStack, HStack, Text, Icon } }) =>
         y="center"
         box={{ color: brand.secondary, height: 'full' }}
       >
-        <HStack x="center" y="center" box={{ padding: { x: 2 } }}>
-          <Text size="5xl" family={brand.fontFamily} x="center">
-            <Icon
-              name="flash-outline"
-              size="5xl"
-              box={{ margin: { right: 4 } }}
-              style={{ transform: 'scaleX(-1)' }}
-            />
+        <HStack x="center" y="center">
+          <Icon
+            as="div"
+            name="flash-outline"
+            size="6xl"
+            box={{
+              margin: { right: 4 },
+              display: 'flex',
+              flexDirection: 'col',
+            }}
+            style={{ transform: 'scaleX(-1) rotate(55deg)' }}
+          />
+          <Text
+            size={['4xl', { md: '5xl' }]}
+            family={brand.fontFamily}
+            space="no-wrap"
+            box={{ padding: { bottom: 2 } }}
+          >
             Z1 App Starter
           </Text>
         </HStack>

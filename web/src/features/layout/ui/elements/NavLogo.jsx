@@ -21,7 +21,7 @@ export const NavLogo = ({ ui: { HStack, Icon } }) => ({
       <Icon
         name="flash-outline"
         size="5xl"
-        style={{ transform: 'scaleX(-1)' }}
+        style={{ transform: 'scaleX(-1) rotate(55deg)' }}
       />
     </HStack>
   )

@@ -134,7 +134,14 @@ export const signIn = task((t, a) =>
       },
     },
     ui: ({
-      ui: { HStack, ViewContainer, ViewHeading, ViewButton, ViewForm, Spinner },
+      HStack,
+      ViewContainer,
+      ViewHeading,
+      ViewButton,
+      ViewForm,
+      ViewLink,
+      Text,
+      ViewAlert,
     }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
@@ -142,6 +149,15 @@ export const signIn = task((t, a) =>
             title="Sign-in to your Z1 Account"
             text="Enter your account credentials below to continue."
           />
+          {t.isNil(state.error) ? null : (
+            <ViewAlert
+              icon="alert-triangle-outline"
+              text="Incorrect email or password"
+              color="orange-500"
+              bgColor={null}
+              box={{ borderWidth: 2, borderColor: 'orange-500' }}
+            />
+          )}
           <ViewForm
             schema={state.form.schema}
             uiSchema={state.form.uiSchema}
@@ -150,12 +166,44 @@ export const signIn = task((t, a) =>
               mutations.formTransmit({ data: formData })
             }
           >
+            <ViewLink
+              to={'/account/reset-password'}
+              box={{ justifyContent: 'end', margin: { top: 4, bottom: 2 } }}
+              textBox={{
+                fontSize: 'md',
+                padding: { right: 0 },
+              }}
+            >
+              Forgot your password?
+            </ViewLink>
             <HStack box={{ padding: { y: 4 } }}>
               <ViewButton
                 type="submit"
                 text={'Sign-in'}
+                radius="full"
                 loading={t.eq(state.status, VIEW_STATUS.LOADING)}
               />
+            </HStack>
+            <HStack
+              x="center"
+              y="center"
+              box={{
+                padding: { bottom: 4 },
+                flexDirection: ['col', { lg: 'row' }],
+              }}
+            >
+              <Text
+                as={'div'}
+                x="center"
+                size="lg"
+                color={'gray-500'}
+                box={{ margin: { y: 2 } }}
+              >
+                Don't have an account?
+              </Text>
+              <ViewLink to={'/account/sign-up'} textBox={{ width: 'full' }}>
+                Sign-up to Z1
+              </ViewLink>
             </HStack>
           </ViewForm>
         </ViewContainer>

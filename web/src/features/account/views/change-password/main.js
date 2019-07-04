@@ -58,8 +58,24 @@ export const changePassword = task((t, a) =>
         }
       },
     },
-    ui: ({ ui }) => ({ state, mutations }) => {
-      return <div />
+    ui: ({
+      HStack,
+      ViewContainer,
+      ViewHeading,
+      ViewButton,
+      ViewForm,
+      Text,
+    }) => ({ state, mutations }) => {
+      return (
+        <ViewContainer>
+          <ViewHeading
+            title="Change your Z1 password"
+            text="Enter the email address you registered with to reset your password."
+            box={{ width: ['full', { lg: '2/5' }], margin: { x: 'auto' } }}
+          />
+        
+        </ViewContainer>
+      )
     },
   })
 )
