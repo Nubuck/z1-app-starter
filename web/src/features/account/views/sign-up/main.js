@@ -9,16 +9,23 @@ import { signUpSchema } from './schema'
 export const signUp = task((t, a) =>
   createView('sign-up', {
     state: {
-      data({ type, status, viewData, formData, error }) {
-        console.log('sign-up data type:', type)
+      data({ type, status, viewData, error }) {
+        // route-enter
+        // data-load
+        // data-load-complete
+        // form-transmit
+        // form-transmit-complete
         return {
           status,
-          data: viewData,
+          data: t.merge(viewData, {
+            mode: t.and(t.eq(type, 'form-transmit-complete'), t.isNil(error))
+              ? 'view'
+              : 'form',
+          }),
           error,
         }
       },
-      form({ type, status, viewData, formData }) {
-        console.log('sign-up form type:', type)
+      form({ type, formData }) {
         return t.merge(
           {
             data: formData,
@@ -26,17 +33,7 @@ export const signUp = task((t, a) =>
           signUpSchema({ disabled: t.eq(type, 'form-transmit') })
         )
       },
-      async transmit({
-        type,
-        status,
-        api,
-        viewData,
-        formData,
-        getState,
-        dispatch,
-        mutations,
-      }) {
-        console.log('sign-up transmit type:', type)
+      async transmit({ status, api, formData }) {
         const [checkError] = await a.of(
           api.service('auth-management').create({
             action: 'checkUnique',
@@ -46,17 +43,10 @@ export const signUp = task((t, a) =>
           })
         )
         if (checkError) {
-          // dispatch(
-          //   mutations.signUpFail({
-          //     error: checkError,
-          //     // message: VIEW_CONTENT.SIGN_UP_CHECK_FAIL.MESSAGES,
-          //   })
-          // )
-          // done()
           return {
             status,
-            data: null,
-            error: checkError,
+            data: formData,
+            error: checkError.message,
           }
         }
         const [userError, userResult] = await a.of(
@@ -71,25 +61,12 @@ export const signUp = task((t, a) =>
           )
         )
         if (userError) {
-          // dispatch(
-          //   mutations.signUpFail({
-          //     error: userError,
-          //     // message: VIEW_CONTENT.SIGN_UP_FAIL.MESSAGES,
-          //   })
-          // )
-          // done()
           return {
             status,
-            data: null,
-            error: userError,
+            data: formData,
+            error: userError.message,
           }
         }
-        // dispatch(
-        //   mutations.signUpSuccess({
-        //     result: userResult,
-        //   })
-        // )
-        // done()
         return {
           status,
           data: userResult,
@@ -106,60 +83,99 @@ export const signUp = task((t, a) =>
       Text,
       ViewLink,
       ViewAlert,
+      Match,
     }) => ({ state, mutations }) => {
+      const containerProps = t.eq(state.data.mode, 'view')
+        ? { large: true, center: true }
+        : {}
       return (
-        <ViewContainer>
-          <ViewHeading
-            title="Sign-up for a Z1 Account"
-            text="Enter your new account details below."
+        <ViewContainer {...containerProps}>
+          <Match
+            value={state.data.mode}
+            when={{
+              view: (
+                <React.Fragment>
+                  <ViewHeading
+                    title="Thank you for registering a Z1 account"
+                    text="Your account verification link has been sent to the entered email."
+                    box={{ color: 'yellow-500' }}
+                  />
+                  <HStack box={{ padding: { top: 8 } }}>
+                    <ViewButton
+                      to="/account/sign-in"
+                      text="Continue to Sign-in"
+                      radius="full"
+                      box={{
+                        justifyContent: 'center',
+                        display: 'flex',
+                        flexDirection: 'row',
+                      }}
+                      color="green-500"
+                    />
+                  </HStack>
+                </React.Fragment>
+              ),
+              form: (
+                <React.Fragment>
+                  <ViewHeading
+                    title="Sign-up for a Z1 Account"
+                    text="Enter your new account details below."
+                  />
+                  {t.isNil(state.error) ? null : (
+                    <ViewAlert
+                      icon="alert-triangle-outline"
+                      text={state.error}
+                      color="orange-500"
+                      bgColor={null}
+                      box={{ borderWidth: 2, borderColor: 'orange-500' }}
+                    />
+                  )}
+                  <ViewForm
+                    schema={state.form.schema}
+                    uiSchema={state.form.uiSchema}
+                    formData={state.form.data}
+                    onSubmit={({ formData }) =>
+                      mutations.formTransmit({ data: formData })
+                    }
+                  >
+                    <HStack box={{ padding: { y: 4 } }}>
+                      <ViewButton
+                        type="submit"
+                        text="Sign-up"
+                        loading={t.eq(state.status, VIEW_STATUS.LOADING)}
+                        radius="full"
+                      />
+                    </HStack>
+                    <HStack
+                      x="center"
+                      y="center"
+                      box={{
+                        padding: { bottom: 4 },
+                        flexDirection: ['col', { lg: 'row' }],
+                        flexWrap: true,
+                      }}
+                    >
+                      <Text
+                        as={'div'}
+                        x="center"
+                        size="lg"
+                        color={'gray-500'}
+                        box={{ margin: { y: 2 } }}
+                      >
+                        Already have an account?
+                      </Text>
+                      <ViewLink
+                        to={'/account/sign-in'}
+                        textBox={{ width: 'full' }}
+                      >
+                        Sign-in to Z1
+                      </ViewLink>
+                    </HStack>
+                  </ViewForm>
+                </React.Fragment>
+              ),
+            }}
           />
-          {t.isNil(state.error) ? null : (
-            <ViewAlert
-              icon="alert-triangle-outline"
-              text="Email address already registered"
-              color="orange-500"
-              bgColor={null}
-              box={{ borderWidth: 2, borderColor: 'orange-500' }}
-            />
-          )}
-          <ViewForm
-            schema={state.form.schema}
-            uiSchema={state.form.uiSchema}
-            formData={state.form.data}
-            onSubmit={({ formData }) =>
-              mutations.formTransmit({ data: formData })
-            }
-          >
-            <HStack box={{ padding: { y: 4 } }}>
-              <ViewButton
-                type="submit"
-                text="Sign-up"
-                loading={t.eq(state.status, VIEW_STATUS.LOADING)}
-                radius="full"
-              />
-            </HStack>
-            <HStack
-              x="center"
-              y="center"
-              box={{
-                padding: { bottom: 4 },
-                flexDirection: ['col', { lg: 'row' }],
-              }}
-            >
-              <Text
-                as={'div'}
-                x="center"
-                size="lg"
-                color={'gray-500'}
-                box={{ margin: { y: 2 } }}
-              >
-                Already have an account?
-              </Text>
-              <ViewLink to={'/account/sign-in'} textBox={{ width: 'full' }}>
-                Sign-in to Z1
-              </ViewLink>
-            </HStack>
-          </ViewForm>
         </ViewContainer>
       )
     },

@@ -9,48 +9,36 @@ import { resetPasswordSchema } from './schema'
 export const resetPassword = task((t, a) =>
   createView('reset-password', {
     state: {
-      data({ type, status, viewData, formData, error }) {
+      data({ type, status, viewData, error }) {
         return {
           status,
           data: viewData,
           error,
         }
       },
-      async load({
-        type,
-        status,
-        api,
-        detailKey,
-        viewData,
-        formData,
-        getState,
-        dispatch,
-        mutations,
-      }) {
-        return {
-          status,
-          data: viewData,
-          error: null,
-        }
-      },
-      form({ type, status, viewData, formData }) {
+      form({ type, formData }) {
         return t.merge(
           {
             data: formData,
           },
-          resetPasswordSchema({ disabled: false })
+          resetPasswordSchema({ disabled: t.eq(type, 'form-transmit') })
         )
       },
-      async transmit({
-        type,
-        status,
-        api,
-        viewData,
-        formData,
-        getState,
-        dispatch,
-        mutations,
-      }) {
+      async transmit({ status, api, formData }) {
+        const [error, result] = await a.of(
+          api.service('auth-management').create({
+            action: 'sendResetPwd',
+            value: { email: formData.email },
+          })
+        )
+        if (error) {
+          return {
+            status,
+            data: formData,
+            error: error.message,
+          }
+        }
+        console.log('RESET RESULT', result)
         return {
           status,
           data: formData,
@@ -66,6 +54,7 @@ export const resetPassword = task((t, a) =>
       ViewForm,
       Text,
       ViewLink,
+      ViewAlert,
     }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
@@ -76,7 +65,7 @@ export const resetPassword = task((t, a) =>
           {t.isNil(state.error) ? null : (
             <ViewAlert
               icon="alert-triangle-outline"
-              text="Email address not registered"
+              text={state.error}
               color="orange-500"
               bgColor={null}
               box={{ borderWidth: 2, borderColor: 'orange-500' }}

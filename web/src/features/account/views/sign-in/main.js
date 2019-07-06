@@ -9,16 +9,19 @@ import { signInSchema } from './schema'
 export const signIn = task((t, a) =>
   createView('sign-in', {
     state: {
-      data({ type, status, viewData, formData, error }) {
-        console.log('sign-in data type:', type)
+      data({ type, status, viewData, error }) {
+        // route-enter
+        // data-load
+        // data-load-complete
+        // form-transmit
+        // form-transmit-complete
         return {
           status,
           data: viewData,
           error,
         }
       },
-      form({ type, status, viewData, formData }) {
-        console.log('sign-in form type:', type)
+      form({ type, formData }) {
         return t.merge(
           {
             data: formData,
@@ -30,14 +33,12 @@ export const signIn = task((t, a) =>
         type,
         status,
         api,
-        viewData,
         formData,
         getState,
         dispatch,
         redirect,
         mutations,
       }) {
-        console.log('sign-in transmit type:', type)
         // authenticate
         const [error, result] = await a.of(
           api.authenticate(t.mergeAll([{ strategy: 'local' }, formData]))
@@ -47,7 +48,6 @@ export const signIn = task((t, a) =>
           dispatch(
             mutations.authenticateFail({
               error,
-              // message: VIEW_CONTENT.SIGN_IN_FAIL.MESSAGES,
             })
           )
           return {
@@ -63,7 +63,6 @@ export const signIn = task((t, a) =>
           dispatch(
             mutations.authenticateFail({
               error: new Error('Access Token not found'),
-              // message: VIEW_CONTENT.SIGN_IN_FAIL.MESSAGES,
             })
           )
           return {
@@ -81,7 +80,6 @@ export const signIn = task((t, a) =>
           dispatch(
             mutations.authenticateFail({
               error: verifyError,
-              // message: VIEW_CONTENT.SIGN_IN_FAIL.MESSAGES,
             })
           )
           return {
@@ -99,7 +97,6 @@ export const signIn = task((t, a) =>
           dispatch(
             mutations.authenticateFail({
               error: userError,
-              // message: VIEW_CONTENT.SIGN_IN_FAIL.MESSAGES,
             })
           )
           return {
@@ -190,6 +187,7 @@ export const signIn = task((t, a) =>
               box={{
                 padding: { bottom: 4 },
                 flexDirection: ['col', { lg: 'row' }],
+                flexWrap: true,
               }}
             >
               <Text

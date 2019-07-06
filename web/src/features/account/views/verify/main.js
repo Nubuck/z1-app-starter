@@ -24,12 +24,28 @@ export const verify = task((t, a) =>
         dispatch,
         mutations,
       }) {
-        return {
-          status,
-          data: viewData,
-          error: null,
-        }
-      },
+           // if (t.and(t.eq(type, 'route-enter'), t.not(t.isNil(viewData)))) {
+           return {
+             status,
+             data: viewData,
+             error: null,
+           }
+           // }
+
+           // const [dataError, dataResult] = await a.of(
+           //   api.service('derp').find({
+           //     query: {
+           //       thing: formData.otherThing,
+           //     },
+           //   })
+           // )
+
+           // return {
+           //   status,
+           //   data: dataResult.data,
+           //   error: null,
+           // }
+         },
       async transmit({
         type,
         status,

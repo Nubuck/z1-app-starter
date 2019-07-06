@@ -3,18 +3,33 @@ import { task, Link } from '@z1/lib-feature-box'
 
 // main
 export const elements = task(
-  t => ({ Box, Button, VStack, HStack, Icon, Spinner, Text, SchemaForm }) => ({
-    ViewContainer({ children, box }) {
+  t => ({
+    Box,
+    Button,
+    VStack,
+    HStack,
+    Icon,
+    Spinner,
+    Text,
+    SchemaForm,
+    Match,
+  }) => ({
+    ViewContainer({ children, box, large, center }) {
       return (
         <VStack
           x="center"
-          y="top"
+          y={t.not(center) ? 'top' : 'center'}
           box={t.merge(
             {
-              padding: { x: 3, top: 6, bottom: 4 },
+              padding: { x: 3, top: 8, bottom: 4 },
               width: [
                 'full',
-                { sm: '8/12', md: '5/12', lg: '4/12', xl: '3/12' },
+                {
+                  sm: '8/12',
+                  md: t.not(large) ? '5/12' : '6/12',
+                  lg: t.not(large) ? '4/12' : '5/12',
+                  xl: t.not(large) ? '3/12' : '4/12',
+                },
               ],
               margin: { x: 'auto' },
             },
@@ -74,36 +89,52 @@ export const elements = task(
       loading,
       to,
       box,
+      color,
       ...props
     }) {
+      const nextColor = color || 'yellow-500'
       const buttonProps = t.isNil(onClick)
         ? t.isNil(to)
           ? { type }
           : { type, as: Link, to }
         : { type, onClick }
+      const buttonContent = t.not(loading) ? 'content' : 'spinner'
       return (
         <Button
           {...buttonProps}
-          bg={[null, { hover: 'yellow-500' }]}
+          bg={[
+            null,
+            {
+              hover: t.eq(buttonContent, 'content')
+                ? nextColor
+                : 'transparent',
+            },
+          ]}
           size="lg"
-          color={['yellow-500', { hover: 'gray-900' }]}
+          color={[nextColor, { hover: 'gray-900' }]}
           radius="lg"
-          border={['yellow-500', { hover: 'yellow-500' }]}
+          border={[nextColor, { hover: nextColor }]}
           borderWidth={2}
           box={t.merge({ width: 'full' }, box || {})}
           style={{ minHeight: 55 }}
           disabled={loading}
           {...props}
         >
-          {t.not(loading) ? (
-            <React.Fragment>
-              {t.isNil(icon) ? null : <Icon name={icon} />}
-              {t.isNil(text) ? null : <Text>{text}</Text>}
-              {children}
-            </React.Fragment>
-          ) : (
-            <Spinner size="xs" box={{ height: 6, padding: { y: 1 } }} />
-          )}
+          <Match
+            value={buttonContent}
+            when={{
+              content: (
+                <React.Fragment>
+                  {t.isNil(icon) ? null : <Icon name={icon} />}
+                  {t.isNil(text) ? null : <Text>{text}</Text>}
+                  {children}
+                </React.Fragment>
+              ),
+              spinner: (
+                <Spinner size="xs" box={{ height: 6, padding: { y: 1 } }} />
+              ),
+            }}
+          />
         </Button>
       )
     },
@@ -114,7 +145,7 @@ export const elements = task(
           <Text
             as={Link}
             to={to}
-            x='center'
+            x="center"
             box={t.merge(
               {
                 fontWeight: 'bold',
@@ -150,8 +181,8 @@ export const elements = task(
             <Icon
               name={icon}
               as="div"
-              size="2xl"
-              box={{ margin: { right: 2 } }}
+              size="3xl"
+              box={{ margin: { right: 3 } }}
             />
           )}
           {t.isNil(text) ? null : (
