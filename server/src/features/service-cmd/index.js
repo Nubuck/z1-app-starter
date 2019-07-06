@@ -1,16 +1,15 @@
 import { createFeature } from '@z1/lib-feature-box-server-nedb'
 
-// api
-import { screenCmdApi } from './api'
+import { serviceCmdApi } from './main'
 
-// main
+// exports
 export default createFeature((
   {
     /* instance props*/
   }
 ) => {
   return {
-    name: 'screenCmd',
-    api: [screenCmdApi],
+    name: 'serviceCmd',
+    api: [serviceCmdApi],
   }
 })

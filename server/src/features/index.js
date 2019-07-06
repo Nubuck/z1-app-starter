@@ -4,7 +4,7 @@ import { combineFeatures } from '@z1/lib-feature-box-server-nedb'
 import accountFeature from '@z1/kit-account-server-nedb'
 
 // features
-import screenCmd from './screen-cmd'
+import serviceCmd from './service-cmd'
 
 // exports
-export default combineFeatures([accountFeature({}), screenCmd({})])
+export default combineFeatures([accountFeature({}), serviceCmd({})])

@@ -16,6 +16,9 @@
   },
   "dependencies": {
     "@z1/kit-account-server-nedb": "^0.2.10",
-    "@z1/lib-feature-box-server-nedb": "^0.2.9"
+    "@z1/lib-feature-box-server-nedb": "^0.2.9",
+    "@z1/preset-tools": "^0.2.5",
+    "pm2": "^3.5.1",
+    "timer-stopwatch": "^0.2.0"
   }
 }

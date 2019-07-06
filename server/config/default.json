@@ -33,5 +33,11 @@
       "usernameField": "email",
       "passwordField": "password"
     }
+  },
+  "cmd": {
+    "service": {
+      "interval": 15,
+      "path": "_services"
+    }
   }
 }
