@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from '@z1/lib-feature-box'
 
 // elements
-export const NavLogo = ({ ui: { HStack, Icon } }) => ({
+export const NavLogo = ({ ui: { HStack, Box } }) => ({
   path,
   brand,
   align,
@@ -18,7 +18,7 @@ export const NavLogo = ({ ui: { HStack, Icon } }) => ({
       }}
       exact={true}
     >
-      <svg viewBox="0 0 627 500" width="60px" height="60px">
+      {/* <svg viewBox="0 0 627 500" width="56px" height="56px">
         <g>
           <g>
             <path
@@ -37,7 +37,38 @@ export const NavLogo = ({ ui: { HStack, Icon } }) => ({
             <path d=" M 9 22 L 604 22 L 469 124" fill="rgb(72,187,120)" />
           </g>
         </g>
-      </svg>
+      </svg> */}
+      <svg viewBox="0 0 627 500" width="56px" height="56px">
+          <g>
+            <g>
+              <path
+                d=" M 127.798 488 L 603 128.002 L 479 128.002 L 9 488 L 127.798 488 M 605 488 L 138 488 C 204.405 438.137 212.998 431.904 261 396 M 261 396 C 279.019 400.819 393.685 431.486 605 488"
+                fillRule="evenodd"
+                fill="rgb(47,133,90)"
+                vectorEffect="non-scaling-stroke"
+                strokeWidth="0.5"
+                stroke="#1a202c"
+                strokeLinejoin="miter"
+                strokeLinecap="square"
+                strokeMiterlimit="3"
+              />
+            </g>
+
+            <g>
+              <path
+                d=" M 486.202 22 L 11 381.998 L 127.798 385 L 603 22 L 486.202 22 M 9 22 L 476 22 C 409.595 71.863 361.397 109.197 355 114 M 355 114 L 11 22"
+                fillRule="evenodd"
+                fill="rgb(72,187,120)"
+                vectorEffect="non-scaling-stroke"
+                strokeWidth="0.5"
+                stroke="#1a202c"
+                strokeLinejoin="miter"
+                strokeLinecap="square"
+                strokeMiterlimit="3"
+              />
+            </g>
+          </g>
+        </svg>
     </HStack>
   )
 }
