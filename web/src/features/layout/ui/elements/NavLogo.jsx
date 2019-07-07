@@ -14,11 +14,11 @@ export const NavLogo = ({ ui: { HStack, Box } }) => ({
       x="center"
       y="center"
       box={{
-        padding: align === 'x' ? { x: 4 } : { top: 4, bottom: 6 },
+        padding: align === 'x' ? { x: 2 } : { top: 4, bottom: 6 },
       }}
       exact={true}
     >
-       <svg viewBox="0 0 550 500" width="58px" height="56px">
+       <svg viewBox="0 0 550 500" width="60px" height="55px">
           <g>
             <ellipse
               vectorEffect="non-scaling-stroke"
@@ -51,19 +51,19 @@ export const NavLogo = ({ ui: { HStack, Box } }) => ({
             <g>
               <path
                 d=" M 310.307 322.719 C 319.601 330.95 378.747 383.33 487.743 479.861"
-                fill="#a0aec0"
+                fill="#e2e8f0"
               />
             </g>
             <g>
               <path
                 d=" M 368.407 128.995 L 111.464 299.467 L 123.743 357.592 L 438.536 151.367 L 368.407 128.995"
-                fill="#fff"
+                fill="#e2e8f0"
               />
             </g>
             <g>
               <path
                 d=" M 81.884 37.592 L 370.287 129.595 C 312.541 168.976 305.347 173.199 263.783 201.108"
-                fill="#fff"
+                fill="#e2e8f0"
               />
             </g>
           </g>

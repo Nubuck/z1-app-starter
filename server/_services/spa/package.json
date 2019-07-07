@@ -18,7 +18,7 @@
     "args": "",
     "node_args": "",
     "env": {},
-    "autoStart": false
+    "autoStart": true
   },
   "dependencies": {
     "@z1/lib-spa-server": "^0.2.10"

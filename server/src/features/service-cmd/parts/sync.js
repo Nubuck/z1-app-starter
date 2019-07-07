@@ -219,13 +219,18 @@ export const syncCmdPm2 = task((t, a) => async app => {
       )
   // app.debug('FS SERVICES', fsServices)
   // db state
-  const [dbServicesError, dbServicesResult] = await a.of(
-    app.service('service-cmd').find({
-      query: {
-        $limit: 0,
-      },
-    })
+  // const [dbServicesError, dbServicesResult] = await a.of(
+  //   app.service('service-cmd').find({
+  //     query: {
+  //       $limit: 0,
+  //     },
+  //   })
+  // ) 
+   const [dbServicesError, dbServicesResult] = await a.of(
+    app.service('service-cmd').find()
   )
+  
+  // app.debug('DB SERVICES RESULT', dbServicesResult)
   if (dbServicesError) {
     app.error('SERVICE CMD DB SYNC ERROR', dbServicesError)
   }
@@ -253,7 +258,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
           platformResult || []
         )
       )
-  // app.debug('DB SERVICES', platformState)
+  // app.debug('PLATFORM SERVICES', platformState)
   // next state
   const dbKeys = t.keys(dbServices)
   const fsKeys = t.keys(fsServices)
@@ -289,7 +294,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
   )
 
   // app.debug('SERVICE SYNC patchKeys', patchKeys)
-
   const syncResult = await a.map(patchKeys, 1, async key => {
     const syncItem = t.omit(
       ['updatedAt', 'createdAt'],
@@ -311,9 +315,8 @@ export const syncCmdPm2 = task((t, a) => async app => {
     const params = t.not(shouldStart) ? { skipCmd: true } : undefined
 
     // app.debug('SERVICE SYNC PAYLOAD', payload, params)
-
     const [patchError, patchResult] = await a.of(
-      app.service('service-cmd').patch(syncItem.id, payload, params)
+      app.service('service-cmd').patch(payload._id, payload, params)
     )
     if (patchError) {
       app.error('SERVICE CMD PATH ERROR', patchError)
@@ -337,7 +340,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
   //       : startResult
   //     const nextStartResult = serviceCmd.pm2OutputToState(nextResult)
   //     await Fs.writeAsync(
-  //       Fs.path(`service_output_selected_${nextCmd.id}.json`),
+  //       Fs.path(`service_output_selected_${nextCmd._id}.json`),
   //       nextStartResult
   //     )
   //     return nextStartResult

@@ -22,6 +22,7 @@ export const cmdHooksServices = task((t, a) => ({
     const [serviceError, serviceResult] = await a.of(
       ctx.app.service('service-cmd').get(ctx.id)
     )
+    // ctx.app.debug('BEFORE PATCH SERVICE', ctx)
     if (serviceError) {
       return ctx
     }

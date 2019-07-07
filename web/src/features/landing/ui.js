@@ -13,7 +13,7 @@ export const LandingPage = ({ ui: { VStack, HStack, Text, Icon } }) =>
         y="center"
         box={{ color: brand.secondary, height: 'full' }}
       >
-        <svg viewBox="0 0 550 500" width="240px" height="240px">
+        <svg viewBox="0 0 550 500" width="300px" height="250px">
           <g>
             <ellipse
               vectorEffect="non-scaling-stroke"

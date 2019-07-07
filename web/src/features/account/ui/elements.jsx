@@ -21,7 +21,7 @@ export const elements = task(
           y={t.not(center) ? 'top' : 'center'}
           box={t.merge(
             {
-              padding: { x: 3, top: 8, bottom: 4 },
+              padding: { x: 4, top: 8, bottom: 4 },
               width: [
                 'full',
                 {

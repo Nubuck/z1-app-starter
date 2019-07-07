@@ -17,7 +17,7 @@ export const authNav = navSchema(n => [
 export const secureNav = navSchema(n => [
   n('/#sign-out', {
     target: 'primary-action',
-    borderWidth: 2,
+    // borderWidth: 2,
     icon: 'log-out-outline',
     title: 'Sign-out',
     action: {
