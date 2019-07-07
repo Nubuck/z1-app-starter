@@ -1,0 +1,26 @@
+{
+  "name": "app-spa-server",
+  "version": "0.0.14",
+  "main": "index.js",
+  "bin": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "cmd": {
+    "script": "./index.js",
+    "interpreter": "node",
+    "instances": 1,
+    "autorestart": true,
+    "watch": false,
+    "exec_mode": "fork",
+    "port": 8081,
+    "args": "",
+    "node_args": "",
+    "env": {},
+    "autoStart": false
+  },
+  "dependencies": {
+    "@z1/lib-spa-server": "^0.2.10"
+  }
+}
