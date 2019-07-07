@@ -141,7 +141,7 @@ export const NavLogo = ({ ui: { HStack, Box } }) => ({
           </g>
         </g>
       </svg> */}
-      <svg viewBox="0 0 550 500" width="60px" height="60px">
+      <svg viewBox="0 0 550 500" width="65px" height="65px">
         <g>
           <g>
             <path
