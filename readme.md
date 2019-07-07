@@ -4,8 +4,6 @@
 
 This repository serves as an early access starter for [Z1](https://www.npmjs.com/search?q=%40z1) developers to accelerate application and [Z1 CORE](https://github.com/SaucecodeOfficial/zero-one-core) work.
 
-Z1 Artwork courtesy of [Emile Esterhuyse](https://iota_16.artstation.com/)
-
 ## Getting Started
 
 This repo contains a minimum running Z1 application on server and web platforms.
