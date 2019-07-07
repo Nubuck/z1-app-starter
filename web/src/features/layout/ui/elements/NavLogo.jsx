@@ -38,7 +38,7 @@ export const NavLogo = ({ ui: { HStack, Box } }) => ({
           </g>
         </g>
       </svg> */}
-      <svg viewBox="0 0 627 500" width="56px" height="56px">
+      {/* <svg viewBox="0 0 627 500" width="56px" height="56px">
           <g>
             <g>
               <path
@@ -68,7 +68,26 @@ export const NavLogo = ({ ui: { HStack, Box } }) => ({
               />
             </g>
           </g>
-        </svg>
+        </svg> */}
+      <svg viewBox="0 0 627 500" width="60px" height="60px">
+        <g>
+          <g>
+            <path
+              d=" M 127.798 488 L 538 173 L 450 152 L 9 488 L 127.798 488 M 605 488 L 138 488 C 204.405 438.137 212.998 431.904 261 396 M 261 396 C 279.019 400.819 393.685 431.486 605 488"
+              fillRule="evenodd"
+              fill="rgb(47,133,90)"
+            />
+          </g>
+
+          <g>
+            <path
+              d=" M 486.202 22 L 55 341 L 151 365 L 603 22 L 486.202 22 M 9 22 L 476 22 C 409.595 71.863 401.002 77.486 353 113 M 11 22"
+              fillRule="evenodd"
+              fill="rgb(72,187,120)"
+            />
+          </g>
+        </g>
+      </svg>
     </HStack>
   )
 }
