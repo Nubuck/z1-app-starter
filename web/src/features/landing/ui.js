@@ -13,18 +13,25 @@ export const LandingPage = ({ ui: { VStack, HStack, Text, Icon } }) =>
         y="center"
         box={{ color: brand.secondary, height: 'full' }}
       >
-        <svg viewBox="0 0 600 500" width="200px" height="200px">
+        <svg viewBox="0 0 627 500" width="200px" height="200px">
           <g>
-            <path
-              d=" M 120 470.859 L 598.992 110.86 L 0 22 L 598.992 22 L 0 470.859 L 120 470.859"
-              fill="rgb(0,255,0)"
-            />
-            <path
-              d=" M 480 22 L 1.008 381.998 L 600 470.859 L 1.008 470.859 L 600 22 L 480 22"
-              fill="rgb(19,204,19)"
-            />
-            <path d=" M 588 472 L 2 472 L 128 370" fill="rgb(19,204,19)" />
-            <path d=" M 8 22 L 594 22 L 468 124" fill="rgb(0,255,0)" />
+            <g>
+              <path
+                d=" M 125 475.859 L 603.992 115.86 L 14 23 L 601 23 L 5 475.859 L 125 475.859"
+                fill="rgb(80,161,77)"
+              />
+
+              <g>
+                <path
+                  d=" M 486.202 22 L 365.431 113.492 L 11 381.998 L 602 473 L 12.008 470.859 L 605 22 L 486.202 22"
+                  fill="rgb(113,182,89)"
+                />
+              </g>
+            </g>
+            <g>
+              <path d=" M 602 473 L 2 476 L 137 377" fill="rgb(80,161,77)" />
+              <path d=" M 9 22 L 604 22 L 469 124" fill="rgb(113,182,89)" />
+            </g>
           </g>
         </svg>
         <Text
