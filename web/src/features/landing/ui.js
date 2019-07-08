@@ -1,12 +1,16 @@
 import React from 'react'
-import { connectState } from '@z1/lib-feature-box'
+import { connectState, Link } from '@z1/lib-feature-box'
 
 // state
 const stateQuery = ({ brand }) => ({ brand })
 
 // main
-export const LandingPage = ({ ui: { VStack, HStack, Text, Icon } }) =>
+export const LandingPage = ({ ui: { Box, VStack, Text } }) =>
   connectState(stateQuery)(({ brand }) => {
+    const linkBox = {
+      color: ['green-400', { hover: 'white' }],
+      fontWeight: 'semibold',
+    }
     return (
       <VStack
         x="center"
@@ -73,6 +77,16 @@ export const LandingPage = ({ ui: { VStack, HStack, Text, Icon } }) =>
         </Text>
         <Text size="6xl" family={brand.fontFamily} x="center">
           Welcome
+        </Text>
+        <Text size="lg" family={brand.fontFamily} x="center">
+          <Box as={Link} to={'/account/sign-in'} box={linkBox}>
+            Sign-in
+          </Box>
+          <span> or </span>
+          <Box as={Link} to={'/account/sign-up'} box={linkBox}>
+            Sign-up
+          </Box>
+          <span> to get started</span>
         </Text>
       </VStack>
     )

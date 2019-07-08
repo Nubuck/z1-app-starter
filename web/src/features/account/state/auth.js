@@ -101,8 +101,7 @@ export const auth = task((t, a) => ({
                 user,
                 t.eq(ACCOUNT_STATUS.AUTH_SUCCESS, accountStatus)
               )
-              // skip if route only requires authentication
-              // + account is valid
+              // skip if route only requires authentication + account is valid
               if (t.and(t.not(route.restrictToRoles), authenticated)) {
                 allow(action)
               } else if (t.not(authenticated)) {
