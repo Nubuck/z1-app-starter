@@ -1,7 +1,6 @@
 // globals
 // import 'eva-icons/style/eva-icons.css'
 import 'react-virtualized/styles.css'
-import 'react-sortable-tree/style.css'
 import './app.css'
 // packages
 import React from 'react'
