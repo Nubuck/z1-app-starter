@@ -55,6 +55,7 @@ export const resetPassword = task((t, a) =>
       Text,
       ViewLink,
       ViewAlert,
+      When,
     }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
@@ -62,7 +63,7 @@ export const resetPassword = task((t, a) =>
             title="Forgot your Z1 password?"
             text="Enter the email address you registered with to reset your password."
           />
-          {t.isNil(state.error) ? null : (
+          <When is={t.not(t.isNil(state.error))}>
             <ViewAlert
               icon="alert-triangle-outline"
               text={state.error}
@@ -70,7 +71,7 @@ export const resetPassword = task((t, a) =>
               bgColor={null}
               box={{ borderWidth: 2, borderColor: 'orange-500' }}
             />
-          )}
+          </When>
           <ViewForm
             schema={state.form.schema}
             uiSchema={state.form.uiSchema}

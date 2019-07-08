@@ -21,6 +21,13 @@ export const signIn = task((t, a) =>
           error,
         }
       },
+      async load({ type, getState, dispatch, action, viewData }) {
+        return {
+          status,
+          data: viewData,
+          error: null,
+        }
+      },
       form({ type, formData }) {
         return t.merge(
           {
@@ -139,6 +146,7 @@ export const signIn = task((t, a) =>
       ViewLink,
       Text,
       ViewAlert,
+      When,
     }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
@@ -146,7 +154,7 @@ export const signIn = task((t, a) =>
             title="Sign-in to your Z1 Account"
             text="Enter your account credentials below to continue."
           />
-          {t.isNil(state.error) ? null : (
+          <When is={t.not(t.isNil(state.error))}>
             <ViewAlert
               icon="alert-triangle-outline"
               text="Incorrect email or password"
@@ -154,7 +162,7 @@ export const signIn = task((t, a) =>
               bgColor={null}
               box={{ borderWidth: 2, borderColor: 'orange-500' }}
             />
-          )}
+          </When>
           <ViewForm
             schema={state.form.schema}
             uiSchema={state.form.uiSchema}

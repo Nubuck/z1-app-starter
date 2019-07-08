@@ -84,6 +84,7 @@ export const signUp = task((t, a) =>
       ViewLink,
       ViewAlert,
       Match,
+      When,
     }) => ({ state, mutations }) => {
       const containerProps = t.eq(state.data.mode, 'view')
         ? { large: true, center: true }
@@ -121,7 +122,7 @@ export const signUp = task((t, a) =>
                     title="Sign-up for a Z1 Account"
                     text="Enter your new account details below."
                   />
-                  {t.isNil(state.error) ? null : (
+                  <When is={t.not(t.isNil(state.error))}>
                     <ViewAlert
                       icon="alert-triangle-outline"
                       text={state.error}
@@ -129,7 +130,7 @@ export const signUp = task((t, a) =>
                       bgColor={null}
                       box={{ borderWidth: 2, borderColor: 'orange-500' }}
                     />
-                  )}
+                  </When>
                   <ViewForm
                     schema={state.form.schema}
                     uiSchema={state.form.uiSchema}

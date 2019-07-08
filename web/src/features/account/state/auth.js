@@ -62,6 +62,11 @@ export const auth = task((t, a) => ({
           navRegistered: action.payload,
         })
       }),
+      m('redirectBackToChange', (state, action) => {
+        return t.merge(state, {
+          redirectBackTo: action.payload,
+        })
+      }),
     ]
   },
   guards(g, { actions, mutations }) {
@@ -104,7 +109,8 @@ export const auth = task((t, a) => ({
                 // reject invalid account -> redirect to login
                 reject(
                   redirect(
-                    mutations.routeSignIn({
+                    mutations.routeView({
+                      view: 'sign-in',
                       redirectBackTo: t.omit(['meta'], action),
                     })
                   )
@@ -128,7 +134,8 @@ export const auth = task((t, a) => ({
                   // reject invalid role -> redirect 401
                   reject(
                     redirect(
-                      mutations.routeNotAuthorized({
+                      mutations.routeView({
+                        view: '401',
                         redirectBackTo: t.omit(['meta'], action),
                       })
                     )

@@ -192,7 +192,7 @@ const NavPageSecondaryItem = task(
 // main
 export const NavPage = task(
   t => ({
-    ui: { Box, VStack, HStack, Icon, Spacer, Text, toCss, NavLogoItem },
+    ui: { Box, VStack, HStack, Icon, Spacer, Text, toCss, NavLogoItem, When },
   }) => {
     const NavPageItem = PageItem({
       ui: { HStack, Icon, Text, toCss },

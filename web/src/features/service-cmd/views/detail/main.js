@@ -3,8 +3,8 @@ import { task } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 
 // main
-export const verify = task((t, a) =>
-  createView('verify', {
+export const detail = task((t, a) =>
+  createView('detail', {
     state: {
       data({ type, status, viewData, formData, error }) {
         return {
@@ -24,27 +24,19 @@ export const verify = task((t, a) =>
         dispatch,
         mutations,
       }) {
-        // if (t.and(t.eq(type, 'route-enter'), t.not(t.isNil(viewData)))) {
         return {
           status,
           data: viewData,
           error: null,
         }
-        // }
-
-        // const [dataError, dataResult] = await a.of(
-        //   api.service('derp').find({
-        //     query: {
-        //       thing: formData.otherThing,
-        //     },
-        //   })
-        // )
-
-        // return {
-        //   status,
-        //   data: dataResult.data,
-        //   error: null,
-        // }
+      },
+      form({ type, status, viewData, formData }) {
+        return t.merge(
+          {
+            data: formData,
+          },
+          {}
+        )
       },
       async transmit({
         type,

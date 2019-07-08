@@ -53,12 +53,12 @@ export const elements = task(
         <VStack box={t.merge({ padding: { bottom: 4 } }, box || {})}>
           <HStack x="center" y="center">
             {t.isNil(icon) ? null : <Icon name={icon} />}
-            <Text size={['3xl', { lg: '4xl' }]} lineHeight="tight" x="center">
+            <Text size={['3xl', { lg: '4xl' }]} lineHeight="tight" alignX="center">
               {title}
             </Text>
           </HStack>
           <HStack x="center" y="center" box={{ padding: { top: 3 } }}>
-            <Text x="center" letterSpacing="tight" size={['lg', { lg: 'xl' }]}>
+            <Text alignX="center" letterSpacing="tight" size={['lg', { lg: 'xl' }]}>
               {text}
             </Text>
           </HStack>
@@ -145,7 +145,7 @@ export const elements = task(
           <Text
             as={Link}
             to={to}
-            x="center"
+            alignX="center"
             box={t.merge(
               {
                 fontWeight: 'bold',

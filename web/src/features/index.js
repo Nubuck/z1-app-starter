@@ -8,11 +8,13 @@ import SchemaForm from '../elements/form'
 // features
 import accountFeature from './account'
 import layoutFeature from './layout'
-import landingFeaturee from './landing'
+import landingFeature from './landing'
+import serviceCmdFeature from './service-cmd'
 
 // main
 export default combineFeatures([
   accountFeature({ ui: { ...elements, SchemaForm } }),
   layoutFeature({ ui: { ...elements, toCss }, brand: { title: 'Z1 App' } }),
-  landingFeaturee({ ui: { ...elements } }),
+  landingFeature({ ui: { ...elements } }),
+  serviceCmdFeature({ ui: { ...elements, SchemaForm } }),
 ])

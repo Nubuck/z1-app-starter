@@ -1,8 +1,5 @@
 import { task, createStateBox } from '@z1/lib-feature-box'
 
-// schema
-// import { homeSchema } from './schema'
-
 // main
 export const landingState = task((t, a) =>
   createStateBox({
@@ -18,16 +15,23 @@ export const landingState = task((t, a) =>
     routes(r, a) {
       return [
         r(a.routeHome, '/', { authenticate: false }),
-        r(a.routeView, '/:view', { authenticate: false }),
+        r(a.routeView, '/pages/:view', { authenticate: false }),
       ]
     },
-    // onInit({ dispatch }) {
-    //   dispatch({
-    //     type: 'nav/NAV_SCHEMA_ADD',
-    //     payload: {
-    //       schema: homeSchema,
-    //     },
-    //   })
-    // },
+    effects(fx, box) {
+      return [
+        fx([box.actions.routeHome], async ({ redirect }, dispatch, done) => {
+          dispatch(
+            redirect({
+              type: 'serviceCmd/ROUTE_HOME',
+              payload: {
+                view: 'home',
+              },
+            })
+          )
+          done()
+        }),
+      ]
+    },
   })
 )
