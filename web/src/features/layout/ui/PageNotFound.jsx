@@ -16,7 +16,7 @@ export const PageNotFound = ({
           404
         </Text>
       </HStack>
-      <Text size="6xl" color="red-500" x='center'>
+      <Text size="6xl" color="red-500" alignX='center'>
         Page Not Found
       </Text>
     </VStack>

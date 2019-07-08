@@ -91,7 +91,7 @@ const NavPrimaryAction = task(
 
 // main
 export const NavPrimary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, toCss, NavLogoItem } }) => {
+  t => ({ ui: { VStack, HStack, Icon, Spacer, toCss, NavLogoItem, When } }) => {
     const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon, toCss } })
     const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon, toCss } })
     return ({ left, bottom, width, items, actions, brand, dispatch }) => {
@@ -117,7 +117,9 @@ export const NavPrimary = task(
             ),
             items || []
           )}
-          {t.isZeroLen(actions || []) ? null : <Spacer />}
+          <When is={t.not(t.isZeroLen(actions || []))}>
+            <Spacer />
+          </When>
           {t.mapIndexed(
             (actionItem, index) => (
               <PrimaryAction

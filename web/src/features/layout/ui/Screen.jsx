@@ -14,7 +14,10 @@ import { elements } from './elements'
 
 // main
 export const Screen = task(
-  t => ({ ui: { Box, VStack, Spinner, ...ui }, makeMutations }) => {
+  t => ({
+    ui: { Box, VStack, Spinner, Match, When, ...ui },
+    makeMutations,
+  }) => {
     const {
       Body,
       NavPrimary,
@@ -23,7 +26,7 @@ export const Screen = task(
       NavPage,
       NavPageSecondary,
       NavPageToggle,
-    } = elements({ ui: { Box, VStack, Spinner, ...ui } })
+    } = elements({ ui: { Box, VStack, Spinner, Match, When, ...ui } })
     const renderChildren = (children, type) =>
       t.isNil(children)
         ? null
@@ -33,6 +36,12 @@ export const Screen = task(
     return connectState(stateQuery, makeMutations)(
       ({ nav, brand, location, account, children, mutations, dispatch }) => {
         const accountStatus = t.pathOr(null, ['status'], account || {})
+        const screenContent = t.or(
+          t.eq(accountStatus, 'init'),
+          t.eq(accountStatus, 'auth-waiting')
+        )
+          ? 'waiting'
+          : 'view'
         return (
           <Box
             box={{
@@ -50,76 +59,83 @@ export const Screen = task(
               fontFamily: brand.fontFamily,
             }}
           >
-            {t.or(
-              t.eq(accountStatus, 'init'),
-              t.eq(accountStatus, 'auth-waiting')
-            ) ? (
-              <VStack x="center" y="center">
-                <Spinner size="xl" />
-              </VStack>
-            ) : (
-              <React.Fragment>
-                {t.and(
-                  t.isZeroLen(nav.primary.items),
-                  t.isZeroLen(nav.primary.actions)
-                ) ? null : (
-                  <NavPrimary
-                    {...nav.primary}
-                    brand={brand}
-                    dispatch={dispatch}
-                  />
-                )}
-                {t.isZeroLen(nav.secondary.items) ? null : (
-                  <NavSecondary
-                    {...nav.secondary}
-                    brand={brand}
-                    title={nav.title}
-                    icon={t.pathOr(null, ['matched', 'icon'], nav)}
-                  />
-                )}
-                {t.and(
-                  t.isZeroLen(nav.body.items),
-                  t.isZeroLen(nav.body.actions)
-                ) ? null : (
-                  <NavPage
-                    {...nav.body}
-                    brand={brand}
-                    dispatch={dispatch}
-                    left={nav.body.navLeft}
-                    actAsPrimary={t.eq(nav.mode, 'page')}
-                    showPageMenu={t.not(t.isZeroLen(nav.page.items))}
-                  />
-                )}
-                {t.isZeroLen(nav.page.items) ? null : (
-                  <NavPageSecondary {...nav.page} brand={brand} />
-                )}
-                <Body
-                  left={nav.body.left}
-                  top={nav.body.top}
-                  bottom={nav.body.bottom}
-                >
-                  {renderChildren(children, location.type)}
-                </Body>
-                {t.eq(nav.mode, 'page') ? null : (
-                  <NavToggle
-                    brand={brand}
-                    pageNav={t.not(t.isZeroLen(nav.body.items))}
-                    open={t.eq(nav.status, 'open')}
-                    onClick={() => mutations.navToggleStatus()}
-                  />
-                )}
-                {t.isZeroLen(nav.page.items) ? null : (
-                  <NavPageToggle
-                    brand={brand}
-                    actAsPrimary={t.eq(nav.mode, 'page')}
-                    open={t.eq(nav.page.status, 'open')}
-                    onClick={() =>
-                      mutations.navToggleStatus({ target: 'page' })
-                    }
-                  />
-                )}
-              </React.Fragment>
-            )}
+            <Match
+              value={screenContent}
+              when={{
+                waiting: (
+                  <VStack x="center" y="center">
+                    <Spinner size="xl" />
+                  </VStack>
+                ),
+                view: (
+                  <React.Fragment>
+                    <When
+                      is={t.or(
+                        t.not(t.isZeroLen(nav.primary.items)),
+                        t.not(t.isZeroLen(nav.primary.actions))
+                      )}
+                    >
+                      <NavPrimary
+                        {...nav.primary}
+                        brand={brand}
+                        dispatch={dispatch}
+                      />
+                    </When>
+                    <When is={t.not(t.isZeroLen(nav.secondary.items))}>
+                      <NavSecondary
+                        {...nav.secondary}
+                        brand={brand}
+                        title={nav.title}
+                        icon={t.pathOr(null, ['matched', 'icon'], nav)}
+                      />
+                    </When>
+                    <When
+                      is={t.or(
+                        t.not(t.isZeroLen(nav.body.items)),
+                        t.not(t.isZeroLen(nav.body.actions))
+                      )}
+                    >
+                      <NavPage
+                        {...nav.body}
+                        brand={brand}
+                        dispatch={dispatch}
+                        left={nav.body.navLeft}
+                        actAsPrimary={t.eq(nav.mode, 'page')}
+                        showPageMenu={t.not(t.isZeroLen(nav.page.items))}
+                      />
+                    </When>
+                    <When is={t.not(t.isZeroLen(nav.page.items))}>
+                      <NavPageSecondary {...nav.page} brand={brand} />
+                    </When>
+                    <Body
+                      left={nav.body.left}
+                      top={nav.body.top}
+                      bottom={nav.body.bottom}
+                    >
+                      {renderChildren(children, location.type)}
+                    </Body>
+                    <When is={t.not(t.eq(nav.mode, 'page'))}>
+                      <NavToggle
+                        brand={brand}
+                        pageNav={t.not(t.isZeroLen(nav.body.items))}
+                        open={t.eq(nav.status, 'open')}
+                        onClick={() => mutations.navToggleStatus()}
+                      />
+                    </When>
+                    <When is={t.not(t.isZeroLen(nav.page.items))}>
+                      <NavPageToggle
+                        brand={brand}
+                        actAsPrimary={t.eq(nav.mode, 'page')}
+                        open={t.eq(nav.page.status, 'open')}
+                        onClick={() =>
+                          mutations.navToggleStatus({ target: 'page' })
+                        }
+                      />
+                    </When>
+                  </React.Fragment>
+                ),
+              }}
+            />
           </Box>
         )
       }

@@ -71,9 +71,7 @@ export const changePassword = task((t, a) =>
           <ViewHeading
             title="Change your Z1 password"
             text="Enter the email address you registered with to reset your password."
-            box={{ width: ['full', { lg: '2/5' }], margin: { x: 'auto' } }}
           />
-        
         </ViewContainer>
       )
     },

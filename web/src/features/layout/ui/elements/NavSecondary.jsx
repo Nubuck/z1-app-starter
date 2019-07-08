@@ -3,21 +3,21 @@ import { task, NavLink } from '@z1/lib-feature-box'
 
 // elements
 const NavSecondaryHeader = task(
-  t => ({ ui: { HStack, Icon, Text } }) => ({ title, icon, brand }) => {
+  t => ({ ui: { HStack, Icon, Text, When } }) => ({ title, icon, brand }) => {
     return (
       <HStack
         x="center"
         y="left"
         box={{ padding: { top: 6, left: 3, right: 2, bottom: 6 } }}
       >
-        {t.isNil(icon) ? null : (
+        <When is={t.not(t.isNil(icon))}>
           <Icon
             name={icon}
             size="3xl"
             color={brand.nav.secondary.headerColor}
             box={{ alignSelf: 'center', margin: { right: 3 } }}
           />
-        )}
+        </When>
         <Text
           size="2xl"
           color={brand.nav.secondary.headerColor}
@@ -31,7 +31,7 @@ const NavSecondaryHeader = task(
   }
 )
 const NavSecondaryItem = task(
-  t => ({ ui: { HStack, Icon, Spacer, Text, toCss } }) => ({
+  t => ({ ui: { HStack, Icon, Spacer, Text, toCss, When } }) => ({
     title,
     icon,
     path,
@@ -57,27 +57,25 @@ const NavSecondaryItem = task(
         })}
         exact={t.isNil(exact) ? false : exact}
       >
-        {t.isNil(icon) ? null : (
+        <When is={t.not(t.isNil(icon))}>
           <Icon
             name={icon}
             size={t.isNil(size) ? '2xl' : size}
             box={{ alignSelf: 'center', margin: { right: 3 } }}
           />
-        )}
+        </When>
         <Text size={t.isNil(size) ? 'xl' : size} family={brand.fontFamily}>
           {title}
         </Text>
-        {t.isNil(alert) ? null : (
-          <React.Fragment>
-            <Spacer />
-            <Icon
-              name={alert.icon}
-              size="xl"
-              color={alert.color || brand.secondary}
-              box={{ alignSelf: 'center', margin: { left: 2 } }}
-            />
-          </React.Fragment>
-        )}
+        <When is={t.not(t.isNil(alert))}>
+          <Spacer />
+          <Icon
+            name={alert.icon}
+            size="xl"
+            color={alert.color || brand.secondary}
+            box={{ alignSelf: 'center', margin: { left: 2 } }}
+          />
+        </When>
       </HStack>
     )
   }
@@ -85,12 +83,12 @@ const NavSecondaryItem = task(
 
 // main
 export const NavSecondary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss } }) => {
+  t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss, When } }) => {
     const SecondaryHeader = NavSecondaryHeader({
-      ui: { HStack, Icon, Spacer, Text },
+      ui: { HStack, Icon, Spacer, Text, When },
     })
     const SecondaryItem = NavSecondaryItem({
-      ui: { HStack, Icon, Spacer, Text, toCss },
+      ui: { HStack, Icon, Spacer, Text, toCss, When },
     })
     return ({ title, icon, width, left, bottom, items, brand }) => {
       return (

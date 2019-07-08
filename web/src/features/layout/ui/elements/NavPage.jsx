@@ -3,14 +3,13 @@ import { task, NavLink } from '@z1/lib-feature-box'
 
 // elements
 const PageItem = task(
-  t => ({ ui: { HStack, Icon, Text, toCss } }) => ({
+  t => ({ ui: { HStack, Icon, Text, toCss, When } }) => ({
     title,
     icon,
     path,
     brand,
     exact,
     size,
-    color,
   }) => {
     return (
       <HStack
@@ -31,7 +30,7 @@ const PageItem = task(
         })}
         exact={t.isNil(exact) ? false : exact}
       >
-        {t.isNil(icon) ? null : (
+        <When is={t.not(t.isNil(icon))}>
           <Icon
             name={icon}
             size={t.isNil(size) ? '2xl' : size}
@@ -40,10 +39,10 @@ const PageItem = task(
               margin: [null, { lg: { right: 2 } }],
             }}
           />
-        )}
+        </When>
         <Text
           size={['sm', { lg: 'xl' }]}
-          x="center"
+          alignX="center"
           family={brand.fontFamily}
           box={{
             whitespace: 'no-wrap',
@@ -58,7 +57,7 @@ const PageItem = task(
 )
 
 const PageAction = task(
-  t => ({ ui: { HStack, Icon, Text, toCss } }) => ({
+  t => ({ ui: { HStack, Icon, Text, toCss, When } }) => ({
     icon,
     title,
     action,
@@ -101,7 +100,7 @@ const PageAction = task(
         }}
         {...actionProps}
       >
-        {t.isNil(icon) ? null : (
+        <When is={t.not(t.isNil(icon))}>
           <Icon
             name={icon}
             size="3xl"
@@ -116,8 +115,8 @@ const PageAction = task(
               ],
             }}
           />
-        )}
-        {t.isNil(title) ? null : (
+        </When>
+        <When is={t.not(t.isNil(title))}>
           <Text
             size={['sm', { lg: 'lg' }]}
             x="center"
@@ -129,14 +128,14 @@ const PageAction = task(
           >
             {title}
           </Text>
-        )}
+        </When>
       </HStack>
     )
   }
 )
 
 const NavPageSecondaryItem = task(
-  t => ({ ui: { HStack, Icon, Spacer, Text, toCss } }) => ({
+  t => ({ ui: { HStack, Icon, Spacer, Text, toCss, When } }) => ({
     title,
     icon,
     path,
@@ -163,27 +162,25 @@ const NavPageSecondaryItem = task(
         })}
         exact={t.isNil(exact) ? false : exact}
       >
-        {t.isNil(icon) ? null : (
+        <When is={t.not(t.isNil(title))}>
           <Icon
             name={icon}
             size={t.isNil(size) ? '2xl' : size}
             box={{ alignSelf: 'center', margin: { right: 3 } }}
           />
-        )}
+        </When>
         <Text size={t.isNil(size) ? 'xl' : size} family={brand.fontFamily}>
           {title}
         </Text>
-        {t.isNil(alert) ? null : (
-          <React.Fragment>
-            <Spacer />
-            <Icon
-              name={alert.icon}
-              size="xl"
-              color={alert.color || brand.secondary}
-              box={{ alignSelf: 'center', margin: { left: 2 } }}
-            />
-          </React.Fragment>
-        )}
+        <When is={t.not(t.isNil(alert))}>
+          <Spacer />
+          <Icon
+            name={alert.icon}
+            size="xl"
+            color={alert.color || brand.secondary}
+            box={{ alignSelf: 'center', margin: { left: 2 } }}
+          />
+        </When>
       </HStack>
     )
   }
@@ -191,14 +188,12 @@ const NavPageSecondaryItem = task(
 
 // main
 export const NavPage = task(
-  t => ({
-    ui: { Box, VStack, HStack, Icon, Spacer, Text, toCss, NavLogoItem, When },
-  }) => {
+  t => ({ ui: { HStack, Icon, Spacer, Text, toCss, NavLogoItem, When } }) => {
     const NavPageItem = PageItem({
-      ui: { HStack, Icon, Text, toCss },
+      ui: { HStack, Icon, Text, toCss, When },
     })
     const NavPageAction = PageAction({
-      ui: { HStack, Icon, Text, toCss },
+      ui: { HStack, Icon, Text, toCss, When },
     })
     return ({
       left,
@@ -236,14 +231,18 @@ export const NavPage = task(
             className="scroll-hide"
             stretch
           >
-            {t.not(actAsPrimary) ? null : <NavLogoItem align="x" />}
+            <When is={actAsPrimary}>
+              <NavLogoItem align="x" />
+            </When>
             {t.mapIndexed(
               (item, index) => (
                 <NavPageItem key={index} brand={brand} {...item} />
               ),
               items || []
             )}
-            {t.isZeroLen(actions || []) ? null : <Spacer />}
+            <When is={t.not(t.isZeroLen(actions || []))}>
+              <Spacer />
+            </When>
             {t.mapIndexed(
               (actionItem, index) => (
                 <NavPageAction
@@ -263,9 +262,9 @@ export const NavPage = task(
 )
 
 export const NavPageSecondary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss } }) => {
+  t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss, When } }) => {
     const SecondaryItem = NavPageSecondaryItem({
-      ui: { HStack, Icon, Spacer, Text, toCss },
+      ui: { HStack, Icon, Spacer, Text, toCss, When },
     })
     return ({ left, top, bottom, width, brand, items }) => {
       return (

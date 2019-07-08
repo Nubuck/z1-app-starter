@@ -13,6 +13,7 @@ export const elements = task(
     Text,
     SchemaForm,
     Match,
+    When,
   }) => ({
     ViewContainer({ children, box, large, center }) {
       return (
@@ -52,13 +53,23 @@ export const elements = task(
       return (
         <VStack box={t.merge({ padding: { bottom: 4 } }, box || {})}>
           <HStack x="center" y="center">
-            {t.isNil(icon) ? null : <Icon name={icon} />}
-            <Text size={['3xl', { lg: '4xl' }]} lineHeight="tight" alignX="center">
+            <When is={t.not(t.isNil(icon))}>
+              <Icon name={icon} />
+            </When>
+            <Text
+              size={['3xl', { lg: '4xl' }]}
+              lineHeight="tight"
+              alignX="center"
+            >
               {title}
             </Text>
           </HStack>
           <HStack x="center" y="center" box={{ padding: { top: 3 } }}>
-            <Text alignX="center" letterSpacing="tight" size={['lg', { lg: 'xl' }]}>
+            <Text
+              alignX="center"
+              letterSpacing="tight"
+              size={['lg', { lg: 'xl' }]}
+            >
               {text}
             </Text>
           </HStack>
@@ -105,9 +116,7 @@ export const elements = task(
           bg={[
             null,
             {
-              hover: t.eq(buttonContent, 'content')
-                ? nextColor
-                : 'transparent',
+              hover: t.eq(buttonContent, 'content') ? nextColor : 'transparent',
             },
           ]}
           size="lg"
@@ -141,7 +150,9 @@ export const elements = task(
     ViewLink({ to, text, children, icon, box, textBox }) {
       return (
         <HStack box={box}>
-          {t.isNil(icon) ? null : <Icon name={icon} />}
+          <When is={t.not(t.isNil(icon))}>
+            <Icon name={icon} />
+          </When>
           <Text
             as={Link}
             to={to}
@@ -177,19 +188,19 @@ export const elements = task(
             ...box,
           }}
         >
-          {t.isNil(icon) ? null : (
+          <When is={t.not(t.isNil(icon))}>
             <Icon
               name={icon}
               as="div"
               size="3xl"
               box={{ margin: { right: 3 } }}
             />
-          )}
-          {t.isNil(text) ? null : (
+          </When>
+          <When is={t.not(t.isNil(text))}>
             <Text size="lg" weight="semibold">
               {text}
             </Text>
-          )}
+          </When>
           {children}
         </HStack>
       )

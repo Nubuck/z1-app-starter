@@ -14,8 +14,31 @@ export const notAuthorized = task((t, a) =>
         }
       },
     },
-    ui: ({  }) => ({ state, mutations }) => {
-      return <div />
+    ui: ({ VStack, HStack, Text, Icon }) => ({ state, mutations }) => {
+      return (
+        <VStack
+          x="center"
+          y="center"
+          box={{ color: 'red-500', height: 'full' }}
+        >
+          <HStack x="center" y="center">
+            <Icon
+              name="slash-outline"
+              size="5xl"
+              box={{ margin: { right: 4 } }}
+            />
+            <Text size="6xl">401</Text>
+          </HStack>
+          <HStack x="center" y="center" >
+            <Text size="4xl" color="red-500" alignX="center" box={{ width: '1/2' }}>
+              Your account is not authorized for this area
+            </Text>
+          </HStack>
+          <Text size="lg" color="red-500" alignX="center">
+            Please contact your administrator to request access
+          </Text>
+        </VStack>
+      )
     },
   })
 )
