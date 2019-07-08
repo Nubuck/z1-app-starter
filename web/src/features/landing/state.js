@@ -20,17 +20,27 @@ export const landingState = task((t, a) =>
     },
     effects(fx, box) {
       return [
-        fx([box.actions.routeHome], async ({ redirect }, dispatch, done) => {
-          dispatch(
-            redirect({
-              type: 'serviceCmd/ROUTE_HOME',
-              payload: {
-                view: 'home',
-              },
-            })
-          )
-          done()
-        }),
+        fx(
+          [box.actions.routeHome],
+          async ({ getState, redirect }, dispatch, done) => {
+            const accountStatus = t.pathOr(
+              null,
+              ['account', 'status'],
+              getState()
+            )
+            if (t.eq(accountStatus, 'auth-success')) {
+              dispatch(
+                redirect({
+                  type: 'serviceCmd/ROUTE_HOME',
+                  payload: {
+                    view: 'home',
+                  },
+                })
+              )
+            }
+            done()
+          }
+        ),
       ]
     },
   })

@@ -21,13 +21,6 @@ export const signIn = task((t, a) =>
           error,
         }
       },
-      async load({ type, getState, dispatch, action, viewData }) {
-        return {
-          status,
-          data: viewData,
-          error: null,
-        }
-      },
       form({ type, formData }) {
         return t.merge(
           {
@@ -66,7 +59,7 @@ export const signIn = task((t, a) =>
         // auth succeeded -> verify token
         const token = t.path(['accessToken'], result)
         // token failed
-        if (!token) {
+        if (t.isNil(token)) {
           dispatch(
             mutations.authenticateFail({
               error: new Error('Access Token not found'),

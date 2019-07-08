@@ -307,16 +307,37 @@ export const auth = task((t, a) => ({
             api.logout()
             dispatch(mutations.navRegistered(false))
             dispatch(mutations.signOutComplete({}))
-            // dispatch(redirect(mutations.routeSignIn({})))
+            dispatch(
+              redirect({
+                type: 'landing/ROUTE_HOME',
+                payload: {},
+              })
+            )
             done()
           } else {
             api.logout()
             dispatch(mutations.navRegistered(false))
-            // dispatch(redirect(mutations.routeSignIn({})))
+            dispatch(
+              redirect({
+                type: 'landing/ROUTE_HOME',
+                payload: {},
+              })
+            )
             done()
           }
         }
       ),
+      fx([actions.routeView], async ({ action }, dispatch, done) => {
+        const redirectBackTo = t.pathOr(
+          null,
+          ['payload', 'redirectBackTo'],
+          action
+        )
+        if (t.not(t.isNil(redirectBackTo))) {
+          dispatch(mutations.redirectBackToChange(redirectBackTo))
+        }
+        done()
+      }),
     ]
   },
   onInit({ dispatch, mutations }) {
