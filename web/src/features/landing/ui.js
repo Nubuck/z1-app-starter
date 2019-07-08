@@ -79,12 +79,12 @@ export const LandingPage = ({ ui: { Box, VStack, Text } }) =>
           Welcome
         </Text>
         <Text size="lg" family={brand.fontFamily} x="center">
-          <Box as={Link} to={'/account/sign-in'} box={linkBox}>
-            Sign-in
-          </Box>
-          <span> or </span>
           <Box as={Link} to={'/account/sign-up'} box={linkBox}>
             Sign-up
+          </Box>
+          <span> or </span>
+          <Box as={Link} to={'/account/sign-in'} box={linkBox}>
+            Sign-in
           </Box>
           <span> to get started</span>
         </Text>

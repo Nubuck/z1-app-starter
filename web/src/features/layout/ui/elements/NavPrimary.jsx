@@ -69,6 +69,7 @@ const NavPrimaryAction = task(
         box={{
           padding: { top: 2, bottom: 4 },
           cursor: 'pointer',
+          color,
         }}
         {...actionProps}
       >
