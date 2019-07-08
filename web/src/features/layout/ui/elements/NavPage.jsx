@@ -15,8 +15,8 @@ const PageItem = task(
       <HStack
         as={NavLink}
         to={path || '/'}
-        x="center"
-        y="left"
+        x="left"
+        y="center"
         box={{
           padding: { x: 5 },
           bgColor: [null, { hover: brand.nav.body.bgHover }],
@@ -87,8 +87,8 @@ const PageAction = task(
         }
     return (
       <HStack
-        x="center"
-        y="left"
+        x="left"
+        y="center"
         box={{
           padding: { x: 5 },
           bgColor: [null, { hover: brand.nav.body.bgHover }],
@@ -119,7 +119,7 @@ const PageAction = task(
         <When is={t.not(t.isNil(title))}>
           <Text
             size={['sm', { lg: 'lg' }]}
-            x="center"
+            alignX="center"
             family={brand.fontFamily}
             box={{
               whitespace: 'no-wrap',
@@ -148,8 +148,8 @@ const NavPageSecondaryItem = task(
       <HStack
         as={NavLink}
         to={path || '/'}
-        x="center"
-        y="left"
+        x="left"
+        y="center"
         box={{
           color: [brand.nav.page.color, { hover: brand.nav.page.colorHover }],
           padding: { y: 5, x: 4 },
@@ -207,8 +207,8 @@ export const NavPage = task(
     }) => {
       return (
         <HStack
-          x="center"
-          y="left"
+          x="left"
+          y="center"
           box={{
             position: 'fixed',
             pin: [

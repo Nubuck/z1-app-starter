@@ -218,7 +218,9 @@ export const auth = task((t, a) => ({
                   dispatch(mutations.authenticateSuccess({ user }))
                   const state = getState()
                   if (state.account.redirectBackTo) {
-                    dispatch(redirect(state.account.redirectBackTo))
+                    const redirectTo = state.account.redirectBackTo
+                    dispatch(mutations.redirectBackToChange(null))
+                    dispatch(redirect(redirectTo))
                     done()
                   } else {
                     dispatch(

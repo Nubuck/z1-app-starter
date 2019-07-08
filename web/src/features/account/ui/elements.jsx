@@ -43,9 +43,11 @@ export const elements = task(
     },
     ViewSpinner({ text }) {
       return (
-        <VStack>
-          <Spinner />
-          <Text>{text}</Text>
+        <VStack x="center" y="center">
+          <Spinner size="xl" />
+          <When is={t.not(t.isNil(text))}>
+            <Text>{text}</Text>
+          </When>
         </VStack>
       )
     },
@@ -164,7 +166,6 @@ export const elements = task(
                 justifyContent: 'center',
                 display: 'flex',
                 flexDirection: 'col',
-                alignSelf: 'stretch',
                 padding: { x: 3 },
               },
               textBox || {}

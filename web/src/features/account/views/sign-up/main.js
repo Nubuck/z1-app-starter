@@ -158,7 +158,7 @@ export const signUp = task((t, a) =>
                     >
                       <Text
                         as={'div'}
-                        x="center"
+                        alignX="center"
                         size="lg"
                         color={'gray-500'}
                         box={{ margin: { y: 2 } }}

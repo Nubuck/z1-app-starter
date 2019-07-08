@@ -110,7 +110,9 @@ export const signIn = task((t, a) =>
         // NOTE: redirect back or to home
         const state = getState()
         if (state.account.redirectBackTo) {
-          dispatch(redirect(state.account.redirectBackTo))
+          const redirectTo = state.account.redirectBackTo
+          dispatch(mutations.redirectBackToChange(null))
+          dispatch(redirect(redirectTo))
           return {
             status,
             data: formData,
@@ -193,7 +195,7 @@ export const signIn = task((t, a) =>
             >
               <Text
                 as={'div'}
-                x="center"
+                alignX="center"
                 size="lg"
                 color={'gray-500'}
                 box={{ margin: { y: 2 } }}

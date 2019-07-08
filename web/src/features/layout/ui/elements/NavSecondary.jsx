@@ -6,8 +6,8 @@ const NavSecondaryHeader = task(
   t => ({ ui: { HStack, Icon, Text, When } }) => ({ title, icon, brand }) => {
     return (
       <HStack
-        x="center"
-        y="left"
+        x="left"
+        y="center"
         box={{ padding: { top: 6, left: 3, right: 2, bottom: 6 } }}
       >
         <When is={t.not(t.isNil(icon))}>
@@ -45,8 +45,8 @@ const NavSecondaryItem = task(
       <HStack
         as={NavLink}
         to={path || '/'}
-        x="center"
-        y="left"
+        x="left"
+        y="center"
         box={{
           color: t.isNil(color) ? brand.nav.secondary.color : color,
           padding: { y: 5, x: 4 },

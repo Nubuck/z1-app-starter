@@ -22,9 +22,9 @@ export const ServiceCmdPage = task(
           <VStack
             x="start"
             y="top"
-            box={{ color: brand.secondary, height: 'full' }}
+            box={{ color: brand.screen.color, height: 'full' }}
           >
-            {renderView(Views, state, mutations)}
+            {renderView(Views, t.merge(state, { brand }), mutations)}
           </VStack>
         )
       }

@@ -69,19 +69,41 @@ export const home = task((t, a) =>
         }
       },
     },
-    ui: ({ ViewContainer, ViewSpinner, Match }) => ({ state, mutations }) => {
+    ui: ({
+      ViewContainer,
+      ViewSpinner,
+      ViewHeader,
+      Match,
+      When,
+      ServiceItem,
+      VStack,
+    }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
           <Match
             value={state.status}
             when={{
-              init: <ViewSpinner />,
-              waiting: <ViewSpinner />,
-              _: (
+              ready: (
                 <React.Fragment>
-                  <h1>Service Cmd</h1>
+                  <ViewHeader
+                    title="Service"
+                    text="Cmd"
+                    icon="settings-2-outline"
+                    size="md"
+                  />
+                  <When is={t.not(t.isZeroLen(state.data.services || []))}>
+                    <VStack box={{ padding: { top: 6 } }}>
+                      {t.map(
+                        service => (
+                          <ServiceItem {...service} />
+                        ),
+                        state.data.services || []
+                      )}
+                    </VStack>
+                  </When>
                 </React.Fragment>
               ),
+              _: <ViewSpinner />,
             }}
           />
         </ViewContainer>
