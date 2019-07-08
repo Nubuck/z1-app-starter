@@ -6,7 +6,7 @@ import { renderView } from '@z1/lib-feature-macros'
 import { views } from '../views'
 
 // elements
-// import { elements } from './elements'
+import { elements } from './elements'
 
 // state
 const stateQuery = ({ serviceCmd, brand }) => ({ brand, state: serviceCmd })
@@ -14,8 +14,8 @@ const stateQuery = ({ serviceCmd, brand }) => ({ brand, state: serviceCmd })
 // main
 export const ServiceCmdPage = task(
   t => ({ ui: { VStack, ...ui }, mutationCreators }) => {
-    // const Elements = elements({ VStack, ...ui })
-    const Views = views.ui({ VStack, ...ui, })
+    const Elements = elements({ VStack, ...ui })
+    const Views = views.ui({ VStack, ...ui, ...Elements })
     return connectState(stateQuery, mutationCreators)(
       ({ brand, state, mutations }) => {
         return (

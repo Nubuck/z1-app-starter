@@ -24,9 +24,23 @@ export const home = task((t, a) =>
         dispatch,
         mutations,
       }) {
+        const [cmdError, cmdResult] = await a.of(
+          api.service('service-cmd').find()
+        )
+        if (cmdError) {
+          return {
+            status,
+            data: t.merge(viewData, {
+              services: [],
+            }),
+            error: cmdError.message,
+          }
+        }
         return {
           status,
-          data: viewData,
+          data: t.merge(viewData, {
+            services: cmdResult.data,
+          }),
           error: null,
         }
       },
@@ -55,8 +69,23 @@ export const home = task((t, a) =>
         }
       },
     },
-    ui: ({ ui }) => ({ state, mutations }) => {
-      return <div />
+    ui: ({ ViewContainer, ViewSpinner, Match }) => ({ state, mutations }) => {
+      return (
+        <ViewContainer>
+          <Match
+            value={state.status}
+            when={{
+              init: <ViewSpinner />,
+              waiting: <ViewSpinner />,
+              _: (
+                <React.Fragment>
+                  <h1>Service Cmd</h1>
+                </React.Fragment>
+              ),
+            }}
+          />
+        </ViewContainer>
+      )
     },
   })
 )
