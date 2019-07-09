@@ -4,7 +4,6 @@ import { combineFeatures } from '@z1/lib-feature-box'
 import * as elements from '@z1/lib-ui-box-elements'
 import { toCss } from '@z1/lib-ui-box-tailwind'
 import SchemaForm from '../elements/form'
-import SelectNext from '../elements/select-next'
 import { AutoSizer, List } from 'react-virtualized'
 
 // features
@@ -19,6 +18,6 @@ export default combineFeatures([
   layoutFeature({ ui: { ...elements, toCss }, brand: { title: 'Z1 App' } }),
   landingFeature({ ui: { ...elements } }),
   serviceCmdFeature({
-    ui: { ...elements, SchemaForm, SelectNext, AutoSizer, List },
+    ui: { ...elements, SchemaForm, AutoSizer, List },
   }),
 ])
