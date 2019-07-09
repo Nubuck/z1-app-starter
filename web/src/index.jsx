@@ -1,5 +1,4 @@
 // globals
-// import 'eva-icons/style/eva-icons.css'
 import 'react-virtualized/styles.css'
 import './app.css'
 // packages

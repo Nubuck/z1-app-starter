@@ -24,7 +24,7 @@ export const elements = task(
           y={t.not(center) ? 'top' : 'center'}
           box={t.merge(
             {
-              padding: 6,
+              padding: { x: 6 },
               width: 'full',
             },
             box || {}
@@ -164,7 +164,7 @@ export const elements = task(
                 }}
               />
               <Button radius="full" size="sm">
-                <Icon name="refresh" size="xl" />
+                <Icon name="rotate-right" size="xl" />
               </Button>
               <When
                 is={t.or(

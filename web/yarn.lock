@@ -736,10 +736,10 @@
     redux-first-router-link "^2.1.1"
     redux-first-router-restore-scroll "^1.2.2"
 
-"@z1/lib-feature-macros@^0.2.37":
-  version "0.2.37"
-  resolved "https://registry.yarnpkg.com/@z1/lib-feature-macros/-/lib-feature-macros-0.2.37.tgz#26245fccaabbae8b7a539ebe9c908d3d5b929332"
-  integrity sha512-RsxAzLvAd8iJpsjELb58GLNxpm/Kp113n9u9DDJl2z1iJpvxftXFGR7bcDSh4pK1nLDlU6M8ELkDGIH/0tkmbw==
+"@z1/lib-feature-macros@^0.2.38":
+  version "0.2.38"
+  resolved "https://registry.yarnpkg.com/@z1/lib-feature-macros/-/lib-feature-macros-0.2.38.tgz#a98478e4e003ea7b01546c4e5ed3538f5a6f848e"
+  integrity sha512-8hws64FBT7ps624y0mPpYzWJmlxJPiK3mWN9iTxoe2pYf6d2uEBhYxDXkkoHJJyOxvnrqY2klAve6rAiGI/QIQ==
 
 "@z1/lib-state-box-core@^0.2.10":
   version "0.2.10"

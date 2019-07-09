@@ -340,11 +340,11 @@ export const bootCmdService = app => {
   syncCmdPm2(app)
     .then(() => {
       app.debug('SYNC SERVICES BOOTED')
-      syncTimer.start()
+      // syncTimer.start()
     })
     .catch(error => {
       app.error('SYNC SERVICES Setup error', error)
-      syncTimer.start()
+      // syncTimer.start()
     })
   // repeat
   syncTimer.onDone(() => {
