@@ -18,6 +18,7 @@ export const cmd = task((t, a) => ({
     ]
   },
   effects(fx, { mutations }) {
+    const matchesBoxRoutes = t.globrex('serviceCmd/ROUTE_*').regex
     return [
       fx(
         ['account/AUTHENTICATE_SUCCESS'],
@@ -57,15 +58,17 @@ export const cmd = task((t, a) => ({
         ['screen/RESIZE', 'nav/NAV_MATCH'],
         async ({ getState }, dispatch, done) => {
           const state = getState()
-          const screen = t.pathOr({}, ['screen'], state)
-          const width = t.pathOr(0, ['nav', 'width'], state)
-          const height = t.pathOr(0, ['nav', 'body', 'top'], state)
-          dispatch(
-            mutations.dataChange({
-              data: { screen, nav: { width, height } },
-            })
-          )
-
+          const route = t.pathOr('', ['serviceCmd', 'route'], state)
+          if (matchesBoxRoutes.test(route)) {
+            const screen = t.pathOr({}, ['screen'], state)
+            const width = t.pathOr(0, ['nav', 'width'], state)
+            const height = t.pathOr(0, ['nav', 'body', 'top'], state)
+            dispatch(
+              mutations.dataChange({
+                data: { screen, nav: { width, height } },
+              })
+            )
+          }
           done()
         }
       ),

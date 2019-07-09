@@ -3,7 +3,7 @@ import { task, NavLink } from '@z1/lib-feature-box'
 
 // elements
 const NavSecondaryHeader = task(
-  t => ({ ui: { HStack, Icon, Text, When } }) => ({ title, icon, brand }) => {
+  t => ({ HStack, Icon, Text, When }) => ({ title, icon, brand }) => {
     return (
       <HStack
         x="left"
@@ -31,7 +31,7 @@ const NavSecondaryHeader = task(
   }
 )
 const NavSecondaryItem = task(
-  t => ({ ui: { HStack, Icon, Spacer, Text, toCss, When } }) => ({
+  t => ({ HStack, Icon, Spacer, Text, toCss, When }) => ({
     title,
     icon,
     path,
@@ -82,40 +82,56 @@ const NavSecondaryItem = task(
 )
 
 // main
-export const NavSecondary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss, When } }) => {
-    const SecondaryHeader = NavSecondaryHeader({
-      ui: { HStack, Icon, Spacer, Text, When },
-    })
-    const SecondaryItem = NavSecondaryItem({
-      ui: { HStack, Icon, Spacer, Text, toCss, When },
-    })
-    return ({ title, icon, width, left, bottom, items, brand }) => {
-      return (
-        <VStack
-          x="left"
-          y="top"
-          box={{
-            position: 'fixed',
-            pin: { top: true, bottom: true },
-            bgColor: brand.nav.secondary.bg,
-            zIndex: 30,
-            shadow: ['2xl', { lg: 'none' }],
-            overflowY: 'auto',
-            overflowX: 'hidden',
-          }}
-          className="scroll-hide"
-          style={{ width, left, bottom }}
-        >
-          <SecondaryHeader title={title} icon={icon} brand={brand} />
-          {t.mapIndexed(
-            (item, index) => (
-              <SecondaryItem key={index} brand={brand} {...item} />
-            ),
-            items || []
+export const NavSecondary = ({
+  VStack,
+  HStack,
+  Icon,
+  Spacer,
+  Text,
+  toCss,
+  When,
+  MapIndexed,
+}) => {
+  const SecondaryHeader = NavSecondaryHeader({
+    HStack,
+    Icon,
+    Spacer,
+    Text,
+    When,
+  })
+  const SecondaryItem = NavSecondaryItem({
+    HStack,
+    Icon,
+    Spacer,
+    Text,
+    toCss,
+    When,
+  })
+  return ({ title, icon, width, left, bottom, items, brand }) => {
+    return (
+      <VStack
+        x="left"
+        y="top"
+        box={{
+          position: 'fixed',
+          pin: { top: true, bottom: true },
+          bgColor: brand.nav.secondary.bg,
+          zIndex: 30,
+          shadow: ['2xl', { lg: 'none' }],
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}
+        className="scroll-hide"
+        style={{ width, left, bottom }}
+      >
+        <SecondaryHeader title={title} icon={icon} brand={brand} />
+        <MapIndexed
+          list={items || []}
+          render={({ item, index }) => (
+            <SecondaryItem key={index} brand={brand} {...item} />
           )}
-        </VStack>
-      )
-    }
+        />
+      </VStack>
+    )
   }
-)
+}

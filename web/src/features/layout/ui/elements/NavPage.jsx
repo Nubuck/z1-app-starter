@@ -3,7 +3,7 @@ import { task, NavLink } from '@z1/lib-feature-box'
 
 // elements
 const PageItem = task(
-  t => ({ ui: { HStack, Icon, Text, toCss, When } }) => ({
+  t => ({  HStack, Icon, Text, toCss, When  }) => ({
     title,
     icon,
     path,
@@ -57,7 +57,7 @@ const PageItem = task(
 )
 
 const PageAction = task(
-  t => ({ ui: { HStack, Icon, Text, toCss, When } }) => ({
+  t => ({  HStack, Icon, Text, toCss, When  }) => ({
     icon,
     title,
     action,
@@ -135,7 +135,7 @@ const PageAction = task(
 )
 
 const NavPageSecondaryItem = task(
-  t => ({ ui: { HStack, Icon, Spacer, Text, toCss, When } }) => ({
+  t => ({  HStack, Icon, Spacer, Text, toCss, When  }) => ({
     title,
     icon,
     path,
@@ -188,12 +188,14 @@ const NavPageSecondaryItem = task(
 
 // main
 export const NavPage = task(
-  t => ({ ui: { HStack, Icon, Spacer, Text, toCss, NavLogoItem, When } }) => {
+  t => ({
+    HStack, Icon, Spacer, Text, toCss, NavLogoItem, When, MapIndexed ,
+  }) => {
     const NavPageItem = PageItem({
-      ui: { HStack, Icon, Text, toCss, When },
+     HStack, Icon, Text, toCss, When 
     })
     const NavPageAction = PageAction({
-      ui: { HStack, Icon, Text, toCss, When },
+       HStack, Icon, Text, toCss, When 
     })
     return ({
       left,
@@ -234,26 +236,26 @@ export const NavPage = task(
             <When is={actAsPrimary}>
               <NavLogoItem align="x" />
             </When>
-            {t.mapIndexed(
-              (item, index) => (
+            <MapIndexed
+              list={items || []}
+              render={({ item, index }) => (
                 <NavPageItem key={index} brand={brand} {...item} />
-              ),
-              items || []
-            )}
+              )}
+            />
             <When is={t.not(t.isZeroLen(actions || []))}>
               <Spacer />
+              <MapIndexed
+                list={actions || []}
+                render={(item, index) => (
+                  <NavPageAction
+                    key={index}
+                    brand={brand}
+                    onAction={action => dispatch(action)}
+                    {...item}
+                  />
+                )}
+              />
             </When>
-            {t.mapIndexed(
-              (actionItem, index) => (
-                <NavPageAction
-                  key={index}
-                  brand={brand}
-                  onAction={action => dispatch(action)}
-                  {...actionItem}
-                />
-              ),
-              actions || []
-            )}
           </HStack>
         </HStack>
       )
@@ -261,43 +263,43 @@ export const NavPage = task(
   }
 )
 
-export const NavPageSecondary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, Text, toCss, When } }) => {
-    const SecondaryItem = NavPageSecondaryItem({
-      ui: { HStack, Icon, Spacer, Text, toCss, When },
-    })
-    return ({ left, top, bottom, width, brand, items }) => {
-      return (
-        <VStack
-          box={{
-            bgColor: brand.nav.page.bg,
-            position: 'fixed',
-            zIndex: 20,
-            // padding: { y: 4 },
-            overflowY: 'auto',
-            overflowX: 'hidden',
-          }}
-          className="scroll-hide"
-          style={{
-            width,
-            top,
-            left,
-            bottom,
-          }}
-        >
-          {t.mapIndexed(
-            (item, index) => (
-              <SecondaryItem key={index} brand={brand} {...item} />
-            ),
-            items || []
+export const NavPageSecondary = ({
+ VStack, HStack, Icon, Spacer, Text, toCss, When, MapIndexed 
+}) => {
+  const SecondaryItem = NavPageSecondaryItem({
+    HStack, Icon, Spacer, Text, toCss, When 
+  })
+  return ({ left, top, bottom, width, brand, items }) => {
+    return (
+      <VStack
+        box={{
+          bgColor: brand.nav.page.bg,
+          position: 'fixed',
+          zIndex: 20,
+          // padding: { y: 4 },
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}
+        className="scroll-hide"
+        style={{
+          width,
+          top,
+          left,
+          bottom,
+        }}
+      >
+        <MapIndexed
+          list={items || []}
+          render={({ item, index }) => (
+            <SecondaryItem key={index} brand={brand} {...item} />
           )}
-        </VStack>
-      )
-    }
+        />
+      </VStack>
+    )
   }
-)
+}
 
-export const NavPageToggle = ({ ui: { HStack, Icon } }) => ({
+export const NavPageToggle = ({  HStack, Icon  }) => ({
   open,
   brand,
   actAsPrimary,

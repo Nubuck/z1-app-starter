@@ -1,12 +1,7 @@
 import React from 'react'
 
 // main
-export const Body = ({ ui: { VStack } }) => ({
-  left,
-  bottom,
-  top,
-  children,
-}) => {
+export const Body = ({ VStack }) => ({ left, bottom, top, children }) => {
   return (
     <VStack
       x="left"

@@ -2,11 +2,7 @@ import React from 'react'
 import { task, NavLink } from '@z1/lib-feature-box'
 
 // elements
-const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
-  icon,
-  path,
-  brand,
-}) => {
+const NavPrimaryItem = ({ HStack, Icon, toCss }) => ({ icon, path, brand }) => {
   return (
     <HStack
       as={NavLink}
@@ -32,7 +28,7 @@ const NavPrimaryItem = ({ ui: { HStack, Icon, toCss } }) => ({
 }
 
 const NavPrimaryAction = task(
-  t => ({ ui: { HStack, Icon } }) => ({
+  t => ({ HStack, Icon, toCss }) => ({
     icon,
     path,
     action,
@@ -91,9 +87,18 @@ const NavPrimaryAction = task(
 
 // main
 export const NavPrimary = task(
-  t => ({ ui: { VStack, HStack, Icon, Spacer, toCss, NavLogoItem, When } }) => {
-    const PrimaryItem = NavPrimaryItem({ ui: { HStack, Icon, toCss } })
-    const PrimaryAction = NavPrimaryAction({ ui: { HStack, Icon, toCss } })
+  t => ({
+    VStack,
+    HStack,
+    Icon,
+    Spacer,
+    toCss,
+    NavLogoItem,
+    When,
+    MapIndexed,
+  }) => {
+    const PrimaryItem = NavPrimaryItem({ HStack, Icon, toCss })
+    const PrimaryAction = NavPrimaryAction({ HStack, Icon, toCss })
     return ({ left, bottom, width, items, actions, brand, dispatch }) => {
       return (
         <VStack
@@ -111,33 +116,33 @@ export const NavPrimary = task(
           style={{ width, left, bottom }}
         >
           <NavLogoItem brand={brand} />
-          {t.mapIndexed(
-            (item, index) => (
+          <MapIndexed
+            list={items || []}
+            render={({ item, index }) => (
               <PrimaryItem key={index} brand={brand} {...item} />
-            ),
-            items || []
-          )}
+            )}
+          />
           <When is={t.not(t.isZeroLen(actions || []))}>
             <Spacer />
           </When>
-          {t.mapIndexed(
-            (actionItem, index) => (
+          <MapIndexed
+            list={actions || []}
+            render={({ item, index }) => (
               <PrimaryAction
                 key={index}
                 brand={brand}
                 onAction={action => dispatch(action)}
-                {...actionItem}
+                {...item}
               />
-            ),
-            actions || []
-          )}
+            )}
+          />
         </VStack>
       )
     }
   }
 )
 
-export const NavToggle = ({ ui: { HStack, Icon } }) => ({
+export const NavToggle = ({ HStack, Icon }) => ({
   open,
   brand,
   pageNav,

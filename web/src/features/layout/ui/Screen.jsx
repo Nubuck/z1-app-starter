@@ -26,7 +26,7 @@ export const Screen = task(
       NavPage,
       NavPageSecondary,
       NavPageToggle,
-    } = elements({ ui: { Box, VStack, Spinner, Match, When, ...ui } })
+    } = elements({  Box, VStack, Spinner, Match, When, ...ui  })
     const renderChildren = (children, type) =>
       t.isNil(children)
         ? null
