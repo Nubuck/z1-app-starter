@@ -13,7 +13,7 @@ const routeProps = { authenticate: true }
 export const serviceCmdState = composeStateBox({ name }, [
   cmd,
   macroRouteViewState(name, {
-    path: '/service-cmd/',
+    path: '/service-cmd',
     views: views.state,
     routes: {
       home: routeProps,

@@ -9,7 +9,10 @@ import { views } from '../views'
 import { elements } from './elements'
 
 // state
-const stateQuery = ({ serviceCmd, brand }) => ({ brand, state: serviceCmd })
+const stateQuery = ({ serviceCmd, brand }) => ({
+  brand,
+  state: serviceCmd,
+})
 
 // main
 export const ServiceCmdPage = task(

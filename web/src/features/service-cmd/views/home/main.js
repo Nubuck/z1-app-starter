@@ -18,6 +18,11 @@ export const home = task((t, a) =>
                   { value: 'updatedAt', label: 'Date Updated' },
                 ],
                 sortBy: { value: 'name', label: 'Name' },
+                screen: {
+                  size: null,
+                  width: null,
+                  height: null,
+                },
               }
             : t.isNil(nextData)
             ? viewData
@@ -42,17 +47,17 @@ export const home = task((t, a) =>
         if (cmdError) {
           return {
             status,
-            data: t.merge(viewData, {
+            data: {
               services: [],
-            }),
+            },
             error: cmdError.message,
           }
         }
         return {
           status,
-          data: t.merge(viewData, {
+          data: {
             services: cmdResult.data,
-          }),
+          },
           error: null,
         }
       },
@@ -87,6 +92,7 @@ export const home = task((t, a) =>
       ViewHeader,
       Match,
       When,
+      MapIndexed,
       ServiceItem,
       VStack,
       HStack,
@@ -205,16 +211,14 @@ export const home = task((t, a) =>
                       <Icon name="sort-amount-desc" size="2xl" />
                     </VStack>
                   </HStack>
-                  <When is={t.not(t.isZeroLen(state.data.services || []))}>
-                    <VStack box={{ padding: { top: 6 } }}>
-                      {t.mapIndexed(
-                        (service, index) => (
-                          <ServiceItem key={index} {...service} />
-                        ),
-                        state.data.services || []
+                  <VStack box={{ padding: { top: 6 } }}>
+                    <MapIndexed
+                      list={state.data.services}
+                      render={({ item, index }) => (
+                        <ServiceItem key={index} {...item} />
                       )}
-                    </VStack>
-                  </When>
+                    />
+                  </VStack>
                 </React.Fragment>
               ),
               _: <ViewSpinner />,

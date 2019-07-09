@@ -11,5 +11,5 @@ import { auth } from './auth'
 const name = 'account'
 export const accountState = composeStateBox({ name }, [
   auth,
-  macroRouteViewState(name, { path: '/account/', views: views.state }),
+  macroRouteViewState(name, { path: '/account', views: views.state }),
 ])
