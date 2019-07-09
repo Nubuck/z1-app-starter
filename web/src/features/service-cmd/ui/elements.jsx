@@ -49,7 +49,7 @@ export const elements = task(
         t.getMatch(size)({
           sm: 'xl',
           lg: '4xl',
-        }) || '2xl'
+        }) || '3xl'
       return (
         <HStack x="left" y="center">
           <When is={icon}>
@@ -84,16 +84,18 @@ export const elements = task(
       pid,
       mode,
       memory,
+      cpu,
       ipAddress,
       folderStatus,
       action,
       actionStatus,
       icon,
+      uptime,
     }) {
       return (
-        <Row>
+        <Row box={{ padding: { y: 4 } }}>
           <Col y="center" box={{ padding: { right: 4 } }}>
-            <Icon name="settings-outline" size="lg" />
+            <Icon name="cube" size="3xl" />
           </Col>
           <Col x="left" y="center" box={{ padding: { right: 4 } }}>
             <HStack y="center" x="center">
@@ -102,13 +104,16 @@ export const elements = task(
               </Text>
               <Text size="sm">{version}</Text>
             </HStack>
-            <Text size="lg" box={{ padding: { top: 2 } }}>
-              {status || 'offline'}
+          </Col>
+
+          <Col y="center" box={{ padding: { right: 4 } }}>
+            <Text size="md" weight="light">
+              {interpreter}
             </Text>
           </Col>
           <Col y="center" box={{ padding: { right: 4 } }}>
             <Text size="md" weight="light">
-              {interpreter}
+              pid {pid}
             </Text>
           </Col>
           <Col y="center" box={{ padding: { right: 4 } }}>
@@ -123,8 +128,55 @@ export const elements = task(
           </Col>
           <Col y="center" box={{ padding: { right: 4 } }}>
             <Text size="lg" weight="light">
-              port {`${ipAddress || '0.0.0.0'}`}
+              port {`${port || '0'}`}
             </Text>
+          </Col>
+          <Col y="center" box={{ padding: { right: 4 } }}>
+            <Text size="lg" weight="light">
+              memory {`${memory || '0'}b`}
+            </Text>
+          </Col>
+          <Col y="center" box={{ padding: { right: 4 } }}>
+            <Text size="lg" weight="light">
+              cpu {`${cpu || '0'}%`}
+            </Text>
+          </Col>
+          <Col y="center" box={{ padding: { right: 4 } }}>
+            <Text size="md" weight="semibold">
+              {status || 'offline'}
+            </Text>
+          </Col>
+          <Col y="center" box={{ padding: { right: 4 } }}>
+            <HStack y="center">
+              <Match
+                value={status}
+                when={{
+                  online: (
+                    <Button radius="full" size="sm">
+                      <Icon name="stop" size="xl" />
+                    </Button>
+                  ),
+                  _: (
+                    <Button radius="full" size="sm">
+                      <Icon name="play" size="xl" />
+                    </Button>
+                  ),
+                }}
+              />
+              <Button radius="full" size="sm">
+                <Icon name="refresh" size="xl" />
+              </Button>
+              <When
+                is={t.or(
+                  t.eq(actionStatus, 'launching'),
+                  t.eq(actionStatus, 'stopping')
+                )}
+              >
+                <VStack x="center" y="center" box={{ padding: { left: 6 } }}>
+                  <Spinner />
+                </VStack>
+              </When>
+            </HStack>
           </Col>
         </Row>
       )

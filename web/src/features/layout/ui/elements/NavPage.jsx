@@ -320,11 +320,11 @@ export const NavPageToggle = ({ ui: { HStack, Icon } }) => ({
         name={
           actAsPrimary
             ? open
-              ? 'close-outline'
-              : 'menu-outline'
+              ? 'close'
+              : 'bars'
             : open
-            ? 'more-vertical-outline'
-            : 'more-horizontal-outline'
+            ? 'ellipsis-v'
+            : 'ellipsis-h'
         }
         size="3xl"
         color={[brand.screen.color, { hover: brand.primary }]}

@@ -736,10 +736,10 @@
     redux-first-router-link "^2.1.1"
     redux-first-router-restore-scroll "^1.2.2"
 
-"@z1/lib-feature-macros@^0.2.33":
-  version "0.2.33"
-  resolved "https://registry.yarnpkg.com/@z1/lib-feature-macros/-/lib-feature-macros-0.2.33.tgz#5fde565ef82baff918bfde374b8c5e0a1d391d41"
-  integrity sha512-ofeUsRi4zKW0PJxbOqCcW/3Ihhd+yEoKsavwPtwp7HKC0KobaWtlD54bFOoWp0hC+rwL5p9BSD1Ibpe6to7+6w==
+"@z1/lib-feature-macros@^0.2.37":
+  version "0.2.37"
+  resolved "https://registry.yarnpkg.com/@z1/lib-feature-macros/-/lib-feature-macros-0.2.37.tgz#26245fccaabbae8b7a539ebe9c908d3d5b929332"
+  integrity sha512-RsxAzLvAd8iJpsjELb58GLNxpm/Kp113n9u9DDJl2z1iJpvxftXFGR7bcDSh4pK1nLDlU6M8ELkDGIH/0tkmbw==
 
 "@z1/lib-state-box-core@^0.2.10":
   version "0.2.10"
@@ -759,10 +759,10 @@
     "@z1/lib-state-box-core" "^0.2.10"
     redux-logger "^3.0.6"
 
-"@z1/lib-ui-box-elements@^0.2.30":
-  version "0.2.30"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-elements/-/lib-ui-box-elements-0.2.30.tgz#d1a02ddd24b1607392f33a238bd8faee3494db80"
-  integrity sha512-nzXYFRDEzPwt/jwYvfcWsHNml7huXFbis+rIr5hsbzv0ypIyy4+17Pms56pa6VB6lBhS/LmisBu3tjsWhIkAbg==
+"@z1/lib-ui-box-elements@^0.2.37":
+  version "0.2.37"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-elements/-/lib-ui-box-elements-0.2.37.tgz#ac04328b2118855f5c3efde57599045021a07176"
+  integrity sha512-sVaHkXLotzsZr0r/Tc4yw3+KeK+CEei3eTqCefNHqhw0Q6O4u96fRlJaLx+F/VCvpf1yCqqLAgvJ9/lnAdovQQ==
   dependencies:
     "@z1/lib-ui-box-tailwind" "^0.2.18"
     "@z1/preset-task" "^0.2.9"
@@ -4507,11 +4507,6 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
-
-eva-icons@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/eva-icons/-/eva-icons-1.1.1.tgz#a5e7529ed4d04e913db9db33b749f0dac415186a"
-  integrity sha512-Uf7JQMA1lWQLLtHuk1lbMlwP4i3W0jjTy5SCYBGeR6DLPub5Ls2QiJlVT59llphVObXSVwaMuofevwgUZWf1CQ==
 
 event-emitter@~0.3.5:
   version "0.3.5"

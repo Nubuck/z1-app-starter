@@ -151,7 +151,7 @@ export const signIn = task((t, a) =>
           />
           <When is={t.not(t.isNil(state.error))}>
             <ViewAlert
-              icon="alert-triangle-outline"
+              icon="exclamation-triangle"
               text="Incorrect email or password"
               color="orange-500"
               bgColor={null}

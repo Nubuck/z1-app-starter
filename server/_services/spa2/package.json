@@ -1,5 +1,5 @@
 {
-  "name": "app-spa-server",
+  "name": "app-spa-server-2",
   "version": "0.0.15",
   "main": "index.js",
   "bin": "index.js",
@@ -14,7 +14,7 @@
     "autorestart": true,
     "watch": false,
     "exec_mode": "fork",
-    "port": 8081,
+    "port": 8082,
     "args": "",
     "node_args": "",
     "env": {},

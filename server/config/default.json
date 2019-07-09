@@ -36,7 +36,7 @@
   },
   "cmd": {
     "service": {
-      "interval": 15,
+      "interval": 60,
       "path": "_services"
     }
   }

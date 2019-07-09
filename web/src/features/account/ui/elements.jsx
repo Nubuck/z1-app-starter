@@ -179,8 +179,8 @@ export const elements = task(
     ViewAlert({ text, children, color, bgColor, icon, box }) {
       return (
         <HStack
-          x="center"
-          y="left"
+          x="left"
+          y="center"
           box={{
             padding: { x: 3, y: 3 },
             margin: { y: 2 },

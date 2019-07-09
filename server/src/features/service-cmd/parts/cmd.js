@@ -1,4 +1,4 @@
-import {task} from '@z1/lib-feature-box-server-nedb'
+import { task } from '@z1/lib-feature-box-server-nedb'
 import pm2 from 'pm2'
 
 // transports
@@ -197,6 +197,7 @@ const pm2OutputToState = task(t => (output = {}) => {
       'version',
       'exec_interpreter',
       'exec_mode',
+      'pm_uptime',
     ],
     output.pm2_env || {}
   )
@@ -223,9 +224,11 @@ const pm2OutputToState = task(t => (output = {}) => {
     ),
     memory: output.monit.memory,
     cpu: output.monit.cpu,
+    uptime: t.not(t.isNil(envFields.pm_uptime))
+      ? new Date(envFields.pm_uptime)
+      : null,
   }
 })
-
 
 const safeDbItem = task(t => item => {
   const extra = t.not(t.has('autoStart')(item))
@@ -280,7 +283,7 @@ export const serviceCmd = {
     ERRORED: 'errored',
     ONE_LAUNCH_STATUS: 'one-launch-status',
   },
-  CMD_KEYS:[
+  CMD_KEYS: [
     'name',
     'slug',
     'alias',
@@ -308,7 +311,8 @@ export const serviceCmd = {
     'meta',
     'memory',
     'cpu',
+    'uptime',
   ],
   pm2OutputToState,
-  safeDbItem
+  safeDbItem,
 }

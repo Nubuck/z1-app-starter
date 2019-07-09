@@ -225,11 +225,11 @@ export const syncCmdPm2 = task((t, a) => async app => {
   //       $limit: 0,
   //     },
   //   })
-  // ) 
-   const [dbServicesError, dbServicesResult] = await a.of(
+  // )
+  const [dbServicesError, dbServicesResult] = await a.of(
     app.service('service-cmd').find()
   )
-  
+
   // app.debug('DB SERVICES RESULT', dbServicesResult)
   if (dbServicesError) {
     app.error('SERVICE CMD DB SYNC ERROR', dbServicesError)
@@ -325,30 +325,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
   })
   // app.debug('SERVICE SYNC RESULT', syncResult)
 
-  // const cmdResult = await a.map(t.keys(nextFsDbState), 1, async cmdKey => {
-  //   const nextCmd = nextFsDbState[cmdKey]
-  //   const [startError, startResult] = await a.of(
-  //     serviceCmd.start(activeCmd(t.pick(serviceCmd.CMD_KEYS, nextCmd)))
-  //   )
-  //   if (startError) {
-  //     app.error('SERVICE CMD START ERROR', startError)
-  //   }
-  //   app.debug('SERVICE CMD START RESULT', startResult)
-  //   if (startResult) {
-  //     const nextResult = t.isType(startResult, 'Array')
-  //       ? t.head(startResult)
-  //       : startResult
-  //     const nextStartResult = serviceCmd.pm2OutputToState(nextResult)
-  //     await Fs.writeAsync(
-  //       Fs.path(`service_output_selected_${nextCmd._id}.json`),
-  //       nextStartResult
-  //     )
-  //     return nextStartResult
-  //   }
-  //   return nextCmd
-  // })
-  // app.debug('SERVICE CMD RESULT', cmdResult)
-
   return syncResult
 })
 
@@ -364,11 +340,11 @@ export const bootCmdService = app => {
   syncCmdPm2(app)
     .then(() => {
       app.debug('SYNC SERVICES BOOTED')
-      // syncTimer.start()
+      syncTimer.start()
     })
     .catch(error => {
       app.error('SYNC SERVICES Setup error', error)
-      // syncTimer.start()
+      syncTimer.start()
     })
   // repeat
   syncTimer.onDone(() => {

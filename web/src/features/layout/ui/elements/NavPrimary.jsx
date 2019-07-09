@@ -157,7 +157,7 @@ export const NavToggle = ({ ui: { HStack, Icon } }) => ({
       onClick={() => onClick && onClick()}
     >
       <Icon
-        name={open ? 'close-outline' : 'menu-outline'}
+        name={open ? 'close' : 'bars'}
         size="4xl"
         color={[brand.screen.color, { hover: brand.primary }]}
         box={{

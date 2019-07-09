@@ -65,7 +65,7 @@ export const resetPassword = task((t, a) =>
           />
           <When is={t.not(t.isNil(state.error))}>
             <ViewAlert
-              icon="alert-triangle-outline"
+              icon="exclamation-triangle"
               text={state.error}
               color="orange-500"
               bgColor={null}

@@ -88,14 +88,14 @@ export const home = task((t, a) =>
                   <ViewHeader
                     title="Service"
                     text="Cmd"
-                    icon="settings-2-outline"
+                    icon="cubes"
                     size="md"
                   />
                   <When is={t.not(t.isZeroLen(state.data.services || []))}>
                     <VStack box={{ padding: { top: 6 } }}>
-                      {t.map(
-                        service => (
-                          <ServiceItem {...service} />
+                      {t.mapIndexed(
+                        (service, index) => (
+                          <ServiceItem key={index} {...service} />
                         ),
                         state.data.services || []
                       )}

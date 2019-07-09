@@ -8,7 +8,7 @@ export const PageNotFound = ({
     <VStack x="center" y="center" box={{ color: 'red-500', height: 'full' }}>
       <HStack x="center" y="center">
         <Icon
-          name="alert-triangle-outline"
+          name="exclamation-triangle"
           size="5xl"
           box={{ margin: { right: 4 } }}
         />

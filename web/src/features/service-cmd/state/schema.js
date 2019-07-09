@@ -4,7 +4,7 @@ import { navSchema } from '@z1/lib-ui-schema'
 export const secureNav = navSchema(n => [
   n('/service-cmd', {
     target: 'nav',
-    icon: 'settings-2-outline',
+    icon: 'cubes',
     title: 'Service Cmd',
   }),
 ])

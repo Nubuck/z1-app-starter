@@ -23,7 +23,7 @@ export const notAuthorized = task((t, a) =>
         >
           <HStack x="center" y="center">
             <Icon
-              name="slash-outline"
+              name="ban"
               size="5xl"
               box={{ margin: { right: 4 } }}
             />

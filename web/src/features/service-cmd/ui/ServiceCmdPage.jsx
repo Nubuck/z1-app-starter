@@ -20,7 +20,7 @@ export const ServiceCmdPage = task(
       ({ brand, state, mutations }) => {
         return (
           <VStack
-            x="start"
+            x="left"
             y="top"
             box={{ color: brand.screen.color, height: 'full' }}
           >
