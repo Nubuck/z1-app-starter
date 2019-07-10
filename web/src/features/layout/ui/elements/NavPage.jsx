@@ -3,7 +3,7 @@ import { task, NavLink } from '@z1/lib-feature-box'
 
 // elements
 const PageItem = task(
-  t => ({  HStack, Icon, Text, toCss, When  }) => ({
+  t => ({ HStack, Icon, Text, toCss, When }) => ({
     title,
     icon,
     path,
@@ -57,7 +57,7 @@ const PageItem = task(
 )
 
 const PageAction = task(
-  t => ({  HStack, Icon, Text, toCss, When  }) => ({
+  t => ({ HStack, Icon, Text, toCss, When }) => ({
     icon,
     title,
     action,
@@ -135,7 +135,7 @@ const PageAction = task(
 )
 
 const NavPageSecondaryItem = task(
-  t => ({  HStack, Icon, Spacer, Text, toCss, When  }) => ({
+  t => ({ HStack, Icon, Spacer, Text, toCss, When }) => ({
     title,
     icon,
     path,
@@ -189,13 +189,28 @@ const NavPageSecondaryItem = task(
 // main
 export const NavPage = task(
   t => ({
-    HStack, Icon, Spacer, Text, toCss, NavLogoItem, When, MapIndexed ,
+    HStack,
+    Icon,
+    Spacer,
+    Text,
+    toCss,
+    NavLogoItem,
+    When,
+    MapIndexed,
   }) => {
     const NavPageItem = PageItem({
-     HStack, Icon, Text, toCss, When 
+      HStack,
+      Icon,
+      Text,
+      toCss,
+      When,
     })
     const NavPageAction = PageAction({
-       HStack, Icon, Text, toCss, When 
+      HStack,
+      Icon,
+      Text,
+      toCss,
+      When,
     })
     return ({
       left,
@@ -246,7 +261,7 @@ export const NavPage = task(
               <Spacer />
               <MapIndexed
                 list={actions || []}
-                render={(item, index) => (
+                render={({ item, index }) => (
                   <NavPageAction
                     key={index}
                     brand={brand}
@@ -264,10 +279,22 @@ export const NavPage = task(
 )
 
 export const NavPageSecondary = ({
- VStack, HStack, Icon, Spacer, Text, toCss, When, MapIndexed 
+  VStack,
+  HStack,
+  Icon,
+  Spacer,
+  Text,
+  toCss,
+  When,
+  MapIndexed,
 }) => {
   const SecondaryItem = NavPageSecondaryItem({
-    HStack, Icon, Spacer, Text, toCss, When 
+    HStack,
+    Icon,
+    Spacer,
+    Text,
+    toCss,
+    When,
   })
   return ({ left, top, bottom, width, brand, items }) => {
     return (
@@ -299,7 +326,7 @@ export const NavPageSecondary = ({
   }
 }
 
-export const NavPageToggle = ({  HStack, Icon  }) => ({
+export const NavPageToggle = ({ HStack, Icon }) => ({
   open,
   brand,
   actAsPrimary,

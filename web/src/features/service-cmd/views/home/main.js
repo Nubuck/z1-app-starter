@@ -381,7 +381,11 @@ export const home = task((t, a) =>
                                         <Button
                                           radius="full"
                                           size="sm"
-                                          color="red-500"
+                                          color={[
+                                            'red-500',
+                                            { hover: 'white' },
+                                          ]}
+                                          bg={[null, { hover: 'red-500' }]}
                                           border="red-500"
                                           borderWidth={2}
                                           disabled={busy}
@@ -391,13 +395,24 @@ export const home = task((t, a) =>
                                             cursor: busy ? 'wait' : 'pointer',
                                           }}
                                         >
-                                          <Icon name="stop" size="3xl" />
+                                          <Icon
+                                            name="stop"
+                                            size="3xl"
+                                            style={{
+                                              paddingLeft: 1.8,
+                                              paddingTop: 1.5,
+                                            }}
+                                          />
                                         </Button>
                                         <Button
                                           radius="full"
                                           size="sm"
-                                          color="yellow-600"
-                                          border="yellow-600"
+                                          color={[
+                                            'yellow-500',
+                                            { hover: 'gray-900' },
+                                          ]}
+                                          bg={[null, { hover: 'yellow-500' }]}
+                                          border="yellow-500"
                                           borderWidth={2}
                                           disabled={busy}
                                           box={{
@@ -418,7 +433,11 @@ export const home = task((t, a) =>
                                       <Button
                                         radius="full"
                                         size="sm"
-                                        color="green-500"
+                                        color={[
+                                          'green-500',
+                                          { hover: 'white' },
+                                        ]}
+                                        bg={[null, { hover: 'green-500' }]}
                                         border="green-500"
                                         borderWidth={2}
                                         disabled={busy}
@@ -678,7 +697,9 @@ export const home = task((t, a) =>
                                   />
                                   <Text weight="semibold" size="sm">{`${
                                     item.updatedAt
-                                      ? dayjs(item.updatedAt).format('DD-MM-YYYY HH:mm:ss a')
+                                      ? dayjs(item.updatedAt).format(
+                                          'DD-MM-YYYY HH:mm:ss a'
+                                        )
                                       : ''
                                   }`}</Text>
                                 </Row>
@@ -702,7 +723,9 @@ export const home = task((t, a) =>
                                   />
                                   <Text weight="semibold" size="sm">{`${
                                     item.createdAt
-                                      ? dayjs(item.createdAt).format('DD-MM-YYYY HH:mm:ss a')
+                                      ? dayjs(item.createdAt).format(
+                                          'DD-MM-YYYY HH:mm:ss a'
+                                        )
                                       : ''
                                   }`}</Text>
                                 </Row>
