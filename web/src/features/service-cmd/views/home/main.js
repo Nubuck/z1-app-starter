@@ -1,6 +1,7 @@
 import React from 'react'
 import { task } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
+import bytes from 'bytes'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
@@ -119,7 +120,10 @@ export const home = task((t, a) =>
               _: <ViewSpinner />,
               ready: (
                 <React.Fragment>
-                  <HStack box={{ flexWrap: true }} className="form-dark">
+                  <HStack
+                    box={{ flexWrap: true, shadow: 'md' }}
+                    className="form-dark"
+                  >
                     <VStack box={{ padding: { y: 4 } }}>
                       <ViewHeader
                         title="Service"
@@ -230,7 +234,7 @@ export const home = task((t, a) =>
                       </HStack>
                     </VStack>
                   </HStack>
-                  <VStack box={{ padding: { top: 6 } }}>
+                  <VStack box={{ padding: [null, { sm: { top: 4 } }] }}>
                     <MapIndexed
                       list={state.data.services}
                       render={({ item, index }) => {
@@ -245,37 +249,64 @@ export const home = task((t, a) =>
                             y="center"
                             box={{
                               margin: { y: 3 },
-                              padding: { y: 2, x: 4 },
-                              borderWidth: { left: 2 },
-                              borderColor: 'green-500',
+                              padding: [4, { sm: { bottom: 4, top: 1, x: 6 } }],
+                              borderWidth: [
+                                { bottom: 2 },
+                                { sm: { left: 2, bottom: 0 } },
+                              ],
+                              borderColor: busy ? 'orange-500' : 'green-500',
+                              shadow: 'md',
                             }}
                           >
-                            <Col xs={12} sm={7} md={5} lg={4}>
+                            <Col xs={12} sm={12} md={5} lg={4}>
                               <HStack y="center">
                                 <Icon
                                   name="cube"
                                   size="4xl"
-                                  color={'green-500'}
+                                  color={
+                                    t.eq(item.status, 'online')
+                                      ? 'green-500'
+                                      : 'orange-500'
+                                  }
                                   box={{
                                     margin: {
                                       right: 4,
                                     },
+                                    opacity: busy ? 50 : 100,
                                   }}
                                 />
                                 <VStack y="center">
                                   <Text
-                                    size="xl"
+                                    size="2xl"
                                     color={'yellow-500'}
                                     weight="semibold"
                                     box={{
                                       margin: {
-                                        bottom: 2,
+                                        bottom: 1,
                                       },
                                     }}
                                   >
                                     {item.name}
                                   </Text>
-                                  <Text weight="thin">v{item.version}</Text>
+                                  <HStack y="center">
+                                    <Text
+                                      weight="thin"
+                                      box={{ padding: { top: 2 } }}
+                                    >
+                                      v{item.version}
+                                    </Text>
+                                    <When is={item.autoStart}>
+                                      <Spacer />
+                                      <Icon
+                                        name="flag-checkered"
+                                        color="blue-500"
+                                        size="2xl"
+                                        box={{
+                                          padding: 1,
+                                        }}
+                                      />
+                                    </When>
+                                  </HStack>
                                 </VStack>
                               </HStack>
                               <HStack
@@ -307,7 +338,12 @@ export const home = task((t, a) =>
                                 >
                                   {item.status}
                                 </Text>
-                                <When is={t.isType(item.uptime, 'String')}>
+                                <When
+                                  is={t.and(
+                                    t.eq(item.status, 'online'),
+                                    t.isType(item.uptime, 'String')
+                                  )}
+                                >
                                   <Icon
                                     name="clock-o"
                                     size="lg"
@@ -341,21 +377,42 @@ export const home = task((t, a) =>
                                   value={item.status}
                                   when={{
                                     online: (
-                                      <Button
-                                        radius="full"
-                                        size="sm"
-                                        color="red-500"
-                                        border="red-500"
-                                        borderWidth={2}
-                                        disabled={busy}
-                                        box={{
-                                          padding: 2,
-                                          opacity: busy ? 50 : null,
-                                          cursor: busy ? 'wait' : 'pointer',
-                                        }}
-                                      >
-                                        <Icon name="stop" size="3xl" />
-                                      </Button>
+                                      <React.Fragment>
+                                        <Button
+                                          radius="full"
+                                          size="sm"
+                                          color="red-500"
+                                          border="red-500"
+                                          borderWidth={2}
+                                          disabled={busy}
+                                          box={{
+                                            padding: 2,
+                                            opacity: busy ? 50 : null,
+                                            cursor: busy ? 'wait' : 'pointer',
+                                          }}
+                                        >
+                                          <Icon name="stop" size="3xl" />
+                                        </Button>
+                                        <Button
+                                          radius="full"
+                                          size="sm"
+                                          color="yellow-600"
+                                          border="yellow-600"
+                                          borderWidth={2}
+                                          disabled={busy}
+                                          box={{
+                                            padding: 2,
+                                            margin: { left: 5, right: 2 },
+                                            opacity: busy ? 50 : null,
+                                            cursor: busy ? 'wait' : 'pointer',
+                                          }}
+                                        >
+                                          <Icon
+                                            name="rotate-right"
+                                            size="3xl"
+                                          />
+                                        </Button>
+                                      </React.Fragment>
                                     ),
                                     _: (
                                       <Button
@@ -367,6 +424,7 @@ export const home = task((t, a) =>
                                         disabled={busy}
                                         box={{
                                           padding: 2,
+                                          margin: { right: 2 },
                                           opacity: busy ? 50 : null,
                                           cursor: busy ? 'wait' : 'pointer',
                                         }}
@@ -376,22 +434,6 @@ export const home = task((t, a) =>
                                     ),
                                   }}
                                 />
-                                <Button
-                                  radius="full"
-                                  size="sm"
-                                  color="yellow-500"
-                                  border="yellow-500"
-                                  borderWidth={2}
-                                  disabled={busy}
-                                  box={{
-                                    padding: 2,
-                                    margin: { left: 4, right: 1, top: 1 },
-                                    opacity: busy ? 50 : null,
-                                    cursor: busy ? 'wait' : 'pointer',
-                                  }}
-                                >
-                                  <Icon name="rotate-right" size="2xl" />
-                                </Button>
                                 <When is={busy}>
                                   <Spinner
                                     size="md"
@@ -407,6 +449,267 @@ export const home = task((t, a) =>
                                   />
                                 </When>
                               </HStack>
+                              <HStack
+                                y="center"
+                                x="left"
+                                box={{ opacity: busy ? 100 : 50 }}
+                              >
+                                <When is={busy}>
+                                  <Text
+                                    size="sm"
+                                    weight="hairline"
+                                    color="orange-500"
+                                  >
+                                    {item.action || 'busy'}
+                                  </Text>
+                                </When>
+                                <When is={t.not(busy)}>
+                                  <Text size="sm" weight="hairline">
+                                    ready
+                                  </Text>
+                                </When>
+                              </HStack>
+                            </Col>
+                            <Col
+                              xs={12}
+                              sm={3}
+                              md={3}
+                              lg={2}
+                              box={{
+                                flexDirection: ['row', { sm: 'col' }],
+                                padding: [{ y: 4 }, { sm: { y: 0 } }],
+                              }}
+                            >
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    padding: [
+                                      { y: 1, right: 4 },
+                                      { sm: { x: 0 } },
+                                    ],
+                                  }}
+                                >
+                                  <Icon
+                                    name="clone"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text
+                                    weight="semibold"
+                                    size="xl"
+                                  >{`${item.instances || '0'}`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  instances
+                                </Text>
+                              </VStack>
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    margin: [null, { sm: { top: 4 } }],
+                                    padding: [{ y: 1, x: 4 }, { sm: { x: 0 } }],
+                                  }}
+                                >
+                                  <Icon
+                                    name="gears"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text
+                                    weight="semibold"
+                                    size="xl"
+                                  >{`${item.interpreter || 'none'}`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  interpreter
+                                </Text>
+                              </VStack>
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    margin: [null, { sm: { top: 4 } }],
+                                    padding: { y: 1 },
+                                  }}
+                                >
+                                  <Icon
+                                    name="barcode"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text
+                                    weight="semibold"
+                                    size="xl"
+                                  >{`${item.pid || 'none'}`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  pid
+                                </Text>
+                              </VStack>
+                            </Col>
+                            <Col
+                              xs={12}
+                              sm={3}
+                              md={3}
+                              lg={2}
+                              box={{ flexDirection: ['row', { sm: 'col' }] }}
+                            >
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    padding: [
+                                      { y: 1, right: 4 },
+                                      { sm: { x: 0 } },
+                                    ],
+                                  }}
+                                >
+                                  <Icon
+                                    name="hdd-o"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text
+                                    weight="semibold"
+                                    size="xl"
+                                  >{`${item.cpu || '0'}%`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  CPU
+                                </Text>
+                              </VStack>
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    margin: [null, { sm: { top: 4 } }],
+                                    padding: [{ y: 1, x: 4 }, { sm: { x: 0 } }],
+                                  }}
+                                >
+                                  <Icon
+                                    name="database"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text weight="semibold" size="md">{`${bytes(
+                                    item.memory || 0
+                                  )}`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  Memory
+                                </Text>
+                              </VStack>
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    margin: [null, { sm: { top: 4 } }],
+                                    padding: { y: 1 },
+                                  }}
+                                >
+                                  <Icon
+                                    name="plug"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text
+                                    weight="semibold"
+                                    size="xl"
+                                  >{`${item.port || 'none'}`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  port
+                                </Text>
+                              </VStack>
+                            </Col>
+                            <Col
+                              xs={12}
+                              sm={3}
+                              md={3}
+                              lg={2}
+                              box={{ flexDirection: ['row', { sm: 'col' }] }}
+                            >
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    padding: [
+                                      { y: 1, right: 4 },
+                                      { sm: { x: 0 } },
+                                    ],
+                                  }}
+                                >
+                                  <Icon
+                                    name="rotate-right"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text
+                                    weight="semibold"
+                                    size="xl"
+                                  >{`${item.restarts || '0'}`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  restarts
+                                </Text>
+                              </VStack>
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    margin: [null, { sm: { top: 4 } }],
+                                    padding: [{ y: 1, x: 4 }, { sm: { x: 0 } }],
+                                  }}
+                                >
+                                  <Icon
+                                    name="calendar"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text weight="semibold" size="sm">{`${
+                                    item.updatedAt
+                                      ? dayjs(item.updatedAt).format('DD-MM-YYYY HH:mm:ss a')
+                                      : ''
+                                  }`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  updated
+                                </Text>
+                              </VStack>
+                              <VStack y="center">
+                                <Row
+                                  y="center"
+                                  x="left"
+                                  box={{
+                                    margin: [null, { sm: { top: 4 } }],
+                                    padding: { y: 1 },
+                                  }}
+                                >
+                                  <Icon
+                                    name="calendar"
+                                    size="3xl"
+                                    box={{ margin: { right: 4, top: 1 } }}
+                                  />
+                                  <Text weight="semibold" size="sm">{`${
+                                    item.createdAt
+                                      ? dayjs(item.createdAt).format('DD-MM-YYYY HH:mm:ss a')
+                                      : ''
+                                  }`}</Text>
+                                </Row>
+                                <Text size="sm" weight="hairline">
+                                  created
+                                </Text>
+                              </VStack>
                             </Col>
                           </Row>
                         )
