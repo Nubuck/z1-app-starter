@@ -381,11 +381,16 @@ export const home = task((t, a) =>
                                         <Button
                                           radius="full"
                                           size="sm"
-                                          color={[
-                                            'red-500',
-                                            { hover: 'white' },
-                                          ]}
-                                          bg={[null, { hover: 'red-500' }]}
+                                          color={
+                                            busy
+                                              ? 'red-500'
+                                              : ['red-500', { hover: 'white' }]
+                                          }
+                                          bg={
+                                            busy
+                                              ? null
+                                              : [null, { hover: 'red-500' }]
+                                          }
                                           border="red-500"
                                           borderWidth={2}
                                           disabled={busy}
@@ -407,11 +412,19 @@ export const home = task((t, a) =>
                                         <Button
                                           radius="full"
                                           size="sm"
-                                          color={[
-                                            'yellow-500',
-                                            { hover: 'gray-900' },
-                                          ]}
-                                          bg={[null, { hover: 'yellow-500' }]}
+                                          color={
+                                            busy
+                                              ? 'yellow-500'
+                                              : [
+                                                  'yellow-500',
+                                                  { hover: 'gray-900' },
+                                                ]
+                                          }
+                                          bg={
+                                            busy
+                                              ? null
+                                              : [null, { hover: 'yellow-500' }]
+                                          }
                                           border="yellow-500"
                                           borderWidth={2}
                                           disabled={busy}
@@ -433,11 +446,16 @@ export const home = task((t, a) =>
                                       <Button
                                         radius="full"
                                         size="sm"
-                                        color={[
-                                          'green-500',
-                                          { hover: 'white' },
-                                        ]}
-                                        bg={[null, { hover: 'green-500' }]}
+                                        color={
+                                          busy
+                                            ? 'green-500'
+                                            : ['green-500', { hover: 'white' }]
+                                        }
+                                        bg={
+                                          busy
+                                            ? null
+                                            : [null, { hover: 'green-500' }]
+                                        }
                                         border="green-500"
                                         borderWidth={2}
                                         disabled={busy}
