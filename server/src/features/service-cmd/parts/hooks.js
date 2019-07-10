@@ -112,7 +112,7 @@ export const cmdHooksServices = task((t, a) => ({
     else if (
       t.and(
         t.eq(action, 'restart'),
-        t.not(t.or(t.eq(status, 'online'), t.eq(status, 'launching')))
+        t.not(t.or(t.eq(status, 'stopping'), t.eq(status, 'launching')))
       )
     ) {
       const [restartError, restartResult] = await a.of(

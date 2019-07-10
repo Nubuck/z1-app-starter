@@ -1,5 +1,5 @@
 import React from 'react'
-import { task } from '@z1/lib-feature-box'
+import { task, VIEW_STATUS } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
 import bytes from 'bytes'
 import dayjs from 'dayjs'
@@ -86,9 +86,65 @@ export const home = task((t, a) =>
         dispatch,
         mutations,
       }) {
+        if (t.or(t.isNil(formData.id), t.isNil(formData.action))) {
+          return {
+            status: VIEW_STATUS.READY,
+            data: formData,
+            error: null,
+          }
+        }
+        const nextServices = t.map(
+          service =>
+            t.eq(service._id, formData.id)
+              ? t.merge(service, {
+                  actionStatus: t.getMatch(formData.action)({
+                    start: 'launching',
+                    stop: 'stopping',
+                    restart: 'launcing',
+                  }),
+                  action: formData.action,
+                })
+              : service,
+          viewData.services
+        )
+        dispatch(
+          mutations.dataChange({
+            data: { services: nextServices },
+            status: VIEW_STATUS.READY,
+          })
+        )
+        const [transportErr, transportResult] = await a.of(
+          api
+            .service('service-cmd')
+            .patch(formData.id, { action: formData.action })
+        )
+        if (transportErr) {
+          dispatch(
+            mutations.dataChange({
+              data: { services: viewData.services },
+              status: VIEW_STATUS.READY,
+            })
+          )
+          return {
+            status: VIEW_STATUS.READY,
+            data: formData,
+            error: transportErr,
+          }
+        }
+        const resultServices = t.map(
+          service =>
+            t.eq(service._id, formData.id) ? transportResult : service,
+          viewData.services
+        )
+        dispatch(
+          mutations.dataChange({
+            data: { services: resultServices },
+            status: VIEW_STATUS.READY,
+          })
+        )
         return {
-          status,
-          data: formData,
+          status: VIEW_STATUS.READY,
+          data: { id: null, action: null },
           error: null,
         }
       },
@@ -254,7 +310,11 @@ export const home = task((t, a) =>
                                 { bottom: 2 },
                                 { sm: { left: 2, bottom: 0 } },
                               ],
-                              borderColor: busy ? 'orange-500' : 'green-500',
+                              borderColor: busy
+                                ? 'orange-500'
+                                : t.not(t.eq(item.status, 'online'))
+                                ? 'red-500'
+                                : 'green-500',
                               shadow: 'md',
                             }}
                           >
@@ -264,9 +324,11 @@ export const home = task((t, a) =>
                                   name="cube"
                                   size="4xl"
                                   color={
-                                    t.eq(item.status, 'online')
-                                      ? 'green-500'
-                                      : 'orange-500'
+                                    busy
+                                      ? 'orange-500'
+                                      : t.not(t.eq(item.status, 'online'))
+                                      ? 'red-500'
+                                      : 'green-500'
                                   }
                                   box={{
                                     margin: {
@@ -317,9 +379,17 @@ export const home = task((t, a) =>
                                 }}
                               >
                                 <Icon
-                                  name="play"
+                                  name={
+                                    t.eq(item.status, 'online')
+                                      ? 'play'
+                                      : 'stop'
+                                  }
                                   size="xl"
-                                  color={'green-500'}
+                                  color={
+                                    t.eq(item.status, 'online')
+                                      ? 'green-500'
+                                      : 'red-500'
+                                  }
                                   box={{
                                     margin: {
                                       right: 2,
@@ -329,14 +399,18 @@ export const home = task((t, a) =>
                                 />
                                 <Text
                                   size="xl"
-                                  color={'green-500'}
+                                  color={
+                                    t.eq(item.status, 'online')
+                                      ? 'green-500'
+                                      : 'red-500'
+                                  }
                                   box={{
                                     margin: {
                                       right: 3,
                                     },
                                   }}
                                 >
-                                  {item.status}
+                                  {item.status || 'offline'}
                                 </Text>
                                 <When
                                   is={t.and(
@@ -398,7 +472,16 @@ export const home = task((t, a) =>
                                             padding: 2,
                                             opacity: busy ? 50 : null,
                                             cursor: busy ? 'wait' : 'pointer',
+                                            outline: 'none',
                                           }}
+                                          onClick={() =>
+                                            mutations.formTransmit({
+                                              data: {
+                                                id: item._id,
+                                                action: 'stop',
+                                              },
+                                            })
+                                          }
                                         >
                                           <Icon
                                             name="stop"
@@ -433,7 +516,16 @@ export const home = task((t, a) =>
                                             margin: { left: 5, right: 2 },
                                             opacity: busy ? 50 : null,
                                             cursor: busy ? 'wait' : 'pointer',
+                                            outline: 'none',
                                           }}
+                                          onClick={() =>
+                                            mutations.formTransmit({
+                                              data: {
+                                                id: item._id,
+                                                action: 'restart',
+                                              },
+                                            })
+                                          }
                                         >
                                           <Icon
                                             name="rotate-right"
@@ -464,9 +556,25 @@ export const home = task((t, a) =>
                                           margin: { right: 2 },
                                           opacity: busy ? 50 : null,
                                           cursor: busy ? 'wait' : 'pointer',
+                                          outline: 'none',
                                         }}
+                                        onClick={() =>
+                                          mutations.formTransmit({
+                                            data: {
+                                              id: item._id,
+                                              action: 'start',
+                                            },
+                                          })
+                                        }
                                       >
-                                        <Icon name="play" size="3xl" />
+                                        <Icon
+                                          name="play"
+                                          size="3xl"
+                                          style={{
+                                            paddingLeft: 1.8,
+                                            paddingTop: 1.5,
+                                          }}
+                                        />
                                       </Button>
                                     ),
                                   }}
@@ -515,6 +623,12 @@ export const home = task((t, a) =>
                               box={{
                                 flexDirection: ['row', { sm: 'col' }],
                                 padding: [{ y: 4 }, { sm: { y: 0 } }],
+                                opacity: t.or(
+                                  t.eq(item.status, 'stopped'),
+                                  t.eq(item.status, 'init')
+                                )
+                                  ? 50
+                                  : 100,
                               }}
                             >
                               <VStack y="center">
@@ -594,7 +708,15 @@ export const home = task((t, a) =>
                               sm={3}
                               md={3}
                               lg={2}
-                              box={{ flexDirection: ['row', { sm: 'col' }] }}
+                              box={{
+                                flexDirection: ['row', { sm: 'col' }],
+                                opacity: t.or(
+                                  t.eq(item.status, 'stopped'),
+                                  t.eq(item.status, 'init')
+                                )
+                                  ? 50
+                                  : 100,
+                              }}
                             >
                               <VStack y="center">
                                 <Row
@@ -672,7 +794,15 @@ export const home = task((t, a) =>
                               sm={3}
                               md={3}
                               lg={2}
-                              box={{ flexDirection: ['row', { sm: 'col' }] }}
+                              box={{
+                                flexDirection: ['row', { sm: 'col' }],
+                                opacity: t.or(
+                                  t.eq(item.status, 'stopped'),
+                                  t.eq(item.status, 'init')
+                                )
+                                  ? 50
+                                  : 100,
+                              }}
                             >
                               <VStack y="center">
                                 <Row
@@ -709,7 +839,7 @@ export const home = task((t, a) =>
                                   }}
                                 >
                                   <Icon
-                                    name="calendar"
+                                    name="calendar-check-o"
                                     size="3xl"
                                     box={{ margin: { right: 4, top: 1 } }}
                                   />
