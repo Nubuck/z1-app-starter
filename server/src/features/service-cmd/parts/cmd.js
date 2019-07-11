@@ -190,6 +190,7 @@ const pm2OutputToState = task(t => (output = {}) => {
   const topFields = t.pick(['pid', 'pm_id'], output || {})
   const envFields = t.pick(
     [
+      'pm_id',
       'name',
       'status',
       'instances',
@@ -203,7 +204,7 @@ const pm2OutputToState = task(t => (output = {}) => {
   )
   return {
     pid: topFields.pid,
-    pmId: topFields.pm_id,
+    pmId: envFields.pm_id,
     name: envFields.name,
     slug: t.caseTo.constantCase(envFields.name),
     version: envFields.version,
@@ -312,6 +313,7 @@ export const serviceCmd = {
     'memory',
     'cpu',
     'uptime',
+    'username',
   ],
   pm2OutputToState,
   safeDbItem,

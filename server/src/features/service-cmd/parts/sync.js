@@ -34,6 +34,7 @@ const baseService = task(t => (current = {}, next = {}) => {
       folderStatus: null,
       memory: 0,
       cpu: 0,
+      username: null,
     },
     current,
     {
@@ -127,7 +128,7 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
     t.flatten([
       t.map(key => {
         const shouldUpdate = t.or(
-          t.not(nextPlatformItem[key]),
+          t.isNil(nextPlatformItem[key]),
           t.not(t.eq(nextFsDbItem[key], nextPlatformItem[key]))
         )
         if (shouldUpdate) {
@@ -150,7 +151,7 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
               : nextFsDbItem[key]
             : t.and(t.eq(key, 'status'), t.not(nextPlatformItem[key]))
             ? null
-            : nextFsDbItem[key],
+            : nextFsDbItem[key] || nextPlatformItem[key],
         }
 
         return nextResult
@@ -350,7 +351,6 @@ export const bootCmdService = app => {
   syncTimer.onDone(() => {
     syncCmdPm2(app)
       .then(() => {
-        app.debug('SYNC SERVICES COMPLETE')
         restartSyncTimer()
       })
       .catch(error => {

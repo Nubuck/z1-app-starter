@@ -167,6 +167,8 @@ export const home = task((t, a) =>
       Button,
       Row,
       Col,
+      ViewMetric,
+      TransportButton,
     }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
@@ -180,7 +182,7 @@ export const home = task((t, a) =>
                     box={{ flexWrap: true, shadow: 'md' }}
                     className="form-dark"
                   >
-                    <VStack box={{ padding: { y: 4, left: 4 } }}>
+                    <VStack box={{ padding: { y: 4 } }}>
                       <ViewHeader
                         title="Service"
                         text="Cmd"
@@ -189,7 +191,13 @@ export const home = task((t, a) =>
                       />
                     </VStack>
                     <Spacer />
-                    <VStack y="center" box={{ padding: { y: 4 } }}>
+                    <VStack
+                      y="center"
+                      box={{
+                        padding: { y: 4 },
+                        width: ['full', { sm: 'auto' }],
+                      }}
+                    >
                       <HStack y="center">
                         <Icon
                           name="search"
@@ -209,7 +217,10 @@ export const home = task((t, a) =>
                     </VStack>
                     <VStack
                       y="center"
-                      box={{ padding: [{ y: 4 }, { sm: { left: 4 } }] }}
+                      box={{
+                        padding: [{ y: 4 }, { sm: { left: 4 } }],
+                        width: ['full', { sm: 'auto' }],
+                      }}
                     >
                       <HStack y="center">
                         <Icon
@@ -291,6 +302,21 @@ export const home = task((t, a) =>
                     </VStack>
                   </HStack>
                   <VStack box={{ padding: [null, { sm: { top: 4 } }] }}>
+                    <Row
+                      box={{
+                        padding: { bottom: 2, top: 2 },
+                        color: 'yellow-500',
+                      }}
+                    >
+                      <ViewMetric
+                        size="sm"
+                        icon="server"
+                        label="2 online"
+                        box={{ padding: { right: 4, bottom: 4 } }}
+                      />
+                      <ViewMetric size="sm" icon="server" label="2 offline" />
+                      <ViewMetric size="sm" icon="th-large" label="4 CPUs" />
+                    </Row>
                     <MapIndexed
                       list={state.data.services}
                       render={({ item, index }) => {
@@ -298,14 +324,34 @@ export const home = task((t, a) =>
                           t.eq(item.actionStatus, 'launching'),
                           t.eq(item.actionStatus, 'stopping')
                         )
-                        // const busy = true
+                        // const busy = false
+                        const primaryMetricProps = {
+                          xs: 6,
+                          sm: 3,
+                          md: 4,
+                          xl: 2,
+                          size: 'md',
+                          color: t.eq(item.status, 'online')
+                            ? 'green-500'
+                            : null,
+                        }
+                        const secondaryMetricProps = {
+                          xs: 6,
+                          sm: 3,
+                          md: 4,
+                          xl: 2,
+                          size: 'md',
+                          color: t.eq(item.status, 'online')
+                            ? 'green-600'
+                            : null,
+                        }
                         return (
                           <Row
                             key={index}
                             y="center"
                             box={{
                               margin: { y: 3 },
-                              padding: [4, { sm: { bottom: 4, top: 1, x: 6 } }],
+                              padding: [0, { sm: { bottom: 4, top: 1, x: 6 } }],
                               borderWidth: [
                                 { bottom: 2 },
                                 { sm: { left: 2, bottom: 0 } },
@@ -321,18 +367,43 @@ export const home = task((t, a) =>
                             <Col
                               xs={12}
                               sm={12}
-                              md={12}
-                              lg={3}
+                              md={6}
+                              lg={5}
+                              xl={4}
                               box={{
-                                padding: [{ bottom: 4 }, { lg: 0 }],
-                                flexDirection: [
-                                  'col',
-                                  { md: 'row', lg: 'col' },
-                                ],
+                                padding: [{ bottom: 4 }, { md: { right: 6 } }],
                               }}
                             >
                               <HStack y="top">
                                 <VStack y="center">
+                                  <TransportButton
+                                    busy={busy}
+                                    status={item.status}
+                                    onStart={() =>
+                                      mutations.formTransmit({
+                                        data: {
+                                          id: item._id,
+                                          action: 'start',
+                                        },
+                                      })
+                                    }
+                                    onStop={() =>
+                                      mutations.formTransmit({
+                                        data: {
+                                          id: item._id,
+                                          action: 'stop',
+                                        },
+                                      })
+                                    }
+                                  />
+                                </VStack>
+                                <VStack
+                                  y="top"
+                                  box={{
+                                    padding: { top: 1, right: 4 },
+                                    display: ['hidden', { sm: 'flex' }],
+                                  }}
+                                >
                                   <HStack y="center" x="center">
                                     <Icon
                                       name="cube"
@@ -346,6 +417,7 @@ export const home = task((t, a) =>
                                       }
                                       box={{
                                         opacity: busy ? 50 : 100,
+                                        width: 10,
                                       }}
                                     />
                                   </HStack>
@@ -356,7 +428,6 @@ export const home = task((t, a) =>
                                   >
                                     <When is={busy}>
                                       <Text
-                                        size="sm"
                                         weight="hairline"
                                         color="orange-500"
                                       >
@@ -364,27 +435,35 @@ export const home = task((t, a) =>
                                       </Text>
                                     </When>
                                     <When is={t.not(busy)}>
-                                      <Text size="sm" weight="hairline">
-                                        ready
-                                      </Text>
+                                      <Text weight="thin">ready</Text>
                                     </When>
                                   </HStack>
                                 </VStack>
-                                <VStack y="top" box={{ padding: { left: 6 } }}>
+                                <VStack
+                                  y="top"
+                                  box={{
+                                    position: 'relative',
+                                    padding: [
+                                      { left: 0, right: 4 },
+                                      { lg: { left: 3 } },
+                                    ],
+                                    flexWrap: true,
+                                  }}
+                                >
                                   <Text
-                                    size="2xl"
+                                    size={['xl', { sm: '2xl' }]}
                                     color={'yellow-500'}
                                     weight="semibold"
-                                    box={{
-                                      margin: {
-                                        bottom: 1,
-                                      },
-                                    }}
                                   >
                                     {item.name}
                                   </Text>
                                   <HStack y="center">
-                                    <Text weight="thin">v{item.version}</Text>
+                                    <Text
+                                      weight="thin"
+                                      box={{ padding: { top: 1 } }}
+                                    >
+                                      v{item.version}
+                                    </Text>
                                     <When is={item.autoStart}>
                                       <Spacer />
                                       <Icon
@@ -397,27 +476,29 @@ export const home = task((t, a) =>
                                       />
                                     </When>
                                   </HStack>
-                                </VStack>
-                                <VStack
-                                  y="top"
-                                  x="left"
-                                  box={{
-                                    padding: { left: 2 },
-                                    margin: { top: -2 },
-                                  }}
-                                >
-                                  <Text
-                                    weight="semibold"
-                                    size="xl"
-                                    color={
-                                      busy
-                                        ? 'orange-500'
-                                        : t.not(t.eq(item.status, 'online'))
-                                        ? 'gray-600'
-                                        : 'green-500'
-                                    }
-                                    box={{ margin: { right: 2 } }}
-                                  >{`x${item.instances || '0'}`}</Text>
+                                  <VStack
+                                    y="top"
+                                    x="left"
+                                    box={{
+                                      position: 'absolute',
+                                      pin: { top: true, right: true },
+                                      margin: { top: -4, right: -4 },
+                                      alignSelf: 'autp',
+                                    }}
+                                  >
+                                    <Text
+                                      weight="semibold"
+                                      size="xl"
+                                      color={
+                                        busy
+                                          ? 'orange-500'
+                                          : t.not(t.eq(item.status, 'online'))
+                                          ? 'gray-600'
+                                          : 'green-500'
+                                      }
+                                      box={{ margin: { right: 2 } }}
+                                    >{`x${item.instances || '0'}`}</Text>
+                                  </VStack>
                                 </VStack>
                               </HStack>
                               <HStack
@@ -426,7 +507,7 @@ export const home = task((t, a) =>
                                   padding: [
                                     { y: 2 },
                                     {
-                                      md: { left: 3, right: 6, top: 1 },
+                                      md: { right: 6, top: 1 },
                                       lg: { x: 0 },
                                     },
                                   ],
@@ -461,7 +542,7 @@ export const home = task((t, a) =>
                                   }
                                   box={{
                                     margin: {
-                                      right: 3,
+                                      right: 2,
                                     },
                                   }}
                                 >
@@ -475,7 +556,6 @@ export const home = task((t, a) =>
                                 >
                                   <Icon
                                     name="clock-o"
-                                    size="lg"
                                     box={{
                                       margin: {
                                         top: 1,
@@ -484,7 +564,6 @@ export const home = task((t, a) =>
                                     }}
                                   />
                                   <Text
-                                    size="lg"
                                     weight="thin"
                                     box={{
                                       margin: {
@@ -496,161 +575,8 @@ export const home = task((t, a) =>
                                   </Text>
                                 </When>
                               </HStack>
-                              <HStack
-                                y="center"
-                                box={{
-                                  padding: [
-                                    { y: 2 },
-                                    { md: { y: 0 }, lg: { y: 2 } },
-                                  ],
-                                }}
-                              >
-                                <Match
-                                  value={item.status}
-                                  when={{
-                                    online: (
-                                      <React.Fragment>
-                                        <Button
-                                          radius="full"
-                                          size="sm"
-                                          color={
-                                            busy
-                                              ? 'red-500'
-                                              : ['red-500', { hover: 'white' }]
-                                          }
-                                          bg={
-                                            busy
-                                              ? null
-                                              : [null, { hover: 'red-500' }]
-                                          }
-                                          border="red-500"
-                                          borderWidth={2}
-                                          disabled={busy}
-                                          box={{
-                                            padding: 2,
-                                            opacity: busy ? 50 : null,
-                                            cursor: busy ? 'wait' : 'pointer',
-                                            outline: 'none',
-                                          }}
-                                          onClick={() =>
-                                            mutations.formTransmit({
-                                              data: {
-                                                id: item._id,
-                                                action: 'stop',
-                                              },
-                                            })
-                                          }
-                                        >
-                                          <Icon
-                                            name="stop"
-                                            size="3xl"
-                                            style={{
-                                              paddingLeft: 1.8,
-                                              paddingTop: 1.5,
-                                            }}
-                                          />
-                                        </Button>
-                                        <Button
-                                          radius="full"
-                                          size="sm"
-                                          color={
-                                            busy
-                                              ? 'blue-500'
-                                              : ['blue-500', { hover: 'white' }]
-                                          }
-                                          bg={
-                                            busy
-                                              ? null
-                                              : [null, { hover: 'blue-500' }]
-                                          }
-                                          border="blue-500"
-                                          borderWidth={2}
-                                          disabled={busy}
-                                          box={{
-                                            padding: 2,
-                                            margin: { left: 5, right: 2 },
-                                            opacity: busy ? 50 : null,
-                                            cursor: busy ? 'wait' : 'pointer',
-                                            outline: 'none',
-                                          }}
-                                          onClick={() =>
-                                            mutations.formTransmit({
-                                              data: {
-                                                id: item._id,
-                                                action: 'restart',
-                                              },
-                                            })
-                                          }
-                                        >
-                                          <Icon
-                                            name="rotate-right"
-                                            size="3xl"
-                                          />
-                                        </Button>
-                                      </React.Fragment>
-                                    ),
-                                    _: (
-                                      <Button
-                                        radius="full"
-                                        size="sm"
-                                        color={
-                                          busy
-                                            ? 'green-500'
-                                            : ['green-500', { hover: 'white' }]
-                                        }
-                                        bg={
-                                          busy
-                                            ? null
-                                            : [null, { hover: 'green-500' }]
-                                        }
-                                        border="green-500"
-                                        borderWidth={2}
-                                        disabled={busy}
-                                        box={{
-                                          padding: 2,
-                                          margin: { right: 2 },
-                                          opacity: busy ? 50 : null,
-                                          cursor: busy ? 'wait' : 'pointer',
-                                          outline: 'none',
-                                        }}
-                                        onClick={() =>
-                                          mutations.formTransmit({
-                                            data: {
-                                              id: item._id,
-                                              action: 'start',
-                                            },
-                                          })
-                                        }
-                                      >
-                                        <Icon
-                                          name="play"
-                                          size="3xl"
-                                          style={{
-                                            paddingLeft: 1.8,
-                                            paddingTop: 1.5,
-                                          }}
-                                        />
-                                      </Button>
-                                    ),
-                                  }}
-                                />
-                                <When is={busy}>
-                                  <Spinner
-                                    size="md"
-                                    box={{
-                                      display: 'block',
-                                      height: 8,
-                                      width: 8,
-                                      padding: 2,
-                                      margin: {
-                                        left: 6,
-                                      },
-                                    }}
-                                  />
-                                </When>
-                              </HStack>
                             </Col>
-                            <Col stretch>
+                            <Col xs={12} sm={12} md={6} lg={7} xl={8}>
                               <Row
                                 box={{
                                   opacity: t.or(
@@ -661,270 +587,75 @@ export const home = task((t, a) =>
                                     : 100,
                                 }}
                               >
-                                <Col
-                                  y="top"
-                                  xs={6}
-                                  sm={3}
-                                  box={{ padding: { x: 4, bottom: 4 } }}
-                                >
-                                  <Row y="center" x="left">
-                                    <Icon
-                                      name="rotate-right"
-                                      size={['3xl', { lg: '4xl' }]}
-                                      box={{ margin: { right: 3, top: 1 } }}
-                                    />
-                                    <Text
-                                      size={['sm', { md: 'lg' }]}
-                                      weight="hairline"
-                                      letterSpacing="wide"
-                                    >
-                                      restarts
-                                    </Text>
-                                  </Row>
-                                  <Text
-                                    color={
-                                      t.eq(item.status, 'online')
-                                        ? 'green-400'
-                                        : null
-                                    }
-                                    weight="semibold"
-                                    size={['lg', { md: '3xl' }]}
-                                  >{`x${item.restarts || '0'}`}</Text>
-                                </Col>
-                                <Col
-                                  y="top"
-                                  xs={6}
-                                  sm={3}
-                                  box={{ padding: { x: 4, bottom: 4 } }}
-                                >
-                                  <Row y="center" x="left">
-                                    <Icon
-                                      name="hdd-o"
-                                      size={['3xl', { lg: '4xl' }]}
-                                      box={{ margin: { right: 3, top: 1 } }}
-                                    />
-                                    <Text
-                                      size={['sm', { md: 'lg' }]}
-                                      weight="hairline"
-                                      letterSpacing="wide"
-                                    >
-                                      CPU
-                                    </Text>
-                                  </Row>
-                                  <Text
-                                    color={
-                                      t.eq(item.status, 'online')
-                                        ? 'green-400'
-                                        : null
-                                    }
-                                    weight="semibold"
-                                    size={['lg', { md: '3xl' }]}
-                                  >{`${item.cpu || '0'}%`}</Text>
-                                </Col>
-                                <Col
-                                  y="top"
-                                  xs={6}
-                                  sm={3}
-                                  box={{ padding: { x: 4, bottom: 4 } }}
-                                >
-                                  <Row y="center" x="left">
-                                    <Icon
-                                      name="database"
-                                      size={['3xl', { lg: '4xl' }]}
-                                      box={{ margin: { right: 3, top: 1 } }}
-                                    />
-                                    <Text
-                                      size={['sm', { md: 'lg' }]}
-                                      weight="hairline"
-                                      letterSpacing="wide"
-                                    >
-                                      memory
-                                    </Text>
-                                  </Row>
-                                  <Text
-                                    color={
-                                      t.eq(item.status, 'online')
-                                        ? 'green-400'
-                                        : null
-                                    }
-                                    weight="semibold"
-                                    size={['lg', { md: '3xl' }]}
-                                  >{`${bytes(item.memory || 0)}`}</Text>
-                                </Col>
-                                <Col
-                                  y="top"
-                                  xs={6}
-                                  sm={3}
-                                  box={{ padding: { x: 4, bottom: 4 } }}
-                                >
-                                  <Row y="center" x="left">
-                                    <Icon
-                                      name="calendar-check-o"
-                                      size={['3xl', { lg: '4xl' }]}
-                                      box={{ margin: { right: 3, top: 1 } }}
-                                    />
-                                    <Text
-                                      size={['sm', { md: 'lg' }]}
-                                      weight="hairline"
-                                      letterSpacing="wide"
-                                    >
-                                      updated
-                                    </Text>
-                                  </Row>
-                                  <Text
-                                    color={
-                                      t.eq(item.status, 'online')
-                                        ? 'green-400'
-                                        : null
-                                    }
-                                    weight="semibold"
-                                    size={['sm', { md: 'xl' }]}
-                                    box={{ padding: { top: 2 } }}
-                                  >{`${
+                                <ViewMetric
+                                  {...primaryMetricProps}
+                                  icon="rotate-right"
+                                  label="restarts"
+                                  text={`x${item.restarts || '0'}`}
+                                />
+                                <ViewMetric
+                                  {...primaryMetricProps}
+                                  icon="hdd-o"
+                                  label="CPU"
+                                  text={`${item.cpu || '0'}%`}
+                                />
+                                <ViewMetric
+                                  {...primaryMetricProps}
+                                  icon="database"
+                                  label="memory"
+                                  text={`${t.caseTo.lowerCase(
+                                    bytes(item.memory || 0)
+                                  )}`}
+                                />
+                                {/* <ViewMetric
+                                  {...primaryMetricProps}
+                                  icon="calendar-check-o"
+                                  label="updated"
+                                  text={`${
                                     item.updatedAt
                                       ? dayjs(item.updatedAt).format(
                                           'DD-MM-YYYY HH:mm a'
                                         )
                                       : ''
-                                  }`}</Text>
-                                </Col>
-                              </Row>
-                              <Row
-                                box={{
-                                  opacity: t.or(
-                                    t.eq(item.status, 'stopped'),
-                                    t.eq(item.status, 'init')
-                                  )
-                                    ? 50
-                                    : 100,
-                                }}
-                              >
-                                <Col
-                                  y="top"
-                                  xs={6}
-                                  sm={3}
-                                  box={{ padding: { x: 4, bottom: 4 } }}
-                                >
-                                  <Row y="center" x="left">
-                                    <Icon
-                                      name="barcode"
-                                      size="3xl"
-                                      box={{ margin: { right: 3, top: 1 } }}
-                                    />
-                                    <Text
-                                      size={['sm', { md: 'lg' }]}
-                                      weight="hairline"
-                                      letterSpacing="wide"
-                                    >
-                                      pid
-                                    </Text>
-                                  </Row>
-                                  <Text
-                                    color={
-                                      t.eq(item.status, 'online')
-                                        ? 'green-500'
-                                        : null
-                                    }
-                                    weight="semibold"
-                                    size={['md', { md: 'xl' }]}
-                                  >{`${item.pid || 'none'}`}</Text>
-                                </Col>
-                                <Col
-                                  y="top"
-                                  xs={6}
-                                  sm={3}
-                                  box={{ padding: { x: 4, bottom: 4 } }}
-                                >
-                                  <Row y="center" x="left">
-                                    <Icon
-                                      name="gears"
-                                      size={['3xl', { lg: '4xl' }]}
-                                      box={{ margin: { right: 3, top: 1 } }}
-                                    />
-                                    <Text
-                                      size={['sm', { md: 'lg' }]}
-                                      weight="hairline"
-                                      letterSpacing="wide"
-                                    >
-                                      interpreter
-                                    </Text>
-                                  </Row>
-                                  <Text
-                                    color={
-                                      t.eq(item.status, 'online')
-                                        ? 'green-500'
-                                        : null
-                                    }
-                                    weight="semibold"
-                                    size={['md', { md: 'xl' }]}
-                                  >{`${item.interpreter || 'none'}`}</Text>
-                                </Col>
-                                <Col
-                                  y="top"
-                                  xs={6}
-                                  sm={3}
-                                  box={{ padding: { x: 4 } }}
-                                >
-                                  <Row y="center" x="left">
-                                    <Icon
-                                      name="plug"
-                                      size={['3xl', { lg: '4xl' }]}
-                                      box={{ margin: { right: 3, top: 1 } }}
-                                    />
-                                    <Text
-                                      size={['sm', { md: 'lg' }]}
-                                      weight="hairline"
-                                      letterSpacing="wide"
-                                    >
-                                      port
-                                    </Text>
-                                  </Row>
-                                  <Text
-                                    color={
-                                      t.eq(item.status, 'online')
-                                        ? 'green-500'
-                                        : null
-                                    }
-                                    weight="semibold"
-                                    size={['md', { md: 'xl' }]}
-                                  >{`${item.port || 'none'}`}</Text>
-                                </Col>
-                                <Col
-                                  y="top"
-                                  xs={6}
-                                  sm={3}
-                                  box={{ padding: { x: 4, bottom: 4 } }}
-                                >
-                                  <Row y="center" x="left">
-                                    <Icon
-                                      name="calendar"
-                                      size={['3xl', { lg: '4xl' }]}
-                                      box={{ margin: { right: 3, top: 1 } }}
-                                    />
-                                    <Text
-                                      size={['sm', { md: 'lg' }]}
-                                      letterSpacing="wide"
-                                      weight="hairline"
-                                    >
-                                      created
-                                    </Text>
-                                  </Row>
-                                  <Text
-                                    color={
-                                      t.eq(item.status, 'online')
-                                        ? 'green-500'
-                                        : null
-                                    }
-                                    size={['sm', { md: 'xl' }]}
-                                    weight="semibold"
-                                  >{`${
+                                  }`}
+                                /> */}
+
+                                <ViewMetric
+                                  {...secondaryMetricProps}
+                                  icon="server"
+                                  label="pm2id"
+                                  text={`${item.pmId || 'none'}`}
+                                />
+                                <ViewMetric
+                                  {...secondaryMetricProps}
+                                  icon="barcode"
+                                  label="pid"
+                                  text={`${item.pid || 'none'}`}
+                                />
+                                <ViewMetric
+                                  {...secondaryMetricProps}
+                                  icon="terminal"
+                                  label="interpreter"
+                                  text={`${item.interpreter || 'none'}`}
+                                />
+                                {/* <ViewMetric
+                                  {...secondaryMetricProps}
+                                  icon="plug"
+                                  label="port"
+                                  text={`${item.port || 'none'}`}
+                                /> */}
+                                {/* <ViewMetric
+                                  {...secondaryMetricProps}
+                                  icon="calendar"
+                                  label="created"
+                                  text={`${
                                     item.createdAt
                                       ? dayjs(item.createdAt).format(
                                           'DD-MM-YYYY HH:mm a'
                                         )
                                       : ''
-                                  }`}</Text>
-                                </Col>
+                                  }`}
+                                /> */}
                               </Row>
                             </Col>
                           </Row>
