@@ -13,11 +13,11 @@ const computeCounts = task(t => list =>
     (counts, item) =>
       t.merge(counts, {
         online: t.eq(item.status, 'online') ? counts.online + 1 : counts.online,
-        offline: t.eq(item.status, 'stopped')
-          ? counts.offline + 1
-          : counts.offline,
+        stopped: t.eq(item.status, 'stopped')
+          ? counts.stopped + 1
+          : counts.stopped,
       }),
-    { online: 0, offline: 0 },
+    { online: 0, stopped: 0 },
     list
   )
 )
@@ -46,7 +46,7 @@ export const home = task((t, a) =>
                 },
                 counts: {
                   online: 0,
-                  offline: 0,
+                  stopped: 0,
                 },
               }
             : t.isNil(nextData)
@@ -197,6 +197,7 @@ export const home = task((t, a) =>
       Col,
       ViewMetric,
       TransportButton,
+      ViewIconLabel,
     }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
@@ -206,7 +207,7 @@ export const home = task((t, a) =>
               _: <ViewSpinner />,
               ready: (
                 <React.Fragment>
-                  <HStack
+                  <Row
                     box={{ flexWrap: true, shadow: 'md' }}
                     className="form-dark"
                   >
@@ -230,7 +231,7 @@ export const home = task((t, a) =>
                         <Icon
                           name="search"
                           size="2xl"
-                          box={{ margin: { right: 3 } }}
+                          box={{ margin: { right: 2 } }}
                         />
                         <Input
                           placeholder="Search..."
@@ -246,17 +247,18 @@ export const home = task((t, a) =>
                     <VStack
                       y="center"
                       box={{
-                        padding: [{ y: 4 }, { sm: { left: 4 } }],
-                        width: ['full', { sm: 'auto' }],
+                        padding: [{ y: 4 }, { sm: { left: 2 } }],
+                        width: ['full', { md: 'auto' }],
                       }}
                     >
                       <HStack y="center">
                         <Icon
                           name="sort"
                           size="2xl"
-                          box={{ margin: { right: 3 } }}
+                          box={{ margin: { right: 2 } }}
                         />
                         <Select
+                          box={{ margin: { right: 2 } }}
                           value={state.data.sortBy}
                           onChange={event =>
                             mutations.dataChange({
@@ -275,13 +277,6 @@ export const home = task((t, a) =>
                             )}
                           />
                         </Select>
-                      </HStack>
-                    </VStack>
-                    <VStack
-                      y="center"
-                      box={{ padding: { left: 4, right: 2, y: 4 } }}
-                    >
-                      <HStack y="center">
                         <Button
                           radius="full"
                           size="sm"
@@ -328,11 +323,11 @@ export const home = task((t, a) =>
                         </Button>
                       </HStack>
                     </VStack>
-                  </HStack>
+                  </Row>
                   <VStack box={{ padding: [null, { sm: { top: 4 } }] }}>
                     <Row
                       box={{
-                        padding: { bottom: 2, top: 2 },
+                        padding: { bottom: 2, top: 4 },
                       }}
                     >
                       <ViewMetric
@@ -347,18 +342,27 @@ export const home = task((t, a) =>
                       <ViewMetric
                         size="sm"
                         icon="cube"
-                        label={`${state.data.counts.offline} offline`}
+                        label={`${state.data.counts.stopped} stopped`}
                         box={{ color: 'red-500' }}
                       />
                       <ViewMetric
                         size="sm"
-                        icon="th-large"
+                        icon="hdd-o"
                         label="4 CPUs"
                         box={{
                           padding: [
-                            { left: 0, right: 4, bottom: 4 },
-                            { sm: { x: 4, bottom: 4 } },
+                            { left: 2, right: 2, bottom: 4 },
+                            { sm: { left: 4, bottom: 4 } },
                           ],
+                          color: 'yellow-500',
+                        }}
+                      />
+                      <ViewMetric
+                        size="sm"
+                        icon="database"
+                        label="16gb RAM"
+                        box={{
+                          padding: [{ bottom: 4 }, { sm: { x: 2, bottom: 4 } }],
                           color: 'yellow-500',
                         }}
                       />
@@ -377,6 +381,9 @@ export const home = task((t, a) =>
                           md: 4,
                           xl: 2,
                           size: 'md',
+                          textBox: {
+                            padding: [{ right: 2, top: 0 }, { xl: { top: 3 } }],
+                          },
                         }
                         const primaryMetricProps = {
                           ...metricProps,
@@ -396,7 +403,7 @@ export const home = task((t, a) =>
                             y="center"
                             box={{
                               margin: { y: 3 },
-                              padding: [0, { sm: { bottom: 2, top: 2, x: 6 } }],
+                              padding: [ { top: 2}, { sm: { top: 2, x: 6 } }],
                               borderWidth: [
                                 { bottom: 2 },
                                 { sm: { left: 2, bottom: 0 } },
@@ -462,20 +469,18 @@ export const home = task((t, a) =>
                                       }
                                       box={{
                                         opacity: busy ? 50 : 100,
-                                        width: 10,
+                                        width: [8, { xl: 10 }],
+                                        textAlignX: 'center',
                                       }}
                                     />
                                   </HStack>
-                                  <HStack
-                                    y="center"
-                                    x="center"
-                                    box={{ opacity: busy ? 100 : 50 }}
-                                  >
+                                  <HStack y="center" x="center">
                                     <When is={busy}>
                                       <Text
                                         size="sm"
-                                        weight="thin"
                                         color="orange-500"
+                                        weight="thin"
+                                        letterSpacing="wide"
                                         box={{
                                           padding: { top: 1 },
                                         }}
@@ -487,6 +492,7 @@ export const home = task((t, a) =>
                                       <Text
                                         size="sm"
                                         weight="thin"
+                                        letterSpacing="wide"
                                         box={{
                                           padding: { top: 1 },
                                         }}
@@ -524,17 +530,16 @@ export const home = task((t, a) =>
                                     </Text>
                                     <When is={item.autoStart}>
                                       <Spacer />
-                                      <Text
+                                      <ViewIconLabel
+                                        icon="flag-checkered"
+                                        text="autostart"
+                                        color="blue-500"
+                                        iconSize="xl"
                                         size="sm"
-                                        color="blue-500"
-                                        box={{ padding: { right: 1 } }}
-                                      >
-                                        autostart
-                                      </Text>
-                                      <Icon
-                                        name="flag-checkered"
-                                        color="blue-500"
-                                        size="2xl"
+                                        letterSpacing="wide"
+                                        box={{ padding: { left: 1 } }}
+                                        textBox={{ margin: 0 }}
+                                        y="bottom"
                                       />
                                     </When>
                                   </HStack>
@@ -563,6 +568,7 @@ export const home = task((t, a) =>
                                   </VStack>
                                 </VStack>
                               </HStack>
+
                               <HStack
                                 y="center"
                                 box={{
@@ -576,67 +582,62 @@ export const home = task((t, a) =>
                                   opacity: busy ? 50 : null,
                                 }}
                               >
-                                <Icon
-                                  name={
+                                <ViewIconLabel
+                                  icon={
                                     t.eq(item.status, 'online')
                                       ? 'play'
                                       : 'stop'
                                   }
-                                  size="xl"
+                                  text={item.status || 'offline'}
                                   color={
                                     t.eq(item.status, 'online')
                                       ? 'green-500'
                                       : 'red-500'
                                   }
-                                  box={{
-                                    margin: {
-                                      right: 2,
-                                      top: 1,
-                                    },
-                                  }}
+                                  size="xl"
+                                  busy={busy}
+                                  box={{ margin: { right: 2 } }}
                                 />
-                                <Text
-                                  size="xl"
-                                  color={
-                                    t.eq(item.status, 'online')
-                                      ? 'green-500'
-                                      : 'red-500'
-                                  }
-                                  box={{
-                                    margin: {
-                                      right: 2,
-                                    },
-                                  }}
-                                >
-                                  {item.status || 'offline'}
-                                </Text>
                                 <When
                                   is={t.and(
                                     t.eq(item.status, 'online'),
                                     t.isType(item.uptime, 'String')
                                   )}
                                 >
-                                  <Icon
-                                    name="clock-o"
-                                    box={{
-                                      margin: {
-                                        top: 1,
-                                        x: 2,
-                                      },
-                                    }}
+                                  <ViewIconLabel
+                                    icon="arrow-up"
+                                    text={dayjs().from(
+                                      dayjs(item.uptime),
+                                      true
+                                    )}
                                   />
-                                  <Text
-                                    weight="thin"
-                                    box={{
-                                      margin: {
-                                        top: 1,
-                                      },
-                                    }}
-                                  >
-                                    {dayjs().from(dayjs(item.uptime), true)}
-                                  </Text>
                                 </When>
                               </HStack>
+                              <ViewIconLabel
+                                icon="calendar"
+                                size="sm"
+                                iconSize="lg"
+                                weight="thin"
+                                letterSpacing="wide"
+                                text={
+                                  item.updatedAt
+                                    ? `updated ${dayjs().from(
+                                        dayjs(item.updatedAt),
+                                        true
+                                      )} ago`
+                                    : ''
+                                }
+                                box={{
+                                  opacity: 75,
+                                  padding: [
+                                    { y: 2, left: 2 },
+                                    {
+                                      md: { right: 6, top: 1 },
+                                      lg: { x: 0 },
+                                    },
+                                  ],
+                                }}
+                              />
                             </Col>
                             <Col xs={12} sm={12} md={6} lg={7} xl={8}>
                               <Row
@@ -669,22 +670,9 @@ export const home = task((t, a) =>
                                     bytes(item.memory || 0)
                                   )}`}
                                 />
-                                {/* <ViewMetric
-                                  {...primaryMetricProps}
-                                  icon="calendar-check-o"
-                                  label="updated"
-                                  text={`${
-                                    item.updatedAt
-                                      ? dayjs(item.updatedAt).format(
-                                          'DD-MM-YYYY HH:mm a'
-                                        )
-                                      : ''
-                                  }`}
-                                /> */}
-
                                 <ViewMetric
                                   {...secondaryMetricProps}
-                                  icon="server"
+                                  icon="gears"
                                   label="pm2id"
                                   text={`${
                                     t.isNil(item.pmId) ? 'none' : item.pmId
@@ -704,24 +692,6 @@ export const home = task((t, a) =>
                                   label="interpreter"
                                   text={`${item.interpreter || 'none'}`}
                                 />
-                                {/* <ViewMetric
-                                  {...secondaryMetricProps}
-                                  icon="plug"
-                                  label="port"
-                                  text={`${item.port || 'none'}`}
-                                /> */}
-                                {/* <ViewMetric
-                                  {...secondaryMetricProps}
-                                  icon="calendar"
-                                  label="created"
-                                  text={`${
-                                    item.createdAt
-                                      ? dayjs(item.createdAt).format(
-                                          'DD-MM-YYYY HH:mm a'
-                                        )
-                                      : ''
-                                  }`}
-                                /> */}
                               </Row>
                             </Col>
                           </Row>

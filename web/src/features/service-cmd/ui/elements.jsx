@@ -24,7 +24,7 @@ export const elements = task(
           y={t.not(center) ? 'top' : 'center'}
           box={t.merge(
             {
-              padding: { x: 6, bottom: 8 },
+              padding: [{ x: 2, bottom: 12 }, { md: { x: 6, bottom: 8 } }],
               width: 'full',
             },
             box || {}
@@ -68,22 +68,22 @@ export const elements = task(
         </HStack>
       )
     },
-    ViewMetric({ icon, label, text, color, size, ...props }) {
+    ViewMetric({ icon, label, text, color, size, textBox, ...props }) {
       const sizes = t.getMatch(size || 'md')({
         sm: {
           icon: '3xl',
           label: ['sm', { md: 'lg' }],
-          text: ['md', { md: 'xl' }],
+          text: ['md', { xl: 'xl' }],
         },
         md: {
-          icon: ['3xl', { lg: '4xl' }],
+          icon: ['2xl', { lg: '3xl' }],
           label: ['sm', { md: 'lg' }],
-          text: ['lg', { md: '2xl' }],
+          text: ['xl', { xl: '2xl' }],
         },
         lg: {
           icon: ['4xl', { lg: '5xl' }],
           label: ['md', { md: 'xl' }],
-          text: ['xl', { md: '4xl' }],
+          text: ['xl', { xl: '4xl' }],
         },
       })
       return (
@@ -104,7 +104,10 @@ export const elements = task(
               weight="semibold"
               size={sizes.text}
               stretch
-              box={{ padding: [{ right: 2, top: 0 }, { lg: { top: 3 } }] }}
+              box={t.merge(
+                { padding: [{ right: 2, top: 0 }, { lg: { top: 3 } }] },
+                textBox || {}
+              )}
             >
               {text}
             </Text>
@@ -112,15 +115,69 @@ export const elements = task(
         </Col>
       )
     },
-    ViewStatus({ icon, text, color, size, weight, ...props }) {
+    ViewIconLabel({
+      icon,
+      text,
+      color,
+      size,
+      iconSize,
+      weight,
+      letterSpacing,
+      busy,
+      textBox,
+      ...props
+    }) {
       return (
-        <HStack {...props}>
-          <Icon name={icon} />
-          <Text>{text}</Text>
+        <HStack y="center" {...props}>
+          <Icon
+            name={icon}
+            size={iconSize || size}
+            color={color}
+            box={{
+              margin: {
+                right: 2,
+                top: 1,
+              },
+            }}
+          />
+          <Text
+            size={size}
+            weight={weight}
+            color={color}
+            box={{
+              margin: {
+                right: 2,
+              },
+              ...textBox,
+            }}
+            letterSpacing={letterSpacing}
+          >
+            {text}
+          </Text>
         </HStack>
       )
     },
     TransportButton({ status, busy, onStart, onStop }) {
+      const buttonProps = {
+        radius: 'full',
+        size: 'sm',
+        borderWidth: 2,
+        box: {
+          padding: 2,
+          margin: { x: 2 },
+          opacity: busy ? 50 : null,
+          cursor: busy ? 'wait' : 'pointer',
+          outline: 'none',
+        },
+        disabled: busy,
+      }
+      const iconProps = {
+        size: '3xl',
+        style: {
+          paddingLeft: 1.8,
+          paddingTop: 1.5,
+        },
+      }
       return (
         <HStack
           y="center"
@@ -136,60 +193,26 @@ export const elements = task(
               when={{
                 online: (
                   <Button
-                    radius="full"
-                    size="sm"
+                    {...buttonProps}
                     color={busy ? 'red-500' : ['red-500', { hover: 'white' }]}
                     bg={busy ? null : [null, { hover: 'red-500' }]}
                     border="red-500"
-                    borderWidth={2}
-                    disabled={busy}
-                    box={{
-                      padding: 2,
-                      margin: { x: 2 },
-                      opacity: busy ? 50 : null,
-                      cursor: busy ? 'wait' : 'pointer',
-                      outline: 'none',
-                    }}
                     onClick={() => onStart && onStop()}
                   >
-                    <Icon
-                      name="stop"
-                      size="3xl"
-                      style={{
-                        paddingLeft: 1.8,
-                        paddingTop: 1.5,
-                      }}
-                    />
+                    <Icon {...iconProps} name="stop" />
                   </Button>
                 ),
                 _: (
                   <Button
-                    radius="full"
-                    size="sm"
+                    {...buttonProps}
                     color={
                       busy ? 'green-500' : ['green-500', { hover: 'white' }]
                     }
                     bg={busy ? null : [null, { hover: 'green-500' }]}
                     border="green-500"
-                    borderWidth={2}
-                    disabled={busy}
-                    box={{
-                      padding: 2,
-                      margin: { x: 2 },
-                      opacity: busy ? 50 : null,
-                      cursor: busy ? 'wait' : 'pointer',
-                      outline: 'none',
-                    }}
                     onClick={() => onStart && onStart()}
                   >
-                    <Icon
-                      name="play"
-                      size="3xl"
-                      style={{
-                        paddingLeft: 1.8,
-                        paddingTop: 1.5,
-                      }}
-                    />
+                    <Icon {...iconProps} name="play" />
                   </Button>
                 ),
               }}
