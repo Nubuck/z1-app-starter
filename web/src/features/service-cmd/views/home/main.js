@@ -7,6 +7,20 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.extend(relativeTime)
 
+// tasks
+const computeCounts = task(t => list =>
+  t.reduce(
+    (counts, item) =>
+      t.merge(counts, {
+        online: t.eq(item.status, 'online') ? counts.online + 1 : counts.online,
+        offline: t.eq(item.status, 'stopped')
+          ? counts.offline + 1
+          : counts.offline,
+      }),
+    { online: 0, offline: 0 },
+    list
+  )
+)
 // main
 export const home = task((t, a) =>
   createView('home', {
@@ -29,6 +43,10 @@ export const home = task((t, a) =>
                   size: null,
                   width: null,
                   height: null,
+                },
+                counts: {
+                  online: 0,
+                  offline: 0,
                 },
               }
             : t.isNil(nextData)
@@ -64,6 +82,7 @@ export const home = task((t, a) =>
           status,
           data: {
             services: cmdResult.data,
+            counts: computeCounts(cmdResult.data),
           },
           error: null,
         }
@@ -109,7 +128,10 @@ export const home = task((t, a) =>
         )
         dispatch(
           mutations.dataChange({
-            data: { services: nextServices },
+            data: {
+              services: nextServices,
+              counts: computeCounts(nextServices),
+            },
             status: VIEW_STATUS.READY,
           })
         )
@@ -121,7 +143,10 @@ export const home = task((t, a) =>
         if (transportErr) {
           dispatch(
             mutations.dataChange({
-              data: { services: viewData.services },
+              data: {
+                services: viewData.services,
+                counts: computeCounts(viewData.services),
+              },
               status: VIEW_STATUS.READY,
             })
           )
@@ -138,7 +163,10 @@ export const home = task((t, a) =>
         )
         dispatch(
           mutations.dataChange({
-            data: { services: resultServices },
+            data: {
+              services: resultServices,
+              counts: computeCounts(resultServices),
+            },
             status: VIEW_STATUS.READY,
           })
         )
@@ -305,17 +333,35 @@ export const home = task((t, a) =>
                     <Row
                       box={{
                         padding: { bottom: 2, top: 2 },
-                        color: 'yellow-500',
                       }}
                     >
                       <ViewMetric
                         size="sm"
-                        icon="server"
-                        label="2 online"
-                        box={{ padding: { right: 4, bottom: 4 } }}
+                        icon="cube"
+                        label={`${state.data.counts.online} online`}
+                        box={{
+                          padding: { right: 4, bottom: 4 },
+                          color: 'green-500',
+                        }}
                       />
-                      <ViewMetric size="sm" icon="server" label="2 offline" />
-                      <ViewMetric size="sm" icon="th-large" label="4 CPUs" />
+                      <ViewMetric
+                        size="sm"
+                        icon="cube"
+                        label={`${state.data.counts.offline} offline`}
+                        box={{ color: 'red-500' }}
+                      />
+                      <ViewMetric
+                        size="sm"
+                        icon="th-large"
+                        label="4 CPUs"
+                        box={{
+                          padding: [
+                            { left: 0, right: 4, bottom: 4 },
+                            { sm: { x: 4, bottom: 4 } },
+                          ],
+                          color: 'yellow-500',
+                        }}
+                      />
                     </Row>
                     <MapIndexed
                       list={state.data.services}
@@ -325,22 +371,21 @@ export const home = task((t, a) =>
                           t.eq(item.actionStatus, 'stopping')
                         )
                         // const busy = false
-                        const primaryMetricProps = {
+                        const metricProps = {
                           xs: 6,
                           sm: 3,
                           md: 4,
                           xl: 2,
                           size: 'md',
+                        }
+                        const primaryMetricProps = {
+                          ...metricProps,
                           color: t.eq(item.status, 'online')
                             ? 'green-500'
                             : null,
                         }
                         const secondaryMetricProps = {
-                          xs: 6,
-                          sm: 3,
-                          md: 4,
-                          xl: 2,
-                          size: 'md',
+                          ...metricProps,
                           color: t.eq(item.status, 'online')
                             ? 'green-600'
                             : null,
@@ -351,7 +396,7 @@ export const home = task((t, a) =>
                             y="center"
                             box={{
                               margin: { y: 3 },
-                              padding: [0, { sm: { bottom: 4, top: 1, x: 6 } }],
+                              padding: [0, { sm: { bottom: 2, top: 2, x: 6 } }],
                               borderWidth: [
                                 { bottom: 2 },
                                 { sm: { left: 2, bottom: 0 } },
@@ -400,14 +445,14 @@ export const home = task((t, a) =>
                                 <VStack
                                   y="top"
                                   box={{
-                                    padding: { top: 1, right: 4, left: 2 },
+                                    padding: { right: 4, left: 2 },
                                     display: ['hidden', { sm: 'flex' }],
                                   }}
                                 >
                                   <HStack y="center" x="center">
                                     <Icon
                                       name="cube"
-                                      size="4xl"
+                                      size={['3xl', { xl: '4xl' }]}
                                       color={
                                         busy
                                           ? 'orange-500'
@@ -428,14 +473,26 @@ export const home = task((t, a) =>
                                   >
                                     <When is={busy}>
                                       <Text
-                                        weight="hairline"
+                                        size="sm"
+                                        weight="thin"
                                         color="orange-500"
+                                        box={{
+                                          padding: { top: 1 },
+                                        }}
                                       >
                                         {item.action || 'busy'}
                                       </Text>
                                     </When>
                                     <When is={t.not(busy)}>
-                                      <Text weight="thin">ready</Text>
+                                      <Text
+                                        size="sm"
+                                        weight="thin"
+                                        box={{
+                                          padding: { top: 1 },
+                                        }}
+                                      >
+                                        ready
+                                      </Text>
                                     </When>
                                   </HStack>
                                 </VStack>
@@ -451,14 +508,15 @@ export const home = task((t, a) =>
                                   }}
                                 >
                                   <Text
-                                    size={['xl', { sm: '2xl' }]}
+                                    size={['xl', { xl: '2xl' }]}
                                     color={'yellow-500'}
                                     weight="semibold"
                                   >
                                     {item.name}
                                   </Text>
-                                  <HStack y="center">
+                                  <HStack y="bottom">
                                     <Text
+                                      size="sm"
                                       weight="thin"
                                       box={{ padding: { top: 1 } }}
                                     >
@@ -466,13 +524,17 @@ export const home = task((t, a) =>
                                     </Text>
                                     <When is={item.autoStart}>
                                       <Spacer />
+                                      <Text
+                                        size="sm"
+                                        color="blue-500"
+                                        box={{ padding: { right: 1 } }}
+                                      >
+                                        autostart
+                                      </Text>
                                       <Icon
                                         name="flag-checkered"
                                         color="blue-500"
                                         size="2xl"
-                                        box={{
-                                          padding: 1,
-                                        }}
                                       />
                                     </When>
                                   </HStack>
@@ -505,7 +567,7 @@ export const home = task((t, a) =>
                                 y="center"
                                 box={{
                                   padding: [
-                                    { y: 2 },
+                                    { y: 2, left: 2 },
                                     {
                                       md: { right: 6, top: 1 },
                                       lg: { x: 0 },
@@ -624,13 +686,17 @@ export const home = task((t, a) =>
                                   {...secondaryMetricProps}
                                   icon="server"
                                   label="pm2id"
-                                  text={`${item.pmId || 'none'}`}
+                                  text={`${
+                                    t.isNil(item.pmId) ? 'none' : item.pmId
+                                  }`}
                                 />
                                 <ViewMetric
                                   {...secondaryMetricProps}
                                   icon="barcode"
                                   label="pid"
-                                  text={`${item.pid || 'none'}`}
+                                  text={`${
+                                    t.isNil(item.pid) ? 'none' : item.pid
+                                  }`}
                                 />
                                 <ViewMetric
                                   {...secondaryMetricProps}

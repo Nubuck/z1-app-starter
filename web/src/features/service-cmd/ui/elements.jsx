@@ -104,7 +104,7 @@ export const elements = task(
               weight="semibold"
               size={sizes.text}
               stretch
-              box={{ padding: { right: 2, top: 3 } }}
+              box={{ padding: [{ right: 2, top: 0 }, { lg: { top: 3 } }] }}
             >
               {text}
             </Text>
