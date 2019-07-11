@@ -400,7 +400,7 @@ export const home = task((t, a) =>
                                 <VStack
                                   y="top"
                                   box={{
-                                    padding: { top: 1, right: 4 },
+                                    padding: { top: 1, right: 4, left: 2 },
                                     display: ['hidden', { sm: 'flex' }],
                                   }}
                                 >
