@@ -690,45 +690,45 @@
     "@z1/lib-api-box-client-core" "^0.2.9"
     localforage "^1.6.0"
 
-"@z1/lib-feature-box@^0.2.10":
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/@z1/lib-feature-box/-/lib-feature-box-0.2.10.tgz#240dc123a3a00b4bc14a5707932d1d00bc1b00b6"
-  integrity sha512-qXYIXuQQiW9Bdowa6QfMfOB3c3o3sYSdfx2X4j+1eplSMb4jbbDmYYZRYwvOInRBY1olmbTKz2KzjrLZtTeQ4g==
+"@z1/lib-feature-box@^0.2.41":
+  version "0.2.41"
+  resolved "https://registry.yarnpkg.com/@z1/lib-feature-box/-/lib-feature-box-0.2.41.tgz#e3808f62a22d2b0acb8c3b3c4de9df7c59671131"
+  integrity sha512-5/51g/2iDjSztRmiXxbNFgMSXNYicmrm6HuAOxcSz6wqYG5wrYIwOoJGe2uGlwRIUFrK0kvgcPE0kI8xXncSIA==
   dependencies:
-    "@z1/lib-state-box" "^0.2.10"
+    "@z1/lib-state-box" "^0.2.41"
     redux-first-router "^2.1.1"
     redux-first-router-link "^2.1.1"
     redux-first-router-restore-scroll "^1.2.2"
 
-"@z1/lib-feature-macros@^0.2.40":
-  version "0.2.40"
-  resolved "https://registry.yarnpkg.com/@z1/lib-feature-macros/-/lib-feature-macros-0.2.40.tgz#c5e004e8d227dfd0c7d9e8514c91fb922d96903f"
-  integrity sha512-z0nQ4oM6nEg3cXB0p75cE0iW56o4ZLIDKJNGCa2+A1LPc8S7PYFw6kX+WG/fTOMc3of8KkY1eSMjzsVowVcZqA==
+"@z1/lib-feature-macros@^0.2.41":
+  version "0.2.41"
+  resolved "https://registry.yarnpkg.com/@z1/lib-feature-macros/-/lib-feature-macros-0.2.41.tgz#089bc0e09729e10f1084ada010566de480781237"
+  integrity sha512-3AnltKL6mG5xOAxBx7T9OCmPkeFCFWGJaPDyCxSY1rWLpjEQIg6jQWRzXSWGB9nFfw35OSOLjgNn8j7D7WJanw==
 
-"@z1/lib-state-box-core@^0.2.10":
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/@z1/lib-state-box-core/-/lib-state-box-core-0.2.10.tgz#5de94b2ffd61138bbbdbeef891c06040b2fb2f3d"
-  integrity sha512-MKQXxZpWdLN0jR2XRuMu3GQ3IHKj2YncGMd0Zra0QPM0IR6sP+xbHxqBo4rbljCzUz+aOUFTYPGcDhR1Dv/16Q==
+"@z1/lib-state-box-core@^0.2.41":
+  version "0.2.41"
+  resolved "https://registry.yarnpkg.com/@z1/lib-state-box-core/-/lib-state-box-core-0.2.41.tgz#8f11d53f0f6d53173956bcf0b696f1b991f87c9a"
+  integrity sha512-7x9F3FXDa1wpKcZwjvpZmSDs01juwXk+zhor6xB6jVlq+9LRBH6vS69qo5LJLvuBfBLnzuMwK5vWq2IS1/wsIA==
   dependencies:
     "@z1/preset-task" "^0.2.9"
     redux-logic "^2.1.1"
     redux-toolbelt "^2.2.6"
     rxjs "^6.5.2"
 
-"@z1/lib-state-box@^0.2.10":
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/@z1/lib-state-box/-/lib-state-box-0.2.10.tgz#c4ea86f0a32f5c401b89d469a43027fb1ddd295a"
-  integrity sha512-kWDxYaXPvy4WthUFnygOBIjhX1XwqEikK1aVnKVaOBzCNwNLr2VDs3xOi288+8Va9KEeJANO8u3TpWjfHLsodQ==
+"@z1/lib-state-box@^0.2.41":
+  version "0.2.41"
+  resolved "https://registry.yarnpkg.com/@z1/lib-state-box/-/lib-state-box-0.2.41.tgz#c002a98af526e69b7d371e8d391e61a569dceba3"
+  integrity sha512-iURiFbwIvozQ0OyEVu+QPjqDOGQTaBqyI431BytXTFrN5ylEYIflvzw4rnHDZ5NjyKMJbbuEPKDuz/htNbU/mg==
   dependencies:
-    "@z1/lib-state-box-core" "^0.2.10"
+    "@z1/lib-state-box-core" "^0.2.41"
     redux-logger "^3.0.6"
 
-"@z1/lib-ui-box-elements@^0.2.40":
-  version "0.2.40"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-elements/-/lib-ui-box-elements-0.2.40.tgz#7dc29bc3b19673e7a62049dc58e700ab85c7d0f0"
-  integrity sha512-TqTvBwvF111j1T0O2GauctjgEn8Fr2+SWMvEaVZ82dC8Q9LVW61nMzHTpzg5EYCN7aaZsZPwWSoRsCwGIl+APg==
+"@z1/lib-ui-box-elements@^0.2.41":
+  version "0.2.41"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-elements/-/lib-ui-box-elements-0.2.41.tgz#5f1484245b0b12ede30d15eda43263a6024f98ca"
+  integrity sha512-8PLREDqlYjJ/OXmJicHCoBp2X52lGN9v7U2doeo3IOOuVgN6H67SvqjCjj3Sqs1JF6lqVWH5CPMlj5j+EqJIEQ==
   dependencies:
-    "@z1/lib-ui-box-tailwind" "^0.2.18"
+    "@z1/lib-ui-box-tailwind" "^0.2.41"
     "@z1/preset-task" "^0.2.9"
     react-value "^0.2.0"
 
@@ -739,10 +739,10 @@
   dependencies:
     "@z1/preset-task" "^0.2.9"
 
-"@z1/lib-ui-box-tailwind@^0.2.18":
-  version "0.2.18"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-tailwind/-/lib-ui-box-tailwind-0.2.18.tgz#95f865dad4cce4992a6595a23d92b45d4ce6b9e3"
-  integrity sha512-0/pdQfJtbKM1/v66zlguMoxl03I6aT5loRUE6oXr+6IstXHKDqr483wmVKAn00AX96nHzDdXuYSIQYEEUFcywA==
+"@z1/lib-ui-box-tailwind@^0.2.41":
+  version "0.2.41"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-tailwind/-/lib-ui-box-tailwind-0.2.41.tgz#6961c4e170f1c9e52cdd462f0dd1ae24812a6282"
+  integrity sha512-Y8QYUNR1tuzp2oAsxTmPUSGufYPgYq1CYYee+vcAR2GYqDnpS3z59vC6KPfiSdze/uuChnv22gNOtMhPmExGaQ==
   dependencies:
     "@z1/preset-task" "^0.2.9"
 

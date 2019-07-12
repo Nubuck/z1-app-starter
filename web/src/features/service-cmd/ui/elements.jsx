@@ -22,13 +22,11 @@ export const elements = task(
         <VStack
           x="left"
           y={t.not(center) ? 'top' : 'center'}
-          box={t.merge(
-            {
-              padding: [{ x: 2, bottom: 12 }, { md: { x: 6, bottom: 8 } }],
-              width: 'full',
-            },
-            box || {}
-          )}
+          box={{
+            padding: [{ x: 2, bottom: 12 }, { md: { x: 6, bottom: 8 } }],
+            width: 'full',
+          }}
+          next={ui => ui.next(box || {})}
         >
           {children}
         </VStack>
