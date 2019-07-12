@@ -1,4 +1,4 @@
-<p align="center"><img align="center" style="width:320px" src="/_artwork/z1.png"/></p><br/>
+<p align="center"><img align="center" style="width:320px" src="https://rawcdn.githack.com/Nubuck/z1-app-starter/32d3d1c5c0761a16d2e21947da9a2e82657cf9f8/_artwork/z1.png"/></p><br/>
 
 
 # Z1 App Starter
