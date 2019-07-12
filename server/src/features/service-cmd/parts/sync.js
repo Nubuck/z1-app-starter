@@ -219,19 +219,16 @@ export const syncCmdPm2 = task((t, a) => async app => {
         t.map(service => [service.slug, service], fsStateResult || [])
       )
   // app.debug('FS SERVICES', fsServices)
+
   // db state
-  // const [dbServicesError, dbServicesResult] = await a.of(
-  //   app.service('service-cmd').find({
-  //     query: {
-  //       $limit: 0,
-  //     },
-  //   })
-  // )
   const [dbServicesError, dbServicesResult] = await a.of(
     app.service('service-cmd').find()
   )
-
+  //     query: {
+  //       $limit: 0,
+  //     },
   // app.debug('DB SERVICES RESULT', dbServicesResult)
+
   if (dbServicesError) {
     app.error('SERVICE CMD DB SYNC ERROR', dbServicesError)
   }
@@ -243,6 +240,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
         t.map(service => [service.slug, service], dbServicesResult.data || [])
       )
   // app.debug('DB SERVICES', dbServices)
+
   // platform state
   const [platformError, platformResult] = await a.of(serviceCmd.list())
   if (platformError) {
@@ -260,6 +258,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
         )
       )
   // app.debug('PLATFORM SERVICES', platformState)
+
   // next state
   const dbKeys = t.keys(dbServices)
   const fsKeys = t.keys(fsServices)
@@ -284,6 +283,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
     platformState
   )
   // app.debug('NEXT STATE SERVICES', nextFsDbPlatformState)
+
   const patchKeys = t.map(
     nextKey => nextFsDbPlatformState[nextKey].slug,
     t.filter(key => {
@@ -294,7 +294,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
     }, t.keys(nextFsDbPlatformState))
   )
 
-  // app.debug('SERVICE SYNC patchKeys', patchKeys)
   const syncResult = await a.map(patchKeys, 1, async key => {
     const syncItem = t.omit(
       ['updatedAt', 'createdAt'],
@@ -314,23 +313,32 @@ export const syncCmdPm2 = task((t, a) => async app => {
       ? t.merge(syncItem, { action: 'start' })
       : syncItem
     const params = t.not(shouldStart) ? { skipCmd: true } : undefined
-
     // app.debug('SERVICE SYNC PAYLOAD', payload, params)
+
+    if (t.isNil(payload._id)) {
+      const [createError, createResult] = await a.of(
+        app.service('service-cmd').create(payload)
+      )
+      if (createError) {
+        app.error('SERVICE CMD CREATE ERROR', createError)
+      }
+      return createResult || syncItem
+    }
+
     const [patchError, patchResult] = await a.of(
       app.service('service-cmd').patch(payload._id, payload, params)
     )
     if (patchError) {
-      app.error('SERVICE CMD PATH ERROR', patchError)
+      app.error('SERVICE CMD PATCH ERROR', patchError)
     }
     return patchResult || syncItem
   })
   // app.debug('SERVICE SYNC RESULT', syncResult)
-
   return syncResult
 })
 
 export const bootCmdService = app => {
-  const syncInterval = 1000 * 15
+  const syncInterval = 1000 * app.get('cmd').service.interval
   const syncTimer = new Stopwatch(syncInterval)
   const restartSyncTimer = () => {
     syncTimer.stop()
@@ -344,17 +352,18 @@ export const bootCmdService = app => {
       syncTimer.start()
     })
     .catch(error => {
-      app.error('SYNC SERVICES Setup error', error)
+      app.error('SYNC SERVICES SETUP ERROR', error)
       syncTimer.start()
     })
   // repeat
   syncTimer.onDone(() => {
     syncCmdPm2(app)
       .then(() => {
+        app.debug('SYNC SERVICES COMPLETE', new Date())
         restartSyncTimer()
       })
       .catch(error => {
-        app.error('SYNC SERVICES Setup error', error)
+        app.error('SYNC SERVICES TIMER ERROR', error)
         restartSyncTimer()
       })
   })

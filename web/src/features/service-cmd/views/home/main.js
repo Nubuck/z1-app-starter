@@ -13,7 +13,10 @@ const computeCounts = task(t => list =>
     (counts, item) =>
       t.merge(counts, {
         online: t.eq(item.status, 'online') ? counts.online + 1 : counts.online,
-        stopped: t.eq(item.status, 'stopped')
+        stopped: t.or(
+          t.isNil(item.status),
+          t.or(t.eq(item.status, 'stopped'), t.eq(item.status, 'init'))
+        )
           ? counts.stopped + 1
           : counts.stopped,
       }),
@@ -327,33 +330,16 @@ export const home = task((t, a) =>
                   <VStack box={{ padding: [null, { sm: { top: 4 } }] }}>
                     <Row
                       box={{
-                        padding: { bottom: 2, top: 4 },
+                        padding: { bottom: 2, top: 2 },
                       }}
                     >
-                      <ViewMetric
-                        size="sm"
-                        icon="cube"
-                        label={`${state.data.counts.online} online`}
-                        box={{
-                          padding: { right: 4, bottom: 4 },
-                          color: 'green-500',
-                        }}
-                      />
-                      <ViewMetric
-                        size="sm"
-                        icon="cube"
-                        label={`${state.data.counts.stopped} stopped`}
-                        box={{ color: 'red-500' }}
-                      />
                       <ViewMetric
                         size="sm"
                         icon="hdd-o"
                         label="4 CPUs"
                         box={{
-                          padding: [
-                            { left: 2, right: 2, bottom: 4 },
-                            { sm: { left: 4, bottom: 4 } },
-                          ],
+                          padding: { right: 4, bottom: 4 },
+
                           color: 'yellow-500',
                         }}
                       />
@@ -362,8 +348,28 @@ export const home = task((t, a) =>
                         icon="database"
                         label="16gb RAM"
                         box={{
-                          padding: [{ bottom: 4 }, { sm: { x: 2, bottom: 4 } }],
                           color: 'yellow-500',
+                        }}
+                      />
+                      <ViewMetric
+                        size="sm"
+                        icon="cube"
+                        label={`${state.data.counts.online} online`}
+                        box={{
+                          padding: [
+                            { left: 2, right: 2, bottom: 4 },
+                            { sm: { left: 4, bottom: 4 } },
+                          ],
+                          color: 'green-500',
+                        }}
+                      />
+                      <ViewMetric
+                        size="sm"
+                        icon="cube"
+                        label={`${state.data.counts.stopped} stopped`}
+                        box={{
+                          padding: [{ bottom: 4 }, { sm: { x: 2, bottom: 4 } }],
+                          color: 'red-500',
                         }}
                       />
                     </Row>
@@ -403,7 +409,7 @@ export const home = task((t, a) =>
                             y="center"
                             box={{
                               margin: { y: 3 },
-                              padding: [ { top: 2}, { sm: { top: 2, x: 6 } }],
+                              padding: [{ top: 2 }, { sm: { top: 2, x: 6 } }],
                               borderWidth: [
                                 { bottom: 2 },
                                 { sm: { left: 2, bottom: 0 } },
@@ -643,8 +649,11 @@ export const home = task((t, a) =>
                               <Row
                                 box={{
                                   opacity: t.or(
-                                    t.eq(item.status, 'stopped'),
-                                    t.eq(item.status, 'init')
+                                    t.isNil(item.status),
+                                    t.or(
+                                      t.eq(item.status, 'stopped'),
+                                      t.eq(item.status, 'init')
+                                    )
                                   )
                                     ? 50
                                     : 100,
