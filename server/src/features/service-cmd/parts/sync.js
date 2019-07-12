@@ -218,16 +218,11 @@ export const syncCmdPm2 = task((t, a) => async app => {
     : t.fromPairs(
         t.map(service => [service.slug, service], fsStateResult || [])
       )
-  // app.debug('FS SERVICES', fsServices)
 
   // db state
   const [dbServicesError, dbServicesResult] = await a.of(
     app.service('service-cmd').find()
   )
-  //     query: {
-  //       $limit: 0,
-  //     },
-  // app.debug('DB SERVICES RESULT', dbServicesResult)
 
   if (dbServicesError) {
     app.error('SERVICE CMD DB SYNC ERROR', dbServicesError)
@@ -239,7 +234,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
     : t.fromPairs(
         t.map(service => [service.slug, service], dbServicesResult.data || [])
       )
-  // app.debug('DB SERVICES', dbServices)
 
   // platform state
   const [platformError, platformResult] = await a.of(serviceCmd.list())
@@ -257,7 +251,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
           platformResult || []
         )
       )
-  // app.debug('PLATFORM SERVICES', platformState)
 
   // next state
   const dbKeys = t.keys(dbServices)
@@ -282,7 +275,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
     syncFsDbState(fsServices, dbServices),
     platformState
   )
-  // app.debug('NEXT STATE SERVICES', nextFsDbPlatformState)
 
   const patchKeys = t.map(
     nextKey => nextFsDbPlatformState[nextKey].slug,
@@ -294,7 +286,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
     }, t.keys(nextFsDbPlatformState))
   )
 
-  const syncResult = await a.map(patchKeys, 1, async key => {
+  return await a.map(patchKeys, 1, async key => {
     const syncItem = t.omit(
       ['updatedAt', 'createdAt'],
       nextFsDbPlatformState[key]
@@ -313,7 +305,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
       ? t.merge(syncItem, { action: 'start' })
       : syncItem
     const params = t.not(shouldStart) ? { skipCmd: true } : undefined
-    // app.debug('SERVICE SYNC PAYLOAD', payload, params)
 
     if (t.isNil(payload._id)) {
       const [createError, createResult] = await a.of(
@@ -333,8 +324,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
     }
     return patchResult || syncItem
   })
-  // app.debug('SERVICE SYNC RESULT', syncResult)
-  return syncResult
 })
 
 export const bootCmdService = app => {
