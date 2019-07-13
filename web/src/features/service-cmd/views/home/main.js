@@ -294,6 +294,7 @@ export const home = task((t, a) =>
                                 : 'yellow-500',
                             },
                           ]}
+                          box={{ padding: { x: 1 } }}
                           onClick={() =>
                             mutations.dataChange({
                               data: { sortDirection: 'asc' },
@@ -316,6 +317,7 @@ export const home = task((t, a) =>
                                 : 'yellow-500',
                             },
                           ]}
+                          box={{ padding: { x: 1 } }}
                           onClick={() =>
                             mutations.dataChange({
                               data: { sortDirection: 'desc' },
@@ -366,7 +368,7 @@ export const home = task((t, a) =>
                       <ViewMetric
                         size="sm"
                         icon="cube"
-                        label={`${state.data.counts.stopped} stopped`}
+                        label={`${state.data.counts.stopped} offline`}
                         box={{
                           padding: [{ bottom: 4 }, { sm: { x: 2, bottom: 4 } }],
                           color: 'red-500',
@@ -556,7 +558,7 @@ export const home = task((t, a) =>
                                       position: 'absolute',
                                       pin: { top: true, right: true },
                                       margin: { top: -4, right: -4 },
-                                      alignSelf: 'autp',
+                                      alignSelf: 'auto',
                                     }}
                                   >
                                     <Text
@@ -634,7 +636,7 @@ export const home = task((t, a) =>
                                     : ''
                                 }
                                 box={{
-                                  opacity: 75,
+                                  opacity: 50,
                                   padding: [
                                     { y: 2, left: 2 },
                                     {

@@ -723,12 +723,12 @@
     "@z1/lib-state-box-core" "^0.2.41"
     redux-logger "^3.0.6"
 
-"@z1/lib-ui-box-elements@^0.2.41":
-  version "0.2.41"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-elements/-/lib-ui-box-elements-0.2.41.tgz#5f1484245b0b12ede30d15eda43263a6024f98ca"
-  integrity sha512-8PLREDqlYjJ/OXmJicHCoBp2X52lGN9v7U2doeo3IOOuVgN6H67SvqjCjj3Sqs1JF6lqVWH5CPMlj5j+EqJIEQ==
+"@z1/lib-ui-box-elements@^0.2.42":
+  version "0.2.42"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-elements/-/lib-ui-box-elements-0.2.42.tgz#036ac3c7744708f9925dcc3dabd10bcc8a90d461"
+  integrity sha512-Ga1Fft3tppwMx3J/N4cOEYsA8YAuREpx5kmwIUz+uMLLeGHEy0l7geVC/LoDCzMqvtZEasTtU9fcLKaAlqcIHQ==
   dependencies:
-    "@z1/lib-ui-box-tailwind" "^0.2.41"
+    "@z1/lib-ui-box-tailwind" "^0.2.42"
     "@z1/preset-task" "^0.2.9"
     react-value "^0.2.0"
 
@@ -739,10 +739,10 @@
   dependencies:
     "@z1/preset-task" "^0.2.9"
 
-"@z1/lib-ui-box-tailwind@^0.2.41":
-  version "0.2.41"
-  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-tailwind/-/lib-ui-box-tailwind-0.2.41.tgz#6961c4e170f1c9e52cdd462f0dd1ae24812a6282"
-  integrity sha512-Y8QYUNR1tuzp2oAsxTmPUSGufYPgYq1CYYee+vcAR2GYqDnpS3z59vC6KPfiSdze/uuChnv22gNOtMhPmExGaQ==
+"@z1/lib-ui-box-tailwind@^0.2.42":
+  version "0.2.42"
+  resolved "https://registry.yarnpkg.com/@z1/lib-ui-box-tailwind/-/lib-ui-box-tailwind-0.2.42.tgz#d12c97ad9f440e5289d9e337e4b5e0c79a4316af"
+  integrity sha512-IDB6lHXs6KLcR7vKVMggKekou3ntTJ6a3NNbq1KyN5UQ2T8B8AWyDodZi98ft4Tz0hrK68f6l38nTuMUUv3ezw==
   dependencies:
     "@z1/preset-task" "^0.2.9"
 

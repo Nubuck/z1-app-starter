@@ -20,22 +20,20 @@ export const elements = task(
         <VStack
           x="center"
           y={t.not(center) ? 'top' : 'center'}
-          box={t.merge(
-            {
-              padding: { x: 4, top: 8, bottom: 4 },
-              width: [
-                'full',
-                {
-                  sm: '8/12',
-                  md: t.not(large) ? '5/12' : '6/12',
-                  lg: t.not(large) ? '4/12' : '5/12',
-                  xl: t.not(large) ? '3/12' : '4/12',
-                },
-              ],
-              margin: { x: 'auto' },
-            },
-            box || {}
-          )}
+          box={{
+            padding: { x: 4, top: 8, bottom: 4 },
+            width: [
+              'full',
+              {
+                sm: '8/12',
+                md: t.not(large) ? '5/12' : '6/12',
+                lg: t.not(large) ? '4/12' : '5/12',
+                xl: t.not(large) ? '3/12' : '4/12',
+              },
+            ],
+            margin: { x: 'auto' },
+          }}
+          next={ui => ui.next(box || {})}
         >
           {children}
         </VStack>
@@ -126,7 +124,8 @@ export const elements = task(
           radius="lg"
           border={[nextColor, { hover: nextColor }]}
           borderWidth={2}
-          box={t.merge({ width: 'full' }, box || {})}
+          box={{ width: 'full' }}
+          next={ui => ui.next(box || {})}
           style={{ minHeight: 55 }}
           disabled={loading}
           {...props}
@@ -159,17 +158,15 @@ export const elements = task(
             as={Link}
             to={to}
             alignX="center"
-            box={t.merge(
-              {
-                fontWeight: 'bold',
-                color: ['green-500', { hover: 'white' }],
-                justifyContent: 'center',
-                display: 'flex',
-                flexDirection: 'col',
-                padding: { x: 3 },
-              },
-              textBox || {}
-            )}
+            box={{
+              fontWeight: 'bold',
+              color: ['green-500', { hover: 'white' }],
+              justifyContent: 'center',
+              display: 'flex',
+              flexDirection: 'col',
+              padding: { x: 3 },
+            }}
+            next={ui => ui.next(textBox || {})}
           >
             {text || children}
           </Text>

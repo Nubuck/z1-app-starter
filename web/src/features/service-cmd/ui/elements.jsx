@@ -102,10 +102,8 @@ export const elements = task(
               weight="semibold"
               size={sizes.text}
               stretch
-              box={t.merge(
-                { padding: [{ right: 2, top: 0 }, { lg: { top: 3 } }] },
-                textBox || {}
-              )}
+              box={{ padding: [{ right: 2, top: 0 }, { lg: { top: 3 } }] }}
+              next={ui => ui.next(textBox || {})}
             >
               {text}
             </Text>
