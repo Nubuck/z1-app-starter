@@ -29,32 +29,57 @@ export const home = task((t, a) =>
   createView('home', {
     state: {
       data({ type, status, viewData, nextData, error }) {
+        if (t.eq(type, 'init')) {
+          return {
+            data: {
+              services: [],
+              sortFields: [
+                { value: 'name', label: 'Name' },
+                { value: 'status', label: 'Status' },
+                { value: 'updatedAt', label: 'Date Updated' },
+              ],
+              sortBy: { value: 'name', label: 'Name' },
+              sortDirection: 'asc',
+              search: '',
+              screen: {
+                size: null,
+                width: null,
+                height: null,
+              },
+              counts: {
+                online: 0,
+                stopped: 0,
+              },
+            },
+            error,
+          }
+        }
+        if (t.eq(type, 'data-load-complete')) {
+          return { status, data: t.merge(viewData, nextData || {}), error }
+        }
+        const item = t.pathOr(null, ['item'], nextData || {})
+        const services = t.pathOr(null, ['services'], nextData)
+        const currentServices = t.pathOr([], ['services'], viewData)
+        const currentItem = t.isNil(item)
+          ? null
+          : t.find(service => t.eq(service._id, item._id), currentServices)
+        const nextServices = t.and(t.isNil(item), t.isNil(currentItem))
+          ? t.isNil(services)
+            ? currentServices
+            : services
+          : t.and(t.not(t.isNil(item)), t.isNil(currentItem))
+          ? t.concat(t.isNil(services) ? currentServices : services, [item])
+          : t.map(
+              service => (t.eq(service._id, item._id) ? item : service),
+              t.isNil(services) ? currentServices : services
+            )
         return {
           status,
-          data: t.eq(type, 'init')
-            ? {
-                services: [],
-                sortFields: [
-                  { value: 'name', label: 'Name' },
-                  { value: 'status', label: 'Status' },
-                  { value: 'updatedAt', label: 'Date Updated' },
-                ],
-                sortBy: { value: 'name', label: 'Name' },
-                sortDirection: 'asc',
-                search: '',
-                screen: {
-                  size: null,
-                  width: null,
-                  height: null,
-                },
-                counts: {
-                  online: 0,
-                  stopped: 0,
-                },
-              }
-            : t.isNil(nextData)
-            ? viewData
-            : t.merge(viewData, nextData),
+          data: t.mergeAll([
+            viewData,
+            t.omit(['services', 'item'], nextData || {}),
+            { services: nextServices, counts: computeCounts(nextServices) },
+          ]),
           error,
         }
       },
@@ -138,41 +163,18 @@ export const home = task((t, a) =>
             status: VIEW_STATUS.READY,
           })
         )
-        const [transportErr, transportResult] = await a.of(
+        const [transportErr] = await a.of(
           api
             .service('service-cmd')
             .patch(formData.id, { action: formData.action })
         )
         if (transportErr) {
-          dispatch(
-            mutations.dataChange({
-              data: {
-                services: viewData.services,
-                counts: computeCounts(viewData.services),
-              },
-              status: VIEW_STATUS.READY,
-            })
-          )
           return {
             status: VIEW_STATUS.READY,
             data: formData,
             error: transportErr,
           }
         }
-        const resultServices = t.map(
-          service =>
-            t.eq(service._id, formData.id) ? transportResult : service,
-          viewData.services
-        )
-        dispatch(
-          mutations.dataChange({
-            data: {
-              services: resultServices,
-              counts: computeCounts(resultServices),
-            },
-            status: VIEW_STATUS.READY,
-          })
-        )
         return {
           status: VIEW_STATUS.READY,
           data: { id: null, action: null },
@@ -187,7 +189,6 @@ export const home = task((t, a) =>
       Match,
       When,
       MapIndexed,
-      Spinner,
       VStack,
       HStack,
       Select,

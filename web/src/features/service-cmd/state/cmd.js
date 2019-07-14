@@ -4,7 +4,7 @@ import { task, VIEW_STATUS } from '@z1/lib-feature-box'
 import { secureNav } from './schema'
 
 // main
-export const cmd = task((t, a) => ({
+export const cmd = task((t, a, r) => ({
   initial: {
     navRegistered: false,
   },
@@ -17,7 +17,7 @@ export const cmd = task((t, a) => ({
       }),
     ]
   },
-  effects(fx, { mutations }) {
+  effects(fx, { mutations, actions }) {
     const matchesBoxRoutes = t.globrex('serviceCmd/ROUTE_*').regex
     return [
       fx(
@@ -54,22 +54,41 @@ export const cmd = task((t, a) => ({
           done()
         }
       ),
+      // fx(
+      //   ['screen/RESIZE', 'nav/NAV_MATCH'],
+      //   async ({ getState }, dispatch, done) => {
+      //     const state = getState()
+      //     const route = t.pathOr('', ['serviceCmd', 'route'], state)
+      //     if (matchesBoxRoutes.test(route)) {
+      //       const screen = t.pathOr({}, ['screen'], state)
+      //       const width = t.pathOr(0, ['nav', 'width'], state)
+      //       const height = t.pathOr(0, ['nav', 'body', 'top'], state)
+      //       dispatch(
+      //         mutations.dataChange({
+      //           data: { screen, nav: { width, height } },
+      //         })
+      //       )
+      //     }
+      //     done()
+      //   }
+      // ),
       fx(
-        ['screen/RESIZE', 'nav/NAV_MATCH'],
-        async ({ getState }, dispatch, done) => {
-          const state = getState()
-          const route = t.pathOr('', ['serviceCmd', 'route'], state)
-          if (matchesBoxRoutes.test(route)) {
-            const screen = t.pathOr({}, ['screen'], state)
-            const width = t.pathOr(0, ['nav', 'width'], state)
-            const height = t.pathOr(0, ['nav', 'body', 'top'], state)
-            dispatch(
-              mutations.dataChange({
-                data: { screen, nav: { width, height } },
-              })
+        actions.routeHome,
+        ({ api }) => {
+          const patched$ = r.fromEvent(api.service('service-cmd'), 'patched')
+          const created$ = r.fromEvent(api.service('service-cmd'), 'created')
+
+          return patched$.pipe(
+            r.merge(created$),
+            r.map(ev =>
+              mutations.dataChange({ data: { item: ev, event: 'patched' } })
             )
-          }
-          done()
+          )
+        },
+        {
+          cancelType: actions.routeExit,
+          warnTimeout: 0,
+          latest: true,
         }
       ),
     ]
