@@ -22,7 +22,7 @@ export const cmd = task((t, a, r) => ({
     return [
       fx(
         ['account/AUTHENTICATE_SUCCESS'],
-        task((t, a) => async ({ getState, api }, dispatch, done) => {
+        async ({ getState, api }, dispatch, done) => {
           const state = getState()
           if (t.not(state.account.user)) {
             done()
@@ -36,7 +36,7 @@ export const cmd = task((t, a, r) => ({
             dispatch(mutations.navRegistered(true))
             done()
           }
-        })
+        }
       ),
       fx(
         ['account/AUTHENTICATE_FAIL', 'account/SIGN_OUT_COMPLETE'],
@@ -77,11 +77,10 @@ export const cmd = task((t, a, r) => ({
         ({ api }) => {
           const patched$ = r.fromEvent(api.service('service-cmd'), 'patched')
           const created$ = r.fromEvent(api.service('service-cmd'), 'created')
-
           return patched$.pipe(
             r.merge(created$),
             r.map(ev =>
-              mutations.dataChange({ data: { item: ev, event: 'patched' } })
+              mutations.dataChange({ data: { item: ev } })
             )
           )
         },
