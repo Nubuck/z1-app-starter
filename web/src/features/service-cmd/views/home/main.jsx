@@ -49,46 +49,37 @@ export const home = task((t, a) =>
             error,
           }
         }
-        if (t.eq(type, 'data-load-complete')) {
+        if (t.not(t.eq(type, 'data-change'))) {
           return { status, data: t.merge(viewData, nextData || {}), error }
         }
+
         const item = t.pathOr(null, ['item'], nextData || {})
-        const services = t.pathOr(null, ['services'], nextData)
+        const event = t.pathOr(null, ['event'], nextData || {})
+        const services = t.pathOr(null, ['services'], nextData || {})
         const currentServices = t.pathOr([], ['services'], viewData)
-        const currentItem = t.isNil(item)
-          ? null
-          : t.find(service => t.eq(service._id, item._id), currentServices)
-        const nextServices = t.and(t.isNil(item), t.isNil(currentItem))
-          ? t.isNil(services)
-            ? currentServices
-            : services
-          : t.and(t.not(t.isNil(item)), t.isNil(currentItem))
-          ? t.concat(t.isNil(services) ? currentServices : services, [item])
+
+        const nextServices = t.and(t.isNil(item), t.isNil(services))
+          ? currentServices
+          : t.isNil(item)
+          ? services
+          : t.and(t.not(t.isNil(item)), t.eq(event, 'created'))
+          ? t.concat(currentServices, [item])
           : t.map(
               service => (t.eq(service._id, item._id) ? item : service),
-              t.isNil(services) ? currentServices : services
+              currentServices
             )
+
         return {
           status,
           data: t.mergeAll([
             viewData,
-            t.omit(['services', 'item'], nextData || {}),
+            t.omit(['services', 'item', 'event'], nextData || {}),
             { services: nextServices, counts: computeCounts(nextServices) },
           ]),
           error,
         }
       },
-      async load({
-        type,
-        status,
-        api,
-        detailKey,
-        viewData,
-        formData,
-        getState,
-        dispatch,
-        mutations,
-      }) {
+      async load({ status, api }) {
         const [cmdError, cmdResult] = await a.of(
           api.service('service-cmd').find()
         )
@@ -110,21 +101,15 @@ export const home = task((t, a) =>
           error: null,
         }
       },
-      form({ type, status, viewData, formData }) {
-        return t.merge(
-          {
-            data: formData,
-          },
-          {}
-        )
+      form({ formData }) {
+        return {
+          data: formData,
+        }
       },
       async transmit({
-        type,
-        status,
         api,
         viewData,
         formData,
-        getState,
         dispatch,
         mutations,
       }) {
