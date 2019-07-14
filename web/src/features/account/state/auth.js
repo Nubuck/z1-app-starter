@@ -1,4 +1,4 @@
-import { task, VIEW_STATUS } from '@z1/lib-feature-box'
+import { task } from '@z1/lib-feature-box'
 
 // ctx
 export const ACCOUNT_STATUS = {
@@ -9,9 +9,6 @@ export const ACCOUNT_STATUS = {
   AUTH_FAIL: 'auth-fail',
 }
 
-// schema
-import { authNav, secureNav } from './schema'
-
 // main
 export const auth = task((t, a) => ({
   initial: {
@@ -20,7 +17,6 @@ export const auth = task((t, a) => ({
     error: null,
     redirectBackTo: null,
     hash: null,
-    navRegistered: false,
   },
   mutations(m) {
     return [
@@ -55,11 +51,6 @@ export const auth = task((t, a) => ({
       m('signOutComplete', state => {
         return t.merge(state, {
           user: null,
-        })
-      }),
-      m('navRegistered', (state, action) => {
-        return t.merge(state, {
-          navRegistered: action.payload,
         })
       }),
       m('redirectBackToChange', (state, action) => {
@@ -252,45 +243,10 @@ export const auth = task((t, a) => ({
             if (error) {
               console.log('ERROR PATCHING USER STATUS', error)
             }
-            dispatch({
-              type: 'nav/NAV_SCHEMA_REMOVE',
-              payload: {
-                schema: ['/account/sign-up', '/account/sign-in'],
-              },
-            })
-            dispatch({
-              type: 'nav/NAV_SCHEMA_ADD',
-              payload: {
-                schema: secureNav,
-              },
-            })
-            dispatch(mutations.navRegistered(true))
-            // dispatch(mutations.navRegistered(false))
+           
             done()
           }
         })
-      ),
-      fx(
-        [actions.authenticateFail, actions.signOutComplete],
-        async ({ getState }, dispatch, done) => {
-          const state = getState()
-          if (t.not(state.account.navRegistered)) {
-            dispatch({
-              type: 'nav/NAV_SCHEMA_REMOVE',
-              payload: {
-                schema: ['/#sign-out'],
-              },
-            })
-            dispatch({
-              type: 'nav/NAV_SCHEMA_ADD',
-              payload: {
-                schema: authNav,
-              },
-            })
-            dispatch(mutations.navRegistered(true))
-          }
-          done()
-        }
       ),
       fx(
         [actions.signOut],
@@ -306,7 +262,6 @@ export const auth = task((t, a) => ({
               console.log('ERROR PATCHING USER STATUS', error)
             }
             api.logout()
-            dispatch(mutations.navRegistered(false))
             dispatch(mutations.signOutComplete({}))
             dispatch(
               redirect({
@@ -317,7 +272,6 @@ export const auth = task((t, a) => ({
             done()
           } else {
             api.logout()
-            dispatch(mutations.navRegistered(false))
             dispatch(
               redirect({
                 type: 'landing/ROUTE_HOME',

@@ -38,14 +38,9 @@ export const home = task((t, a) =>
                 { value: 'status', label: 'Status' },
                 { value: 'updatedAt', label: 'Date Updated' },
               ],
-              sortBy: { value: 'name', label: 'Name' },
+              sortBy: 'name',
               sortDirection: 'asc',
               search: '',
-              screen: {
-                size: null,
-                width: null,
-                height: null,
-              },
               counts: {
                 online: 0,
                 stopped: 0,

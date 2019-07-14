@@ -8,14 +8,15 @@ import { serviceCmdState } from './state'
 import { ServiceCmdPage } from './ui'
 
 // exports
-export const serviceCmd = createFeature(({ ui }) => {
+export const serviceCmd = createFeature(({ ui, macroNavActiveState }) => {
+  const state = serviceCmdState({ macroNavActiveState })
   return {
-    name: 'account',
-    state: [serviceCmdState],
+    name: 'serviceCmd',
+    state: [state],
     routes: [
       {
-        type: routeActions(serviceCmdState.actions),
-        ui: ServiceCmdPage({ ui, mutationCreators: serviceCmdState.mutations }),
+        type: routeActions(state.actions),
+        ui: ServiceCmdPage({ ui, mutationCreators: state.mutations }),
       },
     ],
   }

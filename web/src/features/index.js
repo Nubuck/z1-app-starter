@@ -12,12 +12,20 @@ import layoutFeature from './layout'
 import landingFeature from './landing'
 import serviceCmdFeature from './service-cmd'
 
+// unpack
+const layout = layoutFeature({
+  ui: { ...elements, toCss },
+  brand: { title: 'Z1 App' },
+})
+const { macroNavActiveState } = layout.tasks
+
 // main
 export default combineFeatures([
-  accountFeature({ ui: { ...elements, SchemaForm } }),
-  layoutFeature({ ui: { ...elements, toCss }, brand: { title: 'Z1 App' } }),
-  landingFeature({ ui: { ...elements } }),
+  layout,
+  accountFeature({ ui: { ...elements, SchemaForm }, macroNavActiveState }),
+  landingFeature({ ui: { ...elements }, macroNavActiveState }),
   serviceCmdFeature({
     ui: { ...elements, SchemaForm, AutoSizer, List },
+    macroNavActiveState,
   }),
 ])

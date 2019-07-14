@@ -8,14 +8,15 @@ import { accountState } from './state'
 import { AccountPage } from './ui'
 
 // exports
-export const account = createFeature(({ ui }) => {
+export const account = createFeature(({ ui, macroNavActiveState }) => {
+  const state = accountState({ macroNavActiveState })
   return {
     name: 'account',
-    state: [accountState],
+    state: [state],
     routes: [
       {
-        type: routeActions(accountState.actions),
-        ui: AccountPage({ ui, mutationCreators: accountState.mutations }),
+        type: routeActions(state.actions),
+        ui: AccountPage({ ui, mutationCreators: state.mutations }),
       },
     ],
   }

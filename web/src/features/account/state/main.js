@@ -7,9 +7,14 @@ import { views } from '../views'
 // parts
 import { auth } from './auth'
 
+// schema
+import { authNav, secureNav } from './schema'
+
 // main
 const name = 'account'
-export const accountState = composeStateBox({ name }, [
-  auth,
-  macroRouteViewState(name, { path: '/account', views: views.state }),
-])
+export const accountState = ({ macroNavActiveState }) =>
+  composeStateBox({ name }, [
+    auth,
+    macroRouteViewState(name, { path: '/account', views: views.state }),
+    macroNavActiveState(name, { anon: authNav, secure: secureNav }),
+  ])
