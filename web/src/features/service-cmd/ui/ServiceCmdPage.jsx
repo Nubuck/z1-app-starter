@@ -2,11 +2,11 @@ import React from 'react'
 import { task, connectState } from '@z1/lib-feature-box'
 import { renderView } from '@z1/lib-feature-macros'
 
-// views
-import { views } from '../views'
-
 // elements
 import { elements } from './elements'
+
+// views
+import { views } from '../views'
 
 // state
 const stateQuery = ({ serviceCmd, brand }) => ({

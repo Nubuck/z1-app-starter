@@ -1,6 +1,9 @@
 import React from 'react'
 import { task, connectState } from '@z1/lib-feature-box'
 
+// elements
+import { elements } from './elements'
+
 // state
 const stateQuery = ({ nav, brand, location, account }) => ({
   nav,
@@ -8,9 +11,6 @@ const stateQuery = ({ nav, brand, location, account }) => ({
   location,
   account,
 })
-
-// elements
-import { elements } from './elements'
 
 // main
 export const Screen = task(

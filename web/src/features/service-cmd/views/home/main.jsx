@@ -1,18 +1,12 @@
 import React from 'react'
 import { task, VIEW_STATUS } from '@z1/lib-feature-box'
 import { createView } from '@z1/lib-feature-macros'
-import bytes from 'bytes'
 
 // elements
 import { elements } from './elements'
 
 // tasks
-import {
-  computeCounts,
-  updateServiceInList,
-  itemMetricProps,
-  viewMetricProps,
-} from './tasks'
+import { computeCounts, updateServiceInList, viewMetricProps } from './tasks'
 
 // main
 export const home = task((t, a) =>
@@ -23,6 +17,7 @@ export const home = task((t, a) =>
           return {
             data: {
               services: [],
+              computedServices: [],
               sortFields: [
                 { value: 'name', label: 'Name' },
                 { value: 'status', label: 'Status' },
@@ -144,48 +139,20 @@ export const home = task((t, a) =>
     ui: ({
       ViewContainer,
       ViewSpinner,
-      ViewHeader,
       Match,
-      When,
       MapIndexed,
       VStack,
-      HStack,
-      Select,
-      Input,
-      Text,
-      Spacer,
-      Icon,
-      Button,
       Row,
-      Col,
       ViewMetric,
-      TransportButton,
-      ViewIconLabel,
+      ...ui
     }) => {
-      const {
-        ViewToolbar,
-        ViewTransportItemRow,
-        ViewTransportMetricRow,
-        ViewStatusIcon,
-        ViewTransportTitle,
-        ViewTransportStatusLabel,
-        ViewTimestampLabel,
-      } = elements({
-        ViewHeader,
-        When,
+      const { ViewToolbar, TransportItem } = elements({
         MapIndexed,
         VStack,
-        HStack,
-        Select,
-        Input,
-        Text,
-        Spacer,
-        Icon,
-        Button,
         Row,
-        ViewIconLabel,
+        ViewMetric,
+        ...ui,
       })
-
       return ({ state, mutations }) => {
         return (
           <ViewContainer>
@@ -234,131 +201,15 @@ export const home = task((t, a) =>
                       </Row>
                       <MapIndexed
                         list={state.data.services}
-                        render={({ item, index }) => {
-                          const busy = t.or(
-                            t.eq(item.actionStatus, 'launching'),
-                            t.eq(item.actionStatus, 'stopping')
-                          )
-                          const primaryMetricProps = itemMetricProps(
-                            item.status,
-                            'green-500'
-                          )
-                          const secondaryMetricProps = itemMetricProps(
-                            item.status,
-                            'teal-500'
-                          )
-                          return (
-                            <ViewTransportItemRow
-                              key={index}
-                              status={item.status}
-                              busy={busy}
-                            >
-                              <Col
-                                xs={12}
-                                sm={12}
-                                md={6}
-                                lg={5}
-                                xl={4}
-                                box={{
-                                  padding: [
-                                    { bottom: 2 },
-                                    { md: { right: 6 } },
-                                  ],
-                                }}
-                              >
-                                <HStack y="top">
-                                  <TransportButton
-                                    busy={busy}
-                                    status={item.status}
-                                    onStart={() =>
-                                      mutations.formTransmit({
-                                        data: {
-                                          id: item._id,
-                                          action: 'start',
-                                        },
-                                      })
-                                    }
-                                    onStop={() =>
-                                      mutations.formTransmit({
-                                        data: {
-                                          id: item._id,
-                                          action: 'stop',
-                                        },
-                                      })
-                                    }
-                                  />
-                                  <ViewStatusIcon
-                                    status={item.status}
-                                    busy={busy}
-                                    action={item.action}
-                                  />
-                                  <ViewTransportTitle
-                                    name={item.name}
-                                    version={item.version}
-                                    autoStart={item.autoStart}
-                                    status={item.status}
-                                    busy={busy}
-                                    instances={item.instances}
-                                  />
-                                </HStack>
-                                <ViewTransportStatusLabel
-                                  status={item.status}
-                                  busy={busy}
-                                  uptime={item.uptime}
-                                />
-                              </Col>
-                              <Col xs={12} sm={12} md={6} lg={7} xl={8}>
-                                <ViewTransportMetricRow status={item.status}>
-                                  <ViewMetric
-                                    {...primaryMetricProps}
-                                    icon="rotate-right"
-                                    label="restarts"
-                                    text={`x${item.restarts || '0'}`}
-                                  />
-                                  <ViewMetric
-                                    {...primaryMetricProps}
-                                    icon="hdd-o"
-                                    label="CPU"
-                                    text={`${item.cpu || '0'}%`}
-                                  />
-                                  <ViewMetric
-                                    {...primaryMetricProps}
-                                    icon="database"
-                                    label="memory"
-                                    text={`${t.caseTo.lowerCase(
-                                      bytes(item.memory || 0)
-                                    )}`}
-                                  />
-                                  <ViewMetric
-                                    {...secondaryMetricProps}
-                                    icon="gears"
-                                    label="pm2id"
-                                    text={`${
-                                      t.isNil(item.pmId) ? 'none' : item.pmId
-                                    }`}
-                                  />
-                                  <ViewMetric
-                                    {...secondaryMetricProps}
-                                    icon="barcode"
-                                    label="pid"
-                                    text={`${
-                                      t.isNil(item.pid) ? 'none' : item.pid
-                                    }`}
-                                  />
-                                  <ViewMetric
-                                    {...secondaryMetricProps}
-                                    icon="terminal"
-                                    label="interpreter"
-                                    text={`${item.interpreter || 'none'}`}
-                                  />
-                                </ViewTransportMetricRow>
-                                <ViewTimestampLabel
-                                  updatedAt={item.updatedAt}
-                                />
-                              </Col>
-                            </ViewTransportItemRow>
-                          )
-                        }}
+                        render={({ item, index }) => (
+                          <TransportItem
+                            key={index}
+                            item={item}
+                            onTransport={payload =>
+                              mutations.formTransmit(payload)
+                            }
+                          />
+                        )}
                       />
                     </VStack>
                   </React.Fragment>

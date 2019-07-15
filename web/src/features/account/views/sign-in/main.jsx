@@ -9,12 +9,7 @@ import { signInSchema } from './schema'
 export const signIn = task((t, a) =>
   createView('sign-in', {
     state: {
-      data({ type, status, viewData, error }) {
-        // route-enter
-        // data-load
-        // data-load-complete
-        // form-transmit
-        // form-transmit-complete
+      data({ status, viewData, error }) {
         return {
           status,
           data: viewData,
@@ -30,7 +25,6 @@ export const signIn = task((t, a) =>
         )
       },
       async transmit({
-        type,
         status,
         api,
         formData,

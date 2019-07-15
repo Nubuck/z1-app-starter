@@ -9,7 +9,7 @@ import { resetPasswordSchema } from './schema'
 export const resetPassword = task((t, a) =>
   createView('reset-password', {
     state: {
-      data({ type, status, viewData, error }) {
+      data({ status, viewData, error }) {
         return {
           status,
           data: viewData,
@@ -52,7 +52,6 @@ export const resetPassword = task((t, a) =>
       ViewHeading,
       ViewButton,
       ViewForm,
-      Text,
       ViewLink,
       ViewAlert,
       When,

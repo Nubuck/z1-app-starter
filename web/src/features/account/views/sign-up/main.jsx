@@ -10,11 +10,6 @@ export const signUp = task((t, a) =>
   createView('sign-up', {
     state: {
       data({ type, status, viewData, error }) {
-        // route-enter
-        // data-load
-        // data-load-complete
-        // form-transmit
-        // form-transmit-complete
         return {
           status,
           data: t.merge(viewData, {
