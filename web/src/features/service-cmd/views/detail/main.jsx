@@ -55,8 +55,37 @@ export const detail = task((t, a) =>
         }
       },
     },
-    ui: ({ ui }) => ({ state, mutations }) => {
-      return <div />
+    ui: ({ ViewContainer, ViewSpinner, Match, VStack, Row, ViewHeader }) => ({
+      state,
+      mutations,
+    }) => {
+      return (
+        <ViewContainer>
+          <Match
+            value={state.status}
+            when={{
+              _: <ViewSpinner />,
+              ready: (
+                <React.Fragment>
+                  <Row
+                    box={{ flexWrap: true, shadow: 'md' }}
+                    className="form-dark"
+                  >
+                    <VStack box={{ padding: { y: 4 } }}>
+                      <ViewHeader
+                        title="Service"
+                        text="Service-name"
+                        icon="cube"
+                        size="md"
+                      />
+                    </VStack>
+                  </Row>
+                </React.Fragment>
+              ),
+            }}
+          />
+        </ViewContainer>
+      )
     },
   })
 )
