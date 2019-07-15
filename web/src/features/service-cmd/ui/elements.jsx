@@ -75,7 +75,7 @@ export const elements = task(
         },
         md: {
           icon: ['2xl', { lg: '3xl' }],
-          label: ['sm', { md: 'lg' }],
+          label: ['sm', { lg: 'lg' }],
           text: ['xl', { xl: '2xl' }],
         },
         lg: {
@@ -85,7 +85,7 @@ export const elements = task(
         },
       })
       return (
-        <Col y="top" box={{ padding: { x: 4, bottom: 2 } }} {...props}>
+        <Col y="top" box={{ padding: { x: 4, bottom: 3 } }} {...props}>
           <HStack y="center" x="left">
             <Icon
               name={icon}
@@ -144,8 +144,8 @@ export const elements = task(
               margin: {
                 right: 2,
               },
-              ...textBox,
             }}
+            next={ui => ui.next(textBox || {})}
             letterSpacing={letterSpacing}
           >
             {text}
@@ -175,56 +175,58 @@ export const elements = task(
         },
       }
       return (
-        <HStack
-          y="center"
-          box={{
-            padding: [{ y: 2 }, { md: { y: 0 }, lg: { y: 2 } }],
-            width: 20,
-            height: 20,
-          }}
-        >
-          <When is={t.not(busy)}>
-            <Match
-              value={status}
-              when={{
-                online: (
-                  <Button
-                    {...buttonProps}
-                    color={busy ? 'red-500' : ['red-500', { hover: 'white' }]}
-                    bg={busy ? null : [null, { hover: 'red-500' }]}
-                    border="red-500"
-                    onClick={() => onStart && onStop()}
-                  >
-                    <Icon {...iconProps} name="stop" />
-                  </Button>
-                ),
-                _: (
-                  <Button
-                    {...buttonProps}
-                    color={
-                      busy ? 'green-500' : ['green-500', { hover: 'white' }]
-                    }
-                    bg={busy ? null : [null, { hover: 'green-500' }]}
-                    border="green-500"
-                    onClick={() => onStart && onStart()}
-                  >
-                    <Icon {...iconProps} name="play" />
-                  </Button>
-                ),
-              }}
-            />
-          </When>
-          <When is={busy}>
-            <Button
-              as="div"
-              radius="full"
-              size="md"
-              box={{ padding: 2, margin: { x: 2 } }}
-            >
-              <Spinner size="md" box={{ width: 8, height: 8 }} />
-            </Button>
-          </When>
-        </HStack>
+        <VStack y="center">
+          <HStack
+            y="center"
+            box={{
+              padding: [{ y: 2 }, { md: { y: 0 }, lg: { y: 2 } }],
+              width: 20,
+              height: 20,
+            }}
+          >
+            <When is={t.not(busy)}>
+              <Match
+                value={status}
+                when={{
+                  online: (
+                    <Button
+                      {...buttonProps}
+                      color={busy ? 'red-500' : ['red-500', { hover: 'white' }]}
+                      bg={busy ? null : [null, { hover: 'red-500' }]}
+                      border="red-500"
+                      onClick={() => onStart && onStop()}
+                    >
+                      <Icon {...iconProps} name="stop" />
+                    </Button>
+                  ),
+                  _: (
+                    <Button
+                      {...buttonProps}
+                      color={
+                        busy ? 'green-500' : ['green-500', { hover: 'white' }]
+                      }
+                      bg={busy ? null : [null, { hover: 'green-500' }]}
+                      border="green-500"
+                      onClick={() => onStart && onStart()}
+                    >
+                      <Icon {...iconProps} name="play" />
+                    </Button>
+                  ),
+                }}
+              />
+            </When>
+            <When is={busy}>
+              <Button
+                as="div"
+                radius="full"
+                size="md"
+                box={{ padding: 2, margin: { x: 2 } }}
+              >
+                <Spinner size="md" box={{ width: 8, height: 8 }} />
+              </Button>
+            </When>
+          </HStack>
+        </VStack>
       )
     },
   })
