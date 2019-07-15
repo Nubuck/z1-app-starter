@@ -70,7 +70,7 @@ export const elements = task(
       const sizes = t.getMatch(size || 'md')({
         sm: {
           icon: '3xl',
-          label: ['sm', { md: 'lg' }],
+          label: ['xs', { md: 'lg' }],
           text: ['md', { xl: 'xl' }],
         },
         md: {
@@ -85,7 +85,7 @@ export const elements = task(
         },
       })
       return (
-        <Col y="top" box={{ padding: { x: 4, bottom: 4 } }} {...props}>
+        <Col y="top" box={{ padding: { x: 4, bottom: 2 } }} {...props}>
           <HStack y="center" x="left">
             <Icon
               name={icon}
@@ -102,7 +102,7 @@ export const elements = task(
               weight="semibold"
               size={sizes.text}
               stretch
-              box={{ padding: [{ right: 2, top: 0 }, { lg: { top: 3 } }] }}
+              box={{ padding: { right: 2, top: 0 } }}
               next={ui => ui.next(textBox || {})}
             >
               {text}
