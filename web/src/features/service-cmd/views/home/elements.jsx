@@ -201,6 +201,7 @@ export const elements = task(
               busy={busy}
               uptime={item.uptime}
             />
+            {/* Manage button */}
           </Col>
           <Col xs={12} sm={12} md={6} lg={7} xl={8}>
             <TransportItemMetricRow status={item.status}>

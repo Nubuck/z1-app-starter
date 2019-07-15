@@ -79,6 +79,16 @@ export const detail = task((t, a) =>
                         size="md"
                       />
                     </VStack>
+                    <Spacer />
+                    <VStack
+                      y="center"
+                      box={{
+                        padding: { y: 4 },
+                        width: ['full', { sm: 'auto' }],
+                      }}
+                    >
+                      {/* transport */}
+                    </VStack>
                   </Row>
                 </React.Fragment>
               ),
