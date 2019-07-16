@@ -40,7 +40,7 @@ export const macroNavActiveState = task(t => (name, { anon, secure }) => {
                   },
                 })
               }
-              dispatch(mutations.activeNavChange('anon'))
+              dispatch(mutations.activeNavChange('secure'))
             }
             done()
           }
