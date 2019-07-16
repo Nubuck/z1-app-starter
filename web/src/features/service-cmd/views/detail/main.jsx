@@ -6,10 +6,19 @@ import { createView } from '@z1/lib-feature-macros'
 export const detail = task((t, a) =>
   createView('detail', {
     state: {
-      data({ type, status, viewData, formData, error }) {
+      data({ type, status, viewData, nextData, formData, error }) {
+        if (t.eq(type, 'init')) {
+          return {
+            status,
+            data: {
+              service: null,
+            },
+            error: null,
+          }
+        }
         return {
           status,
-          data: viewData,
+          data: t.merge(viewData, nextData || {}),
           error,
         }
       },
@@ -24,9 +33,23 @@ export const detail = task((t, a) =>
         dispatch,
         mutations,
       }) {
+        const [cmdError, cmdResult] = await a.of(
+          api.service('service-cmd').get(detailKey)
+        )
+        if (cmdError) {
+          return {
+            status,
+            data: {
+              service: null,
+            },
+            error: cmdError.message,
+          }
+        }
         return {
           status,
-          data: viewData,
+          data: {
+            service: cmdResult,
+          },
           error: null,
         }
       },
@@ -55,10 +78,16 @@ export const detail = task((t, a) =>
         }
       },
     },
-    ui: ({ ViewContainer, ViewSpinner, Match, VStack, Row, ViewHeader }) => ({
-      state,
-      mutations,
-    }) => {
+    ui: ({
+      ViewContainer,
+      ViewSpinner,
+      Match,
+      VStack,
+      Row,
+      ViewHeader,
+      Spacer,
+      When,
+    }) => ({ state, mutations }) => {
       return (
         <ViewContainer>
           <Match
@@ -67,29 +96,35 @@ export const detail = task((t, a) =>
               _: <ViewSpinner />,
               ready: (
                 <React.Fragment>
-                  <Row
-                    box={{ flexWrap: true, shadow: 'md' }}
-                    className="form-dark"
-                  >
-                    <VStack box={{ padding: { y: 4 } }}>
-                      <ViewHeader
-                        title="Service"
-                        text="Service-name"
-                        icon="cube"
-                        size="md"
-                      />
-                    </VStack>
-                    <Spacer />
-                    <VStack
-                      y="center"
-                      box={{
-                        padding: { y: 4 },
-                        width: ['full', { sm: 'auto' }],
-                      }}
+                  <When is={t.not(t.isNil(state.data.service))}>
+                    <Row
+                      box={{ flexWrap: true, shadow: 'md' }}
+                      className="form-dark"
                     >
-                      {/* transport */}
-                    </VStack>
-                  </Row>
+                      <VStack box={{ padding: { y: 4 } }}>
+                        <ViewHeader
+                          title="Service"
+                          text={t.pathOr(
+                            '',
+                            ['data', 'service', 'name'],
+                            state
+                          )}
+                          icon="cube"
+                          size="md"
+                        />
+                      </VStack>
+                      <Spacer />
+                      <VStack
+                        y="center"
+                        box={{
+                          padding: { y: 4 },
+                          width: ['full', { sm: 'auto' }],
+                        }}
+                      >
+                        {/* transport */}
+                      </VStack>
+                    </Row>
+                  </When>
                 </React.Fragment>
               ),
             }}

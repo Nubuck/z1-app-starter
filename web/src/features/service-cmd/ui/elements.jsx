@@ -1,5 +1,5 @@
 import React from 'react'
-import { task } from '@z1/lib-feature-box'
+import { task, Link } from '@z1/lib-feature-box'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
@@ -89,14 +89,22 @@ export const elements = task(
           </VStack>
         )
       },
-      ViewHeader({ title, text, icon, highlight, size }) {
+      ViewHeader({ title, text, icon, highlight, size, to }) {
         const textSize =
           t.getMatch(size)({
             sm: 'xl',
             lg: '4xl',
           }) || '3xl'
+        const headerProps = t.isNil(to)
+          ? { container: {}, text: { color: highlight || 'yellow-500' } }
+          : {
+              container: { as: Link, to },
+              text: {
+                color: [highlight || 'yellow-500', { hover: 'white' }],
+              },
+            }
         return (
-          <HStack x="left" y="center">
+          <HStack x="left" y="center" {...headerProps.container}>
             <When is={icon}>
               <Icon
                 name={icon}
@@ -111,11 +119,7 @@ export const elements = task(
             >
               {title}
             </Text>
-            <Text
-              weight="medium"
-              size={textSize}
-              color={highlight || 'yellow-500'}
-            >
+            <Text weight="medium" size={textSize} {...headerProps.text}>
               {text}
             </Text>
           </HStack>
@@ -339,7 +343,15 @@ export const elements = task(
           </VStack>
         )
       },
-      TransportTitle({ name, version, autoStart, status, busy, instances }) {
+      TransportTitle({ name, version, autoStart, status, busy, instances, to }) {
+        const titleProps = t.isNil(to)
+          ? { container: {}, text: { color: 'yellow-500' } }
+          : {
+              container: { as: Link, to },
+              text: {
+                color: ['yellow-500', { hover: 'white' }],
+              },
+            }
         return (
           <VStack
             y="top"
@@ -348,11 +360,12 @@ export const elements = task(
               padding: [{ left: 0, right: 4 }, { lg: { left: 3 } }],
               flexWrap: true,
             }}
+            {...titleProps.container}
           >
             <Text
               size={['xl', { xl: '2xl' }]}
-              color={'yellow-500'}
               weight="semibold"
+              {...titleProps.text}
             >
               {name}
             </Text>
