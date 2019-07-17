@@ -90,11 +90,10 @@ export const elements = task(
         )
       },
       ViewHeader({ title, text, icon, highlight, size, to }) {
-        const textSize =
-          t.getMatch(size)({
-            sm: 'xl',
-            lg: '4xl',
-          }) || '3xl'
+        const textSize = t.getMatch(size)({
+          sm: ['lg', { sm: 'xl' }],
+          lg: ['3xl', { sm: '4xl' }],
+        }) || ['2xl', { sm: '3xl' }]
         const headerProps = t.isNil(to)
           ? { container: {}, text: { color: highlight || 'yellow-500' } }
           : {
@@ -285,7 +284,7 @@ export const elements = task(
           </Row>
         )
       },
-      TransportStatusIcon({ status, busy, action }) {
+      TransportStatusIcon({ status, busy, action, spacing, ...props }) {
         return (
           <VStack
             y="top"
@@ -294,6 +293,7 @@ export const elements = task(
               display: ['hidden', { sm: 'flex' }],
               width: [12, { xl: 16 }],
             }}
+            {...props}
           >
             <HStack y="center" x="center">
               <Icon
@@ -321,7 +321,7 @@ export const elements = task(
                   weight="thin"
                   letterSpacing="wide"
                   box={{
-                    padding: { top: 1 },
+                    padding: { top: t.not(spacing) ? 0 : 1 },
                   }}
                 >
                   {action || 'busy'}
@@ -333,7 +333,7 @@ export const elements = task(
                   weight="thin"
                   letterSpacing="wide"
                   box={{
-                    padding: { top: 1 },
+                    padding: { top: t.not(spacing) ? 0 : 1 },
                   }}
                 >
                   ready
@@ -343,7 +343,15 @@ export const elements = task(
           </VStack>
         )
       },
-      TransportTitle({ name, version, autoStart, status, busy, instances, to }) {
+      TransportTitle({
+        name,
+        version,
+        autoStart,
+        status,
+        busy,
+        instances,
+        to,
+      }) {
         const titleProps = t.isNil(to)
           ? { container: {}, text: { color: 'yellow-500' } }
           : {
@@ -414,7 +422,7 @@ export const elements = task(
           </VStack>
         )
       },
-      TransportStatusLabel({ status, busy, uptime }) {
+      TransportStatusLabel({ status, busy, uptime, box }) {
         return (
           <HStack
             y="center"
@@ -428,6 +436,7 @@ export const elements = task(
               ],
               opacity: busy ? 50 : null,
             }}
+            next={ui => ui.next(box || {})}
           >
             <ViewIconLabel
               icon={t.eq(status, 'online') ? 'play' : 'stop'}
@@ -441,6 +450,7 @@ export const elements = task(
               is={t.and(t.eq(status, 'online'), t.isType(uptime, 'String'))}
             >
               <ViewIconLabel
+                size="xl"
                 icon="arrow-up"
                 text={dayjs().from(dayjs(uptime), true)}
               />

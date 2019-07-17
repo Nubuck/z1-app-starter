@@ -110,11 +110,11 @@ export const home = task((t, a) =>
         )
         dispatch(
           mutations.dataChange({
+            status: VIEW_STATUS.READY,
             data: {
               services: nextServices,
               counts: computeCounts(nextServices),
             },
-            status: VIEW_STATUS.READY,
           })
         )
         const [transportErr] = await a.of(

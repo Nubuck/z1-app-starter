@@ -186,6 +186,7 @@ export const elements = task(
                 status={item.status}
                 busy={busy}
                 action={item.action}
+                spacing={true}
               />
               <TransportTitle
                 name={item.name}

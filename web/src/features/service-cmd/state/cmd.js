@@ -7,9 +7,9 @@ export const cmd = task((t, a, r) => ({
   },
   mutations(m) {
     return [
-      m(['sub', 'unsub'], (state, action) => {
-        return t.merge(state, { subbed: action.payload })
-      }),
+      m(['sub', 'unsub'], (state, action) =>
+        t.merge(state, { subbed: action.payload })
+      ),
     ]
   },
   effects(fx, { mutations, actions }) {
@@ -45,7 +45,6 @@ export const cmd = task((t, a, r) => ({
         ({ api }) => {
           const patched$ = r.fromEvent(api.service('service-cmd'), 'patched')
           const created$ = r.fromEvent(api.service('service-cmd'), 'created')
-
           return patched$.pipe(
             r.merge(
               created$.pipe(
