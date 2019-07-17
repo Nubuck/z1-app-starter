@@ -286,7 +286,7 @@ export const detail = task((t, a) =>
                           }
                         />
                       </Row>
-                      <Row box={{ flexWrap: true, padding: { y: 6 } }}>
+                      <Row box={{ flexWrap: true, padding: { y: 6, x: 4 } }}>
                         <Col xs={12} md={6}>
                           <Row box={{ flexWrap: true }}>
                             <ViewMetric
@@ -419,7 +419,7 @@ export const detail = task((t, a) =>
                                 state
                               )}`}
                             />
-                            <Col xs={12} xl={6}>
+                            <Col xs={12}>
                               <TimestampLabel
                                 updatedAt={t.pathOr(
                                   null,
@@ -431,26 +431,10 @@ export const detail = task((t, a) =>
                                 next={ui =>
                                   ui.next({
                                     opacity: 1,
-                                    margin: [{ top: 4, bottom: 2 },{ top: 4, bottom: 4 }],
-                                    padding: 0,
-                                  })
-                                }
-                              />
-                            </Col>
-                            <Col xs={12} xl={6}>
-                              <DateLabel
-                                label="created"
-                                date={t.pathOr(
-                                  null,
-                                  ['data', 'service', 'updatedAt'],
-                                  state
-                                )}
-                                size="md"
-                                iconSize="xl"
-                                next={ui =>
-                                  ui.next({
-                                    opacity: 1,
-                                    margin: [{ top: 4, bottom: 6 },{ top: 4, bottom: 4 }],
+                                    margin: [
+                                      { top: 4, bottom: 6 },
+                                      { top: 4, bottom: 4 },
+                                    ],
                                     padding: 0,
                                   })
                                 }
@@ -499,6 +483,26 @@ export const detail = task((t, a) =>
                               ['data', 'service', 'meta', 'pm_err_log_path'],
                               state
                             )}`}
+                          />
+                          <DateLabel
+                            label="created"
+                            date={t.pathOr(
+                              null,
+                              ['data', 'service', 'updatedAt'],
+                              state
+                            )}
+                            size="md"
+                            iconSize="xl"
+                            next={ui =>
+                              ui.next({
+                                opacity: 1,
+                                margin: [
+                                  { top: 4, bottom: 6 },
+                                  { top: 4, bottom: 4 },
+                                ],
+                                // padding: 0,
+                              })
+                            }
                           />
                         </Col>
                       </Row>
