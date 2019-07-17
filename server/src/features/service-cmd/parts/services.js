@@ -1,6 +1,6 @@
 import { task } from '@z1/lib-feature-box-server-nedb'
 import { cmdHooksServices } from './hooks'
-export const services = (s, m, { auth, data }) => {
+export const services = task(t => (s, m, { auth, data }) => {
   return [
     s(
       'service-cmd',
@@ -18,8 +18,20 @@ export const services = (s, m, { auth, data }) => {
             remove: [auth.authenticate('jwt')],
           },
           after: {
+            get: [
+              ctx => {
+                if (t.not(t.isNil(t.pathOr(null, ['result', '_id'], ctx)))) {
+                  ctx.result = t.merge(ctx.result, {
+                    env: JSON.parse(ctx.result.env || '{}'),
+                    options: JSON.parse(ctx.result.options || '{}'),
+                    meta: JSON.parse(ctx.result.meta || '{}'),
+                  })
+                }
+                return ctx
+              },
+            ],
             find: [
-              task(t => ctx => {
+              ctx => {
                 ctx.result.data = t.map(
                   item =>
                     t.merge(item, {
@@ -30,7 +42,7 @@ export const services = (s, m, { auth, data }) => {
                   ctx.result.data || []
                 )
                 return ctx
-              }),
+              },
             ],
             create: [],
             patch: [cmdHooksServices.afterPatch],
@@ -40,4 +52,4 @@ export const services = (s, m, { auth, data }) => {
       }
     ),
   ]
-}
+})

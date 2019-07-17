@@ -175,7 +175,10 @@ export const home = task((t, a) =>
                     <VStack box={{ padding: [{ top: 6 }, { sm: { top: 4 } }] }}>
                       <Row
                         box={{
-                          padding: { bottom: 2 },
+                          padding: [
+                            { left: 2, right: 2 },
+                            { sm: { bottom: 2, left: 4 } },
+                          ],
                         }}
                       >
                         <ViewMetric

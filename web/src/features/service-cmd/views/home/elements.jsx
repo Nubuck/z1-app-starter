@@ -39,20 +39,39 @@ export const elements = task(
       onDataChange,
     }) {
       return (
-        <Row box={{ flexWrap: true, shadow: 'md' }} className="form-dark">
-          <VStack box={{ padding: { y: 4 } }}>
+        <Row
+          y="center"
+          x="right"
+          box={{
+            flexWrap: true,
+            shadow: 'md',
+            padding: { bottom: 2, x: 4 },
+          }}
+          className="form-dark"
+        >
+          <VStack
+            y="center"
+            box={{
+              padding: { top: 4, bottom: 2 },
+              width: ['full', { lg: 'auto' }],
+            }}
+          >
             <ViewHeader title={title} text={text} icon={icon} size="md" />
           </VStack>
           <Spacer />
           <VStack
             y="center"
             box={{
-              padding: { y: 4 },
-              width: ['full', { sm: 'auto' }],
+              padding: { top: 3, bottom: 2 },
+              width: ['full', { md: 'auto' }],
             }}
           >
             <HStack y="center">
-              <Icon name="search" size="2xl" box={{ margin: { right: 2 } }} />
+              <Icon
+                name="search"
+                size="2xl"
+                box={{ margin: [{ right: 2 }, { md: { left: 2 } }] }}
+              />
               <Input
                 placeholder="Search..."
                 value={search}
@@ -68,12 +87,16 @@ export const elements = task(
           <VStack
             y="center"
             box={{
-              padding: [{ y: 4 }, { sm: { left: 2 } }],
+              padding: { top: 3, bottom: 2 },
               width: ['full', { md: 'auto' }],
             }}
           >
             <HStack y="center">
-              <Icon name="sort" size="2xl" box={{ margin: { right: 2 } }} />
+              <Icon
+                name="sort"
+                size="2xl"
+                box={{ margin: [{ right: 2 }, { md: { left: 2 } }] }}
+              />
               <Select
                 box={{ margin: { right: 2 } }}
                 value={sortBy}

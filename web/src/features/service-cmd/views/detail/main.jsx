@@ -13,6 +13,7 @@ const metricProps = task(t => (status, color) => ({
   textBox: {
     padding: [{ right: 2, top: 0 }, { xl: { top: 3 } }],
   },
+  box: { padding: { y: 4 } },
   color: t.eq(status, 'online') ? color : null,
 }))
 
@@ -145,8 +146,10 @@ export const detail = task((t, a) =>
       Spacer,
       Row,
       Col,
+      Text,
       ViewHeader,
       ViewMetric,
+      ViewIconLabel,
       TransportButton,
       TransportStatusIcon,
       TransportTitle,
@@ -176,20 +179,57 @@ export const detail = task((t, a) =>
                 <React.Fragment>
                   <When is={t.not(t.isNil(id))}>
                     <Row
-                      box={{ flexWrap: true, shadow: 'md' }}
+                      y="center"
+                      x="right"
+                      box={{
+                        flexWrap: true,
+                        shadow: 'md',
+                        padding: [
+                          { top: 3, bottom: 2, left: 4 },
+                          { lg: { top: 0, bottom: 0 } },
+                        ],
+                      }}
                       className="form-dark"
                     >
-                      <VStack box={{ padding: { y: 4 } }}>
-                        <ViewHeader
-                          title="Service"
-                          text={t.pathOr(
-                            '',
-                            ['data', 'service', 'name'],
-                            state
-                          )}
-                          icon="cube"
-                          size="md"
-                        />
+                      <VStack
+                        y="center"
+                        box={{ width: ['full', { lg: 'auto' }] }}
+                      >
+                        <HStack y="center" box={{ flexWrap: true, padding: 0 }}>
+                          <ViewHeader
+                            title="Service"
+                            text={t.pathOr(
+                              '',
+                              ['data', 'service', 'name'],
+                              state
+                            )}
+                            icon="cube"
+                            size="md"
+                          />
+                          <Text
+                            y="center"
+                            as={VStack}
+                            weight="thin"
+                            box={{ padding: { left: 4, top: 2 } }}
+                          >
+                            {`v${t.pathOr(
+                              '0.0.0',
+                              ['data', 'service', 'version'],
+                              state
+                            )}`}
+                          </Text>
+                          {/* <ViewIconLabel
+                            icon="flag-checkered"
+                            text="autostart"
+                            color="blue-500"
+                            iconSize="xl"
+                            size="sm"
+                            letterSpacing="wide"
+                            box={{ padding: { left: 4 } }}
+                            textBox={{ margin: 0 }}
+                            y="center"
+                          /> */}
+                        </HStack>
                       </VStack>
                       <Spacer />
                       <TransportStatusLabel
@@ -212,7 +252,6 @@ export const detail = task((t, a) =>
                           ['data', 'service', 'action'],
                           state
                         )}
-                        next={ui => ui.next({ display: 'flex' })}
                       />
                       <TransportButton
                         busy={busy}
@@ -236,6 +275,17 @@ export const detail = task((t, a) =>
                       />
                     </Row>
                     <Row box={{ flexWrap: true, padding: { y: 6 } }}>
+                      <ViewMetric
+                        {...primaryMetricProps}
+                        icon="clone"
+                        label="instances"
+                        text={`x${t.pathOr(
+                          '0',
+                          ['data', 'service', 'instances'],
+                          state
+                        )}`}
+                      />
+
                       <ViewMetric
                         {...primaryMetricProps}
                         icon="rotate-right"
@@ -293,6 +343,16 @@ export const detail = task((t, a) =>
                         text={`${t.pathOr(
                           'none',
                           ['data', 'service', 'interpreter'],
+                          state
+                        )}`}
+                      />
+                      <ViewMetric
+                        {...secondaryMetricProps}
+                        icon="wrench"
+                        label="mode"
+                        text={`${t.pathOr(
+                          'fork',
+                          ['data', 'service', 'exec_mode'],
                           state
                         )}`}
                       />

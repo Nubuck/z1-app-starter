@@ -89,7 +89,7 @@ export const elements = task(
           </VStack>
         )
       },
-      ViewHeader({ title, text, icon, highlight, size, to }) {
+      ViewHeader({ title, text, icon, highlight, size, to, box }) {
         const textSize = t.getMatch(size)({
           sm: ['lg', { sm: 'xl' }],
           lg: ['3xl', { sm: '4xl' }],
@@ -103,7 +103,12 @@ export const elements = task(
               },
             }
         return (
-          <HStack x="left" y="center" {...headerProps.container}>
+          <HStack
+            x="left"
+            y="center"
+            {...headerProps.container}
+            box={box || {}}
+          >
             <When is={icon}>
               <Icon
                 name={icon}
@@ -442,7 +447,7 @@ export const elements = task(
               icon={t.eq(status, 'online') ? 'play' : 'stop'}
               text={status || 'offline'}
               color={t.eq(status, 'online') ? 'green-500' : 'red-500'}
-              size="xl"
+              size={['md', { md: 'xl' }]}
               busy={busy}
               box={{ margin: { right: 2 } }}
             />
@@ -450,7 +455,7 @@ export const elements = task(
               is={t.and(t.eq(status, 'online'), t.isType(uptime, 'String'))}
             >
               <ViewIconLabel
-                size="xl"
+                size={['md', { md: 'xl' }]}
                 icon="arrow-up"
                 text={dayjs().from(dayjs(uptime), true)}
               />
