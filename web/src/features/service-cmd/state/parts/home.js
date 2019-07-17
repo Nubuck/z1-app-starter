@@ -23,7 +23,10 @@ export const homeCmd = task((t, _, r) => ({
               r.filter(action =>
                 t.and(
                   t.eq(action.type, actions.exitRoute),
-                  t.eq(action.payload.route, actions.routeHome)
+                  t.eq(
+                    t.pathOr(null, ['payload', 'route'], action),
+                    actions.routeHome
+                  )
                 )
               ),
               r.tap(() => {

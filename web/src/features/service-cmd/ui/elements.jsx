@@ -132,18 +132,18 @@ export const elements = task(
       ViewMetric({ icon, label, text, color, size, textBox, ...props }) {
         const sizes = t.getMatch(size || 'md')({
           sm: {
-            icon: '3xl',
-            label: ['xs', { md: 'lg' }],
+            icon: ['2xl', { lg: '3xl' }],
+            label: ['md', { md: 'lg' }],
             text: ['md', { xl: 'xl' }],
           },
           md: {
             icon: ['2xl', { lg: '3xl' }],
-            label: ['sm', { lg: 'lg' }],
+            label: ['md', { lg: 'lg' }],
             text: ['xl', { xl: '2xl' }],
           },
           lg: {
             icon: ['4xl', { lg: '5xl' }],
-            label: ['md', { md: 'xl' }],
+            label: ['lg', { md: 'xl' }],
             text: ['xl', { xl: '4xl' }],
           },
         })

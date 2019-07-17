@@ -23,7 +23,10 @@ export const detailCmd = task((t, a, r) => ({
               r.filter(action =>
                 t.and(
                   t.eq(action.type, actions.exitRoute),
-                  t.eq(action.payload.route, actions.routeViewDetail)
+                  t.eq(
+                    t.pathOr(null, ['payload', 'route'], action),
+                    actions.routeViewDetail
+                  )
                 )
               ),
               r.tap(() => {

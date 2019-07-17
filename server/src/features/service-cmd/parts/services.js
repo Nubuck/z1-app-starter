@@ -1,6 +1,16 @@
 import { task } from '@z1/lib-feature-box-server-nedb'
 import { cmdHooksServices } from './hooks'
 export const services = task(t => (s, m, { auth, data }) => {
+  const afterResult = ctx => {
+    if (t.not(t.isNil(t.pathOr(null, ['result', '_id'], ctx)))) {
+      ctx.result = t.merge(ctx.result, {
+        env: JSON.parse(ctx.result.env || '{}'),
+        options: JSON.parse(ctx.result.options || '{}'),
+        meta: JSON.parse(ctx.result.meta || '{}'),
+      })
+    }
+    return ctx
+  }
   return [
     s(
       'service-cmd',
@@ -18,18 +28,7 @@ export const services = task(t => (s, m, { auth, data }) => {
             remove: [auth.authenticate('jwt')],
           },
           after: {
-            get: [
-              ctx => {
-                if (t.not(t.isNil(t.pathOr(null, ['result', '_id'], ctx)))) {
-                  ctx.result = t.merge(ctx.result, {
-                    env: JSON.parse(ctx.result.env || '{}'),
-                    options: JSON.parse(ctx.result.options || '{}'),
-                    meta: JSON.parse(ctx.result.meta || '{}'),
-                  })
-                }
-                return ctx
-              },
-            ],
+            get: [afterResult],
             find: [
               ctx => {
                 ctx.result.data = t.map(
@@ -44,8 +43,8 @@ export const services = task(t => (s, m, { auth, data }) => {
                 return ctx
               },
             ],
-            create: [],
-            patch: [cmdHooksServices.afterPatch],
+            create: [afterResult],
+            patch: [cmdHooksServices.afterPatch, afterResult],
             remove: [],
           },
         },
