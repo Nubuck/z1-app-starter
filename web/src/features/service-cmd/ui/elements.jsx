@@ -106,24 +106,30 @@ export const elements = task(
           <HStack
             x="left"
             y="center"
+            box={{ flexWrap: true }}
             {...headerProps.container}
-            box={box || {}}
+            next={ui => ui.next(box || {})}
           >
             <When is={icon}>
               <Icon
                 name={icon}
                 size={textSize}
-                box={{ padding: { right: 2 } }}
+                box={{ padding: { right: 3, top: 1 } }}
               />
             </When>
             <Text
               weight="medium"
               size={textSize}
-              box={{ padding: { right: 2 } }}
+              box={{ padding: { right: 3 } }}
             >
               {title}
             </Text>
-            <Text weight="medium" size={textSize} {...headerProps.text}>
+            <Text
+              weight="medium"
+              size={textSize}
+              box={{ padding: { right: 3 } }}
+              {...headerProps.text}
+            >
               {text}
             </Text>
           </HStack>
@@ -258,8 +264,8 @@ export const elements = task(
           <Row
             y="center"
             box={{
-              margin: { y: 2 },
-              padding: [{ y: 3 }, { sm: { y: 2, x: 6 } }],
+              margin: [{ y: 2 }, { sm: { x: 4 } }],
+              padding: [{ y: 3, x: 4 }, { sm: { y: 2,x: 6 } }],
               borderWidth: [{ bottom: 2 }, { sm: { left: 2, bottom: 0 } }],
               borderColor: busy
                 ? 'orange-500'
@@ -478,7 +484,7 @@ export const elements = task(
             }
             box={{
               opacity: 50,
-              padding: { bottom: 4, left: 3, top: 0 },
+              padding: [{ bottom: 4, left: 0, top: 0 }, { md: { left: 3 } }],
             }}
             {...props}
           />
@@ -493,9 +499,7 @@ export const elements = task(
             weight="thin"
             letterSpacing="wide"
             text={
-              date
-                ? `${label} ${dayjs(date).format('YYYY-MM-DD HH:mm a')}`
-                : ''
+              date ? `${label} ${dayjs(date).format('YYYY-MM-DD HH:mm a')}` : ''
             }
             box={{
               padding: { bottom: 4, left: 3, top: 0 },

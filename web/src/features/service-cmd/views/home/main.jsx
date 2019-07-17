@@ -176,8 +176,8 @@ export const home = task((t, a) =>
                       <Row
                         box={{
                           padding: [
-                            { left: 2, right: 2 },
-                            { sm: { bottom: 2, left: 4 } },
+                            { left: 4, right: 4 },
+                            { md: { bottom: 2 } },
                           ],
                         }}
                       >

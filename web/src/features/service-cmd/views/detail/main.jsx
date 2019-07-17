@@ -143,7 +143,7 @@ export const detail = task((t, a) =>
       TimestampLabel,
       DateLabel,
     }) => {
-      const metricProps = (status, color) => ({
+      const metricProps = (status, color, secondary = null) => ({
         xs: 6,
         md: 4,
         xl: 3,
@@ -152,16 +152,18 @@ export const detail = task((t, a) =>
           padding: [{ right: 2, top: 0 }, { xl: { top: 3 } }],
         },
         box: { padding: { y: 4 } },
-        color: t.eq(status, 'online') ? color : null,
+        color: t.eq(status, 'online') ? color : secondary,
       })
       const folderProps = (status, color) => ({
         xs: 12,
         size: 'sm',
         textBox: {
-          padding: [{ right: 2, top: 2 }, { xl: { top: 1 } }],
+          padding: [{ right: 2, top: 2 }, { xl: { top: 2 } }],
         },
-        box: { padding: [{ x: 0, y: 2 }, { md: { x: 4 } }] },
-        color: t.eq(status, 'online') ? color : null,
+        box: {
+          padding: [{ x: 0, bottom: 4 }, { md: { x: 4, bottom: 4, top: 1 } }],
+        },
+        color: t.eq(status, 'online') ? color : 'blue-600',
       })
       return ({ state, mutations }) => {
         const id = t.pathOr(null, ['data', 'service', '_id'], state)
@@ -175,8 +177,8 @@ export const detail = task((t, a) =>
           t.eq(actionStatus, 'launching'),
           t.eq(actionStatus, 'stopping')
         )
-        const primaryMetricProps = metricProps(status, 'green-500')
-        const secondaryMetricProps = metricProps(status, 'teal-500')
+        const primaryMetricProps = metricProps(status, 'green-500', 'gray-500')
+        const secondaryMetricProps = metricProps(status, 'teal-500', 'teal-700')
         const folderMetricProps = folderProps(status, 'blue-500')
         return (
           <ViewContainer>
@@ -194,7 +196,7 @@ export const detail = task((t, a) =>
                           flexWrap: true,
                           shadow: 'md',
                           padding: [
-                            { top: 3, bottom: 2, left: 4 },
+                            { top: 3, bottom: 2, x: 4 },
                             { lg: { top: 0, bottom: 0 } },
                           ],
                         }}
@@ -222,7 +224,9 @@ export const detail = task((t, a) =>
                               y="center"
                               as={VStack}
                               weight="thin"
-                              box={{ padding: { left: 4, top: 2 } }}
+                              box={{
+                                padding: { left: 0, top: 2 },
+                              }}
                             >
                               {`v${t.pathOr(
                                 '0.0.0',
@@ -230,17 +234,6 @@ export const detail = task((t, a) =>
                                 state
                               )}`}
                             </Text>
-                            {/* <ViewIconLabel
-                            icon="flag-checkered"
-                            text="autostart"
-                            color="blue-500"
-                            iconSize="xl"
-                            size="sm"
-                            letterSpacing="wide"
-                            box={{ padding: { left: 4 } }}
-                            textBox={{ margin: 0 }}
-                            y="center"
-                          /> */}
                           </HStack>
                         </VStack>
                         <Spacer />
@@ -264,6 +257,13 @@ export const detail = task((t, a) =>
                             ['data', 'service', 'action'],
                             state
                           )}
+                          next={ui =>
+                            ui.next({
+                              flexDirection: 'row',
+                              width: [20, { xl: 24 }],
+                              padding: { right: 4, left: 0 },
+                            })
+                          }
                         />
                         <TransportButton
                           busy={busy}
@@ -286,9 +286,35 @@ export const detail = task((t, a) =>
                           }
                         />
                       </Row>
-                      <Row box={{ flexWrap: true, padding: { y: 6, x: 4 } }}>
+                      <Row
+                        box={{
+                          flexWrap: true,
+                          padding: [{ y: 4, x: 4 }, { md: { y: 6, x: 4 } }],
+                        }}
+                      >
                         <Col xs={12} md={6}>
                           <Row box={{ flexWrap: true }}>
+                            <Col xs={12}>
+                              <TimestampLabel
+                                updatedAt={t.pathOr(
+                                  null,
+                                  ['data', 'service', 'updatedAt'],
+                                  state
+                                )}
+                                size="md"
+                                iconSize="xl"
+                                next={ui =>
+                                  ui.next({
+                                    opacity: 1,
+                                    margin: [
+                                      { top: 3, bottom: 6 },
+                                      { top: 4, bottom: 4 },
+                                    ],
+                                    padding: 0,
+                                  })
+                                }
+                              />
+                            </Col>
                             <ViewMetric
                               {...primaryMetricProps}
                               icon="clone"
@@ -419,30 +445,26 @@ export const detail = task((t, a) =>
                                 state
                               )}`}
                             />
-                            <Col xs={12}>
-                              <TimestampLabel
-                                updatedAt={t.pathOr(
-                                  null,
-                                  ['data', 'service', 'updatedAt'],
-                                  state
-                                )}
-                                size="md"
-                                iconSize="xl"
-                                next={ui =>
-                                  ui.next({
-                                    opacity: 1,
-                                    margin: [
-                                      { top: 4, bottom: 6 },
-                                      { top: 4, bottom: 4 },
-                                    ],
-                                    padding: 0,
-                                  })
-                                }
-                              />
-                            </Col>
                           </Row>
                         </Col>
                         <Col xs={12} md={6}>
+                          <DateLabel
+                            label="created"
+                            date={t.pathOr(
+                              null,
+                              ['data', 'service', 'updatedAt'],
+                              state
+                            )}
+                            size="md"
+                            iconSize="xl"
+                            next={ui =>
+                              ui.next({
+                                opacity: 1,
+                                margin: { top: 4, bottom: 8 },
+                                padding: [{ x: 0 }, { md: { x: 4 } }],
+                              })
+                            }
+                          />
                           <ViewMetric
                             {...folderMetricProps}
                             icon="folder-open-o"
@@ -483,26 +505,6 @@ export const detail = task((t, a) =>
                               ['data', 'service', 'meta', 'pm_err_log_path'],
                               state
                             )}`}
-                          />
-                          <DateLabel
-                            label="created"
-                            date={t.pathOr(
-                              null,
-                              ['data', 'service', 'updatedAt'],
-                              state
-                            )}
-                            size="md"
-                            iconSize="xl"
-                            next={ui =>
-                              ui.next({
-                                opacity: 1,
-                                margin: [
-                                  { top: 4, bottom: 6 },
-                                  { top: 4, bottom: 4 },
-                                ],
-                                // padding: 0,
-                              })
-                            }
                           />
                         </Col>
                       </Row>

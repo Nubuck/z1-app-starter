@@ -180,6 +180,7 @@ export const elements = task(
             xl={4}
             box={{
               padding: [{ bottom: 2 }, { md: { right: 6 } }],
+              margin: [{ x: -2 }, { md: { x: 0 } }],
             }}
           >
             <HStack y="top">

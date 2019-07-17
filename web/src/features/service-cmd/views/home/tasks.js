@@ -32,6 +32,7 @@ export const itemMetricProps = task(t => (status, color) => ({
     padding: [{ right: 2, top: 0 }, { xl: { top: 3 } }],
   },
   color: t.eq(status, 'online') ? color : null,
+  next: ui => ui.next({ padding: [{ x: 0, bottom: 3 }, { md: { x: 4 } }] }),
 }))
 export const viewMetricProps = color => ({
   xs: 6,
@@ -39,7 +40,7 @@ export const viewMetricProps = color => ({
   lg: 2,
   size: 'md',
   box: {
-    padding: [{ left: 4, right: 4, bottom: 4 }, { md: { left: 0 } }],
+    padding: { left: 0, right: 4, bottom: 4 },
     color,
   },
 })
