@@ -36,14 +36,14 @@ export const detail = task((t, a) =>
             t.eq(type, VIEW_LIFECYCLE.DATA_CHANGE),
             t.eq(
               t.pathOr('detail', ['service', '_id'], viewData),
-              t.pathOr(null, ['item', '_id'], nextData || {})
+              t.pathOr(null, ['service', '_id'], nextData || {})
             )
           )
         ) {
           return {
             status,
             data: t.merge(viewData, {
-              service: nextData.item || {},
+              service: nextData.service || {},
             }),
             error,
           }
@@ -155,6 +155,7 @@ export const detail = task((t, a) =>
       TransportTitle,
       TransportStatusLabel,
       TimestampLabel,
+      DateLabel,
     }) => ({ state, mutations }) => {
       const id = t.pathOr(null, ['data', 'service', '_id'], state)
       const status = t.pathOr('init', ['data', 'service', 'status'], state)
@@ -275,87 +276,121 @@ export const detail = task((t, a) =>
                       />
                     </Row>
                     <Row box={{ flexWrap: true, padding: { y: 6 } }}>
-                      <ViewMetric
-                        {...primaryMetricProps}
-                        icon="clone"
-                        label="instances"
-                        text={`x${t.pathOr(
-                          '0',
-                          ['data', 'service', 'instances'],
-                          state
-                        )}`}
-                      />
-
-                      <ViewMetric
-                        {...primaryMetricProps}
-                        icon="rotate-right"
-                        label="restarts"
-                        text={`x${t.pathOr(
-                          '0',
-                          ['data', 'service', 'restarts'],
-                          state
-                        )}`}
-                      />
-                      <ViewMetric
-                        {...primaryMetricProps}
-                        icon="hdd-o"
-                        label="CPU"
-                        text={`${t.pathOr(
-                          '0',
-                          ['data', 'service', 'cpu'],
-                          state
-                        )}%`}
-                      />
-                      <ViewMetric
-                        {...primaryMetricProps}
-                        icon="database"
-                        label="memory"
-                        text={`${t.caseTo.lowerCase(
-                          bytes(
-                            t.pathOr(0, ['data', 'service', 'memory'], state)
-                          )
-                        )}`}
-                      />
-                      <ViewMetric
-                        {...secondaryMetricProps}
-                        icon="gears"
-                        label="pm2id"
-                        text={`${t.pathOr(
-                          'none',
-                          ['data', 'service', 'pmId'],
-                          state
-                        )}`}
-                      />
-                      <ViewMetric
-                        {...secondaryMetricProps}
-                        icon="barcode"
-                        label="pid"
-                        text={`${t.pathOr(
-                          '0',
-                          ['data', 'service', 'pid'],
-                          state
-                        )}`}
-                      />
-                      <ViewMetric
-                        {...secondaryMetricProps}
-                        icon="terminal"
-                        label="interpreter"
-                        text={`${t.pathOr(
-                          'none',
-                          ['data', 'service', 'interpreter'],
-                          state
-                        )}`}
-                      />
-                      <ViewMetric
-                        {...secondaryMetricProps}
-                        icon="wrench"
-                        label="mode"
-                        text={`${t.pathOr(
-                          'fork',
-                          ['data', 'service', 'exec_mode'],
-                          state
-                        )}`}
-                      />
+                      <Col xs={12} md={6}>
+                        <Row box={{ flexWrap: true }}>
+                          <ViewMetric
+                            {...primaryMetricProps}
+                            icon="clone"
+                            label="instances"
+                            text={`x${t.pathOr(
+                              '0',
+                              ['data', 'service', 'instances'],
+                              state
+                            )}`}
+                          />
+                          <ViewMetric
+                            {...primaryMetricProps}
+                            icon="rotate-right"
+                            label="restarts"
+                            text={`x${t.pathOr(
+                              '0',
+                              ['data', 'service', 'restarts'],
+                              state
+                            )}`}
+                          />
+                          <ViewMetric
+                            {...primaryMetricProps}
+                            icon="hdd-o"
+                            label="CPU"
+                            text={`${t.pathOr(
+                              '0',
+                              ['data', 'service', 'cpu'],
+                              state
+                            )}%`}
+                          />
+                          <ViewMetric
+                            {...primaryMetricProps}
+                            icon="database"
+                            label="memory"
+                            text={`${t.caseTo.lowerCase(
+                              bytes(
+                                t.pathOr(
+                                  0,
+                                  ['data', 'service', 'memory'],
+                                  state
+                                )
+                              )
+                            )}`}
+                          />
+                          <ViewMetric
+                            {...secondaryMetricProps}
+                            icon="gears"
+                            label="pm2id"
+                            text={`${t.pathOr(
+                              'none',
+                              ['data', 'service', 'pmId'],
+                              state
+                            )}`}
+                          />
+                          <ViewMetric
+                            {...secondaryMetricProps}
+                            icon="barcode"
+                            label="pid"
+                            text={`${t.pathOr(
+                              '0',
+                              ['data', 'service', 'pid'],
+                              state
+                            )}`}
+                          />
+                          <ViewMetric
+                            {...secondaryMetricProps}
+                            icon="terminal"
+                            label="interpreter"
+                            text={`${t.pathOr(
+                              'none',
+                              ['data', 'service', 'interpreter'],
+                              state
+                            )}`}
+                          />
+                          <ViewMetric
+                            {...secondaryMetricProps}
+                            icon="wrench"
+                            label="mode"
+                            text={`${t.pathOr(
+                              'fork',
+                              ['data', 'service', 'exec_mode'],
+                              state
+                            )}`}
+                          />
+                        </Row>
+                      </Col>
+                      <Col xs={12} md={6}>
+                        <TimestampLabel
+                          updatedAt={t.pathOr(
+                            null,
+                            ['data', 'service', 'updatedAt'],
+                            state
+                          )}
+                          size="xl"
+                          iconSize="2xl"
+                          next={ui =>
+                            ui.next({ opacity: 1, margin: { top: 4 } })
+                          }
+                        />
+                        <DateLabel
+                          label="created"
+                          date={t.pathOr(
+                            null,
+                            ['data', 'service', 'updatedAt'],
+                            state
+                          )}
+                          size="xl"
+                          iconSize="2xl"
+                          next={ui =>
+                            ui.next({ opacity: 1, margin: { top: 4 } })
+                          }
+                        />
+                      </Col>
                     </Row>
                   </When>
                 </React.Fragment>

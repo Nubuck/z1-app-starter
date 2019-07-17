@@ -1,14 +1,14 @@
 import { task } from '@z1/lib-feature-box'
 
 // main
-export const cmd = task((t, a, r) => ({
+export const homeCmd = task((t, _, r) => ({
   initial: {
-    subbed: false,
+    homeSubsribed: false,
   },
   mutations(m) {
     return [
-      m(['sub', 'unsub'], (state, action) =>
-        t.merge(state, { subbed: action.payload })
+      m(['homeSub', 'homeUnsub'], (state, action) =>
+        t.merge(state, { homeSubsribed: action.payload })
       ),
     ]
   },
@@ -17,7 +17,7 @@ export const cmd = task((t, a, r) => ({
       fx(
         actions.routeHome,
         ({ action$, cancelled$ }, dispatch, done) => {
-          dispatch(mutations.sub(true))
+          dispatch(mutations.homeSub(true))
           action$
             .pipe(
               r.filter(action =>
@@ -27,7 +27,7 @@ export const cmd = task((t, a, r) => ({
                 )
               ),
               r.tap(() => {
-                dispatch(mutations.unsub(false))
+                dispatch(mutations.homeUnsub(false))
                 done()
               }),
               r.takeUntil(cancelled$)
@@ -35,13 +35,13 @@ export const cmd = task((t, a, r) => ({
             .subscribe()
         },
         {
-          cancelType: actions.unsub,
+          cancelType: actions.homeUnsub,
           warnTimeout: 0,
           latest: true,
         }
       ),
       fx(
-        actions.sub,
+        actions.homeSub,
         ({ api }) => {
           const patched$ = r.fromEvent(api.service('service-cmd'), 'patched')
           const created$ = r.fromEvent(api.service('service-cmd'), 'created')
@@ -66,7 +66,7 @@ export const cmd = task((t, a, r) => ({
           )
         },
         {
-          cancelType: actions.unsub,
+          cancelType: actions.homeUnsub,
           warnTimeout: 0,
           latest: true,
         }

@@ -5,7 +5,7 @@ import { macroRouteViewState } from '@z1/lib-feature-macros'
 import { views } from '../views'
 
 // parts
-import { cmd } from './cmd'
+import { homeCmd, detailCmd } from './parts'
 
 // schema
 import { secureNav } from './schema'
@@ -15,7 +15,6 @@ const name = 'serviceCmd'
 const routeProps = { authenticate: true }
 export const serviceCmdState = ({ macroNavActiveState }) =>
   composeStateBox({ name }, [
-    cmd,
     macroRouteViewState(name, {
       path: '/service-cmd',
       views: views.state,
@@ -27,4 +26,6 @@ export const serviceCmdState = ({ macroNavActiveState }) =>
       },
     }),
     macroNavActiveState(name, { secure: secureNav }),
+    homeCmd,
+    detailCmd,
   ])

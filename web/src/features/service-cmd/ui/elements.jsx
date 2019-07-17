@@ -463,7 +463,7 @@ export const elements = task(
           </HStack>
         )
       },
-      TimestampLabel({ updatedAt }) {
+      TimestampLabel({ updatedAt, ...props }) {
         return (
           <ViewIconLabel
             icon="calendar"
@@ -480,6 +480,27 @@ export const elements = task(
               opacity: 50,
               padding: { bottom: 4, left: 3, top: 0 },
             }}
+            {...props}
+          />
+        )
+      },
+      DateLabel({ label, date, ...props }) {
+        return (
+          <ViewIconLabel
+            icon="calendar"
+            size="sm"
+            iconSize="lg"
+            weight="thin"
+            letterSpacing="wide"
+            text={
+              date
+                ? `${label} ${dayjs(date).format('YYYY-MM-DD HH:mm a')}`
+                : ''
+            }
+            box={{
+              padding: { bottom: 4, left: 3, top: 0 },
+            }}
+            {...props}
           />
         )
       },
