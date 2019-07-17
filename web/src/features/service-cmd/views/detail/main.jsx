@@ -6,9 +6,7 @@ import bytes from 'bytes'
 // tasks
 const metricProps = task(t => (status, color) => ({
   xs: 6,
-  sm: 3,
-  md: 4,
-  xl: 2,
+  xl: 3,
   size: 'md',
   textBox: {
     padding: [{ right: 2, top: 0 }, { xl: { top: 3 } }],
