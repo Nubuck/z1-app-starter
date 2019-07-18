@@ -1,6 +1,9 @@
 import { task } from '@z1/lib-feature-box-server-nedb'
 import { serviceCmd } from './cmd'
 
+// sync
+import { safeDbItem, pm2OutputToState } from './sync/tasks'
+
 // tasks
 const activeCmd = task(t => item => {
   const options = JSON.parse(item.options || '{}')
@@ -88,11 +91,11 @@ export const cmdHooksServices = task((t, a) => ({
         const nextResult = t.isType(startResult, 'Array')
           ? t.head(startResult)
           : startResult || {}
-        const nextStartResult = serviceCmd.pm2OutputToState(nextResult)
+        const nextStartResult = pm2OutputToState(nextResult)
         const [syncError, syncResult] = await a.of(
           ctx.app.service('service-cmd').patch(
             ctx.id,
-            serviceCmd.safeDbItem(
+            safeDbItem(
               t.merge(t.pick(serviceCmd.PLATFORM_KEYS, nextStartResult || {}), {
                 action: null,
                 actionStatus: null,
@@ -124,11 +127,11 @@ export const cmdHooksServices = task((t, a) => ({
         const nextResult = t.isType(restartResult, 'Array')
           ? t.head(restartResult)
           : restartResult || {}
-        const nextStartResult = serviceCmd.pm2OutputToState(nextResult)
+        const nextStartResult = pm2OutputToState(nextResult)
         const [syncError, syncResult] = await a.of(
           ctx.app.service('service-cmd').patch(
             ctx.id,
-            serviceCmd.safeDbItem(
+            safeDbItem(
               t.merge(t.pick(serviceCmd.PLATFORM_KEYS, nextStartResult || {}), {
                 action: null,
                 actionStatus: null,
@@ -160,11 +163,11 @@ export const cmdHooksServices = task((t, a) => ({
         const nextResult = t.isType(stopResult, 'Array')
           ? t.head(stopResult)
           : stopResult || {}
-        const nextStartResult = serviceCmd.pm2OutputToState(nextResult)
+        const nextStartResult = pm2OutputToState(nextResult)
         const [syncError, syncResult] = await a.of(
           ctx.app.service('service-cmd').patch(
             ctx.id,
-            serviceCmd.safeDbItem(
+            safeDbItem(
               t.merge(t.pick(serviceCmd.PLATFORM_KEYS, nextStartResult || {}), {
                 action: null,
                 actionStatus: null,

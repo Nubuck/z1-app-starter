@@ -1,4 +1,3 @@
-import { task } from '@z1/lib-feature-box-server-nedb'
 import pm2 from 'pm2'
 
 // transports
@@ -186,73 +185,7 @@ const killPm2 = async function() {
   })
 }
 
-const pm2OutputToState = task(t => (output = {}) => {
-  const topFields = t.pick(['pid', 'pm_id'], output || {})
-  const envFields = t.pick(
-    [
-      'pm_id',
-      'name',
-      'status',
-      'instances',
-      'restart_time',
-      'version',
-      'exec_interpreter',
-      'exec_mode',
-      'pm_uptime',
-    ],
-    output.pm2_env || {}
-  )
-  return {
-    pid: topFields.pid,
-    pmId: envFields.pm_id,
-    name: envFields.name,
-    slug: t.caseTo.constantCase(envFields.name),
-    version: envFields.version,
-    status: envFields.status,
-    instances: envFields.instances,
-    restarts: envFields.restart_time,
-    interpreter: envFields.exec_interpreter,
-    mode: envFields.exec_mode,
-    meta: t.pick(
-      [
-        'cwd',
-        'pm_exec_path',
-        'pm_out_log_path',
-        'pm_err_log_path',
-        'pm_pid_path',
-      ],
-      output.pm2_env || {}
-    ),
-    memory: output.monit.memory,
-    cpu: output.monit.cpu,
-    uptime: t.not(t.isNil(envFields.pm_uptime))
-      ? new Date(envFields.pm_uptime)
-      : null,
-  }
-})
 
-const safeDbItem = task(t => item => {
-  const extra = t.not(t.has('autoStart')(item))
-    ? {}
-    : {
-        autoStart: t.eq(item.autoStart, null) ? false : item.autoStart,
-      }
-  return t.mergeAll([
-    item,
-    {
-      env: t.isType(item.env, 'String')
-        ? item.env
-        : JSON.stringify(item.env || {}),
-      meta: t.isType(item.meta, 'String')
-        ? item.meta
-        : JSON.stringify(item.meta || {}),
-      options: t.isType(item.options, 'String')
-        ? item.options
-        : JSON.stringify(item.options || {}),
-    },
-    extra,
-  ])
-})
 
 // main
 export const serviceCmd = {
@@ -315,6 +248,5 @@ export const serviceCmd = {
     'uptime',
     'username',
   ],
-  pm2OutputToState,
-  safeDbItem,
+
 }
