@@ -1,5 +1,6 @@
 import { task } from '@z1/lib-feature-box-server-nedb'
-import { cmdHooksServices } from './hooks'
+import { cmdHooks } from './hooks'
+import { cmdEvents } from './events'
 
 // main
 export const services = task(t => (s, m, { auth, data }) => {
@@ -18,6 +19,7 @@ export const services = task(t => (s, m, { auth, data }) => {
       'service-cmd',
       {
         Model: m.services_state,
+        events: ['log-pub', 'log-sub'],
       },
       {
         hooks: {
@@ -26,7 +28,7 @@ export const services = task(t => (s, m, { auth, data }) => {
             find: [auth.authenticate('jwt'), data.safeFindMSSQL],
             create: [auth.authenticate('jwt')],
             update: [auth.authenticate('jwt')],
-            patch: [auth.authenticate('jwt'), cmdHooksServices.beforePatch],
+            patch: [auth.authenticate('jwt'), cmdHooks.beforePatch],
             remove: [auth.authenticate('jwt')],
           },
           after: {
@@ -46,9 +48,12 @@ export const services = task(t => (s, m, { auth, data }) => {
               },
             ],
             create: [afterResult],
-            patch: [cmdHooksServices.afterPatch, afterResult],
+            patch: [cmdHooks.afterPatch, afterResult],
             remove: [],
           },
+        },
+        events: {
+          patched: cmdEvents.onPatched,
         },
       }
     ),

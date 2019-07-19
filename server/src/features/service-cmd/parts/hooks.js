@@ -17,7 +17,7 @@ const activeCmd = task(t => item => {
 })
 
 // main
-export const cmdHooksServices = task((t, a) => ({
+export const cmdHooks = task((t, a) => ({
   async beforePatch(ctx) {
     if (ctx.params.skipCmd) {
       return ctx

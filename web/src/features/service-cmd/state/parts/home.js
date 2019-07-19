@@ -3,12 +3,12 @@ import { task } from '@z1/lib-feature-box'
 // main
 export const homeCmd = task((t, _, r) => ({
   initial: {
-    homeSubsribed: false,
+    homeSubbed: false,
   },
   mutations(m) {
     return [
       m(['homeSub', 'homeUnsub'], (state, action) =>
-        t.merge(state, { homeSubsribed: action.payload })
+        t.merge(state, { homeSubbed: action.payload })
       ),
     ]
   },

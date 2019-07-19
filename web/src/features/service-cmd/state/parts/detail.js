@@ -3,12 +3,12 @@ import { task } from '@z1/lib-feature-box'
 // main
 export const detailCmd = task((t, a, r) => ({
   initial: {
-    detailSubsribed: false,
+    detailSubbed: false,
   },
   mutations(m) {
     return [
       m(['detailSub', 'detailUnsub'], (state, action) =>
-        t.merge(state, { detailSubsribed: action.payload })
+        t.merge(state, { detailSubbed: action.payload })
       ),
     ]
   },
@@ -46,7 +46,7 @@ export const detailCmd = task((t, a, r) => ({
       fx(
         actions.detailSub,
         ({ getState, api }) => {
-          return r.fromEvent(api.service('service-cmd'), 'patched').pipe(
+          return r.fromEvent(api.service('service-cmd'), 'log-pub').pipe(
             r.filter(service =>
               t.eq(
                 service._id,
