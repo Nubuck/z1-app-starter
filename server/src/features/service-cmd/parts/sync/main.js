@@ -166,9 +166,9 @@ export const syncCmdPm2 = task((t, a) => async app => {
   })
 })
 
-export const bootCmdService = app => {
-  console.log('log pubs', app.get('logPubs'))
-  const syncInterval = 1000 * app.get('cmd').service.interval
+export const bootCmdService = task(t => app => {
+  const syncInterval =
+    1000 * t.pathOr(30, ['service', 'interval'], app.get('cmd'))
   const syncTimer = new Stopwatch(syncInterval)
   const restartSyncTimer = () => {
     syncTimer.stop()
@@ -197,4 +197,4 @@ export const bootCmdService = app => {
         restartSyncTimer()
       })
   })
-}
+})

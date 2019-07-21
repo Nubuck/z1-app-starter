@@ -46,7 +46,7 @@ export const detailCmd = task((t, a, r) => ({
       fx(
         actions.detailSub,
         ({ getState, api }) => {
-          return r.fromEvent(api.service('service-cmd'), 'log-pub').pipe(
+          return r.fromEvent(api.service('service-cmd'), 'patched').pipe(
             r.filter(service =>
               t.eq(
                 service._id,
@@ -60,6 +60,33 @@ export const detailCmd = task((t, a, r) => ({
             r.map(service =>
               mutations.dataChange({
                 data: { service, event: 'patched' },
+              })
+            )
+          )
+        },
+        {
+          cancelType: actions.detailUnsub,
+          warnTimeout: 0,
+          latest: true,
+        }
+      ),
+      fx(
+        actions.detailSub,
+        ({ getState, api }) => {
+          return r.fromEvent(api.service('service-cmd'), 'log-pub').pipe(
+            r.filter(log =>
+              t.eq(
+                log.id,
+                t.pathOr(
+                  null,
+                  ['serviceCmd', 'views', 'DETAIL', 'data', 'service', '_id'],
+                  getState()
+                )
+              )
+            ),
+            r.map(log =>
+              mutations.dataChange({
+                data: { log },
               })
             )
           )

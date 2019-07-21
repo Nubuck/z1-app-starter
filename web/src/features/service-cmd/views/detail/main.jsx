@@ -13,6 +13,7 @@ export const detail = task((t, a) =>
             status: VIEW_STATUS.WAITING,
             data: {
               service: null,
+              logs: [],
             },
             error: null,
           }
@@ -30,6 +31,20 @@ export const detail = task((t, a) =>
             status,
             data: t.merge(viewData, {
               service: nextData.service || {},
+            }),
+            error,
+          }
+        }
+        if (
+          t.and(
+            t.eq(type, VIEW_LIFECYCLE.DATA_CHANGE),
+            t.not(t.isNil(t.pathOr(null, ['log', 'id'], nextData || {})))
+          )
+        ) {
+          return {
+            status,
+            data: t.merge(viewData, {
+              logs: t.concat(viewData.logs, [nextData.log.line]),
             }),
             error,
           }
@@ -70,6 +85,7 @@ export const detail = task((t, a) =>
           status,
           data: {
             service: cmdResult,
+            logs: [],
           },
           error: null,
         }

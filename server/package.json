@@ -19,9 +19,9 @@
     "@z1/kit-account-server-nedb": "^0.2.10",
     "@z1/lib-feature-box-server-nedb": "^0.2.9",
     "@z1/preset-tools": "^0.2.5",
+    "always-tail": "^0.2.0",
     "npminstall": "^3.22.1",
     "pm2": "^3.5.1",
-    "tail": "^2.0.2",
     "timer-stopwatch": "^0.2.0"
   }
 }

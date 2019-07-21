@@ -512,6 +512,11 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
+lodash@^2.4.1:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.4.2.tgz#fadd834b9683073da179b3eae6d9c0d15053f73e"
+  integrity sha1-+t2DS5aDBz2hebPq5tnA0VBT9z4=
+
 lower-case-first@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/lower-case-first/-/lower-case-first-1.0.2.tgz#e5da7c26f29a7073be02d52bac9980e5922adfa1"
@@ -805,6 +810,13 @@ swap-case@^1.1.0:
   dependencies:
     lower-case "^1.1.1"
     upper-case "^1.1.1"
+
+timer-stopwatch@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/timer-stopwatch/-/timer-stopwatch-0.2.0.tgz#d2847cf7496e29d2c87db81283ddb9813ffad147"
+  integrity sha1-0oR890luKdLIfbgSg925gT/60Uc=
+  dependencies:
+    lodash "^2.4.1"
 
 title-case@^2.1.0:
   version "2.1.1"
