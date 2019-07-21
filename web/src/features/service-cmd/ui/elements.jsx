@@ -138,7 +138,7 @@ export const elements = task(
       ViewMetric({ icon, label, text, color, size, textBox, ...props }) {
         const sizes = t.getMatch(size || 'md')({
           sm: {
-            icon: ['2xl', { lg: '3xl' }],
+            icon: ['xl', { lg: '2xl' }],
             label: ['md', { md: 'lg' }],
             text: ['md', { xl: 'xl' }],
           },
@@ -272,7 +272,6 @@ export const elements = task(
                 : t.not(t.eq(status, 'online'))
                 ? 'red-500'
                 : 'green-500',
-              shadow: 'md',
             }}
           >
             {children}

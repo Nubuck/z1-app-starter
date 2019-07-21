@@ -44,7 +44,6 @@ export const elements = task(
           x="right"
           box={{
             flexWrap: true,
-            shadow: 'md',
             padding: { bottom: 2, x: 4 },
           }}
           className="form-dark"

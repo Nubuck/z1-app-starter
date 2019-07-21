@@ -16,7 +16,7 @@ export const services = task((t, a) => (s, m, { auth, data }) => {
     }
     return JSON.parse(val)
   }
-  const nextitem = (ctx, item) => {
+  const nextItem = (ctx, item) => {
     try {
       return t.merge(item, {
         env: safeParse(item.env),
@@ -30,7 +30,7 @@ export const services = task((t, a) => (s, m, { auth, data }) => {
   }
   const afterResult = ctx => {
     if (t.not(t.isNil(t.pathOr(null, ['result', '_id'], ctx)))) {
-      ctx.result = nextitem(ctx, ctx.result)
+      ctx.result = nextItem(ctx, ctx.result)
     }
     return ctx
   }
@@ -53,12 +53,12 @@ export const services = task((t, a) => (s, m, { auth, data }) => {
         if (logResult) {
           ctx.result.logs = t.concat(
             t.map(
-              line => ({ id: ctx.result._id, type: 'out', line }),
-              t.split(/\n/, logResult) || []
-            ),
-            t.map(
               line => ({ id: ctx.result._id, type: 'err', line }),
               t.split(/\n/, errLogResult) || []
+            ),
+            t.map(
+              line => ({ id: ctx.result._id, type: 'out', line }),
+              t.split(/\n/, logResult) || []
             )
           )
         }
@@ -88,7 +88,7 @@ export const services = task((t, a) => (s, m, { auth, data }) => {
             find: [
               ctx => {
                 ctx.result.data = t.map(
-                  item => nextitem(ctx, item),
+                  item => nextItem(ctx, item),
                   ctx.result.data || []
                 )
                 return ctx

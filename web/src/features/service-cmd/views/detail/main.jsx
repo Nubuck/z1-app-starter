@@ -167,22 +167,23 @@ export const detail = task((t, a) =>
       const metricProps = (status, color, secondary = null) => ({
         xs: 6,
         md: 4,
-        xl: 3,
+        xl: 4,
         size: 'md',
         textBox: {
-          padding: [{ right: 2, top: 0 }, { xl: { top: 3 } }],
+          padding: [{ right: 2, top: 0 }, { xl: { top: 1 } }],
         },
-        box: { padding: { y: 4 } },
+        box: { padding: { y: 2 } },
         color: t.eq(status, 'online') ? color : secondary,
       })
       const folderProps = (status, color) => ({
         xs: 12,
         size: 'sm',
         textBox: {
-          padding: [{ right: 2, top: 2 }, { xl: { top: 2 } }],
+          padding: [{ right: 2, top: 2 }, { xl: { top: 1 } }],
+          fontSize: ['sm', { xl: 'lg' }],
         },
         box: {
-          padding: [{ x: 0, bottom: 4 }, { md: { x: 4, bottom: 4, top: 1 } }],
+          padding: [{ x: 0, bottom: 2 }, { md: { x: 0, bottom: 2, top: 0 } }],
         },
         color: t.eq(status, 'online') ? color : 'blue-600',
       })
@@ -216,9 +217,8 @@ export const detail = task((t, a) =>
                         x="right"
                         box={{
                           flexWrap: true,
-                          shadow: 'md',
                           padding: [
-                            { top: 3, bottom: 2, x: 4 },
+                            { top: 3, bottom: 1, x: 4 },
                             { lg: { top: 0, bottom: 0 } },
                           ],
                         }}
@@ -311,32 +311,18 @@ export const detail = task((t, a) =>
                       <Row
                         box={{
                           flexWrap: true,
-                          padding: [{ y: 4, x: 4 }, { md: { y: 6, x: 4 } }],
+                          padding: [{ top: 3, x: 4 }, { md: { top: 6, x: 4 } }],
                         }}
                       >
-                        <Col xs={12} md={6}>
+                        <Col
+                          xs={12}
+                          md={6}
+                          xl={5}
+                          box={{
+                            padding: [{ bottom: 4 }, { md: { bottom: 0 } }],
+                          }}
+                        >
                           <Row box={{ flexWrap: true }}>
-                            <Col xs={12}>
-                              <TimestampLabel
-                                updatedAt={t.pathOr(
-                                  null,
-                                  ['data', 'service', 'updatedAt'],
-                                  state
-                                )}
-                                size="md"
-                                iconSize="xl"
-                                next={ui =>
-                                  ui.next({
-                                    opacity: 1,
-                                    margin: [
-                                      { top: 3, bottom: 6 },
-                                      { top: 4, bottom: 4 },
-                                    ],
-                                    padding: 0,
-                                  })
-                                }
-                              />
-                            </Col>
                             <ViewMetric
                               {...primaryMetricProps}
                               icon="clone"
@@ -344,16 +330,6 @@ export const detail = task((t, a) =>
                               text={`x${t.pathOr(
                                 '0',
                                 ['data', 'service', 'instances'],
-                                state
-                              )}`}
-                            />
-                            <ViewMetric
-                              {...primaryMetricProps}
-                              icon="rotate-right"
-                              label="restarts"
-                              text={`x${t.pathOr(
-                                '0',
-                                ['data', 'service', 'restarts'],
                                 state
                               )}`}
                             />
@@ -379,6 +355,16 @@ export const detail = task((t, a) =>
                                     state
                                   )
                                 )
+                              )}`}
+                            />
+                            <ViewMetric
+                              {...primaryMetricProps}
+                              icon="rotate-right"
+                              label="restarts"
+                              text={`x${t.pathOr(
+                                '0',
+                                ['data', 'service', 'restarts'],
+                                state
                               )}`}
                             />
                             <ViewMetric
@@ -468,25 +454,25 @@ export const detail = task((t, a) =>
                               )}`}
                             />
                           </Row>
-                        </Col>
-                        <Col xs={12} md={6}>
-                          <DateLabel
-                            label="created"
-                            date={t.pathOr(
-                              null,
-                              ['data', 'service', 'updatedAt'],
-                              state
-                            )}
-                            size="md"
-                            iconSize="xl"
-                            next={ui =>
-                              ui.next({
-                                opacity: 1,
-                                margin: { top: 4, bottom: 8 },
-                                padding: [{ x: 0 }, { md: { x: 4 } }],
-                              })
-                            }
-                          />
+                          <Col xs={12}>
+                            <DateLabel
+                              label="created"
+                              date={t.pathOr(
+                                null,
+                                ['data', 'service', 'updatedAt'],
+                                state
+                              )}
+                              size="md"
+                              iconSize="xl"
+                              next={ui =>
+                                ui.next({
+                                  opacity: 50,
+                                  margin: { y: 2 },
+                                  padding: { left: 0, right: 0 },
+                                })
+                              }
+                            />
+                          </Col>
                           <ViewMetric
                             {...folderMetricProps}
                             icon="folder-open-o"
@@ -529,38 +515,61 @@ export const detail = task((t, a) =>
                             )}`}
                           />
                         </Col>
+                        <Col
+                          xs={12}
+                          md={6}
+                          xl={7}
+                          box={{
+                            flex: 1,
+                            height: ['screen', { md: 'auto' }],
+                          }}
+                        >
+                          <ViewHeader
+                            title="Log"
+                            text="output"
+                            icon="newspaper-o"
+                            size="sm"
+                            box={{ padding: { bottom: 3 } }}
+                          />
+                          <VStack box={{ flex: 1 }}>
+                            <AutoSizer>
+                              {({ width, height }) => (
+                                <List
+                                  width={width}
+                                  height={height}
+                                  rowCount={t.length(logList)}
+                                  rowHeight={({ index }) => {
+                                    const item = logList[index]
+                                    return t.gt(t.length(item.line), 80)
+                                      ? t.length(item.line) / 1.9
+                                      : 26
+                                  }}
+                                  scrollToIndex={
+                                    t.gt(t.length(logList), 0)
+                                      ? t.length(logList) - 1
+                                      : undefined
+                                  }
+                                  rowRenderer={({ index, key, style }) => {
+                                    const item = logList[index]
+                                    return (
+                                      <HStack key={key} style={style}>
+                                        <Text
+                                          size="sm"
+                                          color={
+                                            t.eq(item.type, 'err')
+                                              ? 'red-500'
+                                              : 'green-500'
+                                          }
+                                        >{`${item.line}`}</Text>
+                                      </HStack>
+                                    )
+                                  }}
+                                />
+                              )}
+                            </AutoSizer>
+                          </VStack>
+                        </Col>
                       </Row>
-                      <VStack box={{ flex: 1 }}>
-                        <AutoSizer>
-                          {({ width, height }) => (
-                            <List
-                              width={width}
-                              height={height}
-                              rowCount={t.length(logList)}
-                              rowHeight={26}
-                              scrollToIndex={
-                                t.gt(t.length(logList), 0)
-                                  ? t.length(logList) - 1
-                                  : undefined
-                              }
-                              rowRenderer={({ index, key, style }) => {
-                                const item = logList[index]
-                                return (
-                                  <HStack key={key} style={style}>
-                                    <Text
-                                      color={
-                                        t.eq(item.type, 'err')
-                                          ? 'red-500'
-                                          : 'green-500'
-                                      }
-                                    >{`${item.line}`}</Text>
-                                  </HStack>
-                                )
-                              }}
-                            />
-                          )}
-                        </AutoSizer>
-                      </VStack>
                     </When>
                   </React.Fragment>
                 ),
