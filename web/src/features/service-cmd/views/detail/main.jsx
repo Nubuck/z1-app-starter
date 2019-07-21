@@ -27,10 +27,12 @@ export const detail = task((t, a) =>
             )
           )
         ) {
+          const nextLogs = t.pathOr([], ['logs'], nextData.service || {})
           return {
             status,
             data: t.merge(viewData, {
-              service: nextData.service || {},
+              service: t.omit(['logs'], nextData.service || {}),
+              logs: t.isZeroLen(nextLogs) ? viewData.logs : nextLogs,
             }),
             error,
           }
@@ -44,7 +46,7 @@ export const detail = task((t, a) =>
           return {
             status,
             data: t.merge(viewData, {
-              logs: t.concat(viewData.logs, [nextData.log.line]),
+              logs: t.concat(viewData.logs, [nextData.log]),
             }),
             error,
           }
@@ -70,7 +72,7 @@ export const detail = task((t, a) =>
         mutations,
       }) {
         const [cmdError, cmdResult] = await a.of(
-          api.service('service-cmd').get(detailKey)
+          api.service('service-cmd').get(detailKey, { withLogs: true })
         )
         if (cmdError) {
           return {
@@ -81,11 +83,12 @@ export const detail = task((t, a) =>
             error: cmdError.message,
           }
         }
+        const nextLogs = t.pathOr(null, ['logs'], cmdResult)
         return {
           status,
           data: {
-            service: cmdResult,
-            logs: [],
+            service: t.omit(['logs'], cmdResult),
+            logs: nextLogs,
           },
           error: null,
         }
@@ -534,12 +537,26 @@ export const detail = task((t, a) =>
                               width={width}
                               height={height}
                               rowCount={t.length(logList)}
-                              rowHeight={40}
-                              rowRenderer={({ index, key }) => (
-                                <HStack key={key}>
-                                  <Text>{logList[index]}</Text>
-                                </HStack>
-                              )}
+                              rowHeight={26}
+                              scrollToIndex={
+                                t.gt(t.length(logList), 0)
+                                  ? t.length(logList) - 1
+                                  : undefined
+                              }
+                              rowRenderer={({ index, key, style }) => {
+                                const item = logList[index]
+                                return (
+                                  <HStack key={key} style={style}>
+                                    <Text
+                                      color={
+                                        t.eq(item.type, 'err')
+                                          ? 'red-500'
+                                          : 'green-500'
+                                      }
+                                    >{`${item.line}`}</Text>
+                                  </HStack>
+                                )
+                              }}
                             />
                           )}
                         </AutoSizer>
