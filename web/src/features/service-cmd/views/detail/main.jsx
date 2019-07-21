@@ -158,6 +158,8 @@ export const detail = task((t, a) =>
       TransportStatusLabel,
       TimestampLabel,
       DateLabel,
+      AutoSizer,
+      List,
     }) => {
       const metricProps = (status, color, secondary = null) => ({
         xs: 6,
@@ -193,6 +195,7 @@ export const detail = task((t, a) =>
           t.eq(actionStatus, 'launching'),
           t.eq(actionStatus, 'stopping')
         )
+        const logList = t.pathOr([], ['data', 'logs'], state)
         const primaryMetricProps = metricProps(status, 'green-500', 'gray-500')
         const secondaryMetricProps = metricProps(status, 'teal-500', 'teal-700')
         const folderMetricProps = folderProps(status, 'blue-500')
@@ -524,6 +527,23 @@ export const detail = task((t, a) =>
                           />
                         </Col>
                       </Row>
+                      <VStack box={{ flex: 1 }}>
+                        <AutoSizer>
+                          {({ width, height }) => (
+                            <List
+                              width={width}
+                              height={height}
+                              rowCount={t.length(logList)}
+                              rowHeight={40}
+                              rowRenderer={({ index, key }) => (
+                                <HStack key={key}>
+                                  <Text>{logList[index]}</Text>
+                                </HStack>
+                              )}
+                            />
+                          )}
+                        </AutoSizer>
+                      </VStack>
                     </When>
                   </React.Fragment>
                 ),
