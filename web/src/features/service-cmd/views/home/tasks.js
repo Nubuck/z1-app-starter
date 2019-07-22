@@ -22,6 +22,28 @@ export const updateServiceInList = task(t => (item, list) =>
   t.map(service => (t.eq(service._id, item._id) ? item : service), list || [])
 )
 
+export const searchSortType = task(t => (data = {}) =>
+  t.find(key => t.contains(key,  ['sortBy', 'sortDirection', 'search']), t.keys(data))
+)
+
+export const computeServices = task(t => (props = {}, list = []) => {
+  const sorter = t.eq(props.sortDirection, 'asc')
+    ? t.ascend(t.prop(props.sortBy))
+    : t.descend(t.prop(props.sortBy))
+  const nextList = t.or(t.isNil(props.search), t.isZeroLen(props.search))
+    ? list
+    : t.filter(
+        service =>
+          t.anyOf([
+            t.contains(props.search, service.name || ''),
+            t.contains(props.search, service.status || ''),
+            t.contains(props.search, service.interpreter || ''),
+          ]),
+        list
+      )
+  return t.sort(sorter, nextList)
+})
+
 export const itemMetricProps = task(t => (status, color) => ({
   xs: 6,
   sm: 3,
@@ -43,28 +65,4 @@ export const viewMetricProps = color => ({
     padding: { left: 0, right: 4, bottom: 4 },
     color,
   },
-})
-
-const SEARCH_SORT_KEYS = ['sortBy', 'sortDirection', 'search']
-
-export const searchSortType = task(t => (data = {}) =>
-  t.find(key => t.contains(key, SEARCH_SORT_KEYS), t.keys(data))
-)
-
-export const computeServices = task(t => (props = {}, list = []) => {
-  const sorter = t.eq(props.sortDirection, 'asc')
-    ? t.ascend(t.prop(props.sortBy))
-    : t.descend(t.prop(props.sortBy))
-  const nextList = t.or(t.isNil(props.search), t.isZeroLen(props.search))
-    ? list
-    : t.filter(
-        service =>
-          t.anyOf([
-            t.contains(props.search, service.name || ''),
-            t.contains(props.search, service.status || ''),
-            t.contains(props.search, service.interpreter || ''),
-          ]),
-        list
-      )
-  return t.sort(sorter, nextList)
 })

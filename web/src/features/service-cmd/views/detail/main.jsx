@@ -7,7 +7,7 @@ import bytes from 'bytes'
 export const detail = task((t, a) =>
   createView('detail', {
     state: {
-      data({ type, status, viewData, nextData, formData, error }) {
+      data({ type, status, viewData, nextData, error }) {
         if (t.eq(type, VIEW_LIFECYCLE.INIT)) {
           return {
             status: VIEW_STATUS.WAITING,
@@ -60,19 +60,9 @@ export const detail = task((t, a) =>
           error,
         }
       },
-      async load({
-        type,
-        status,
-        api,
-        detailKey,
-        viewData,
-        formData,
-        getState,
-        dispatch,
-        mutations,
-      }) {
+      async load({ status, api, detailKey }) {
         const [cmdError, cmdResult] = await a.of(
-          api.service('service-cmd').get(detailKey, { withLogs: true })
+          api.service('service-cmd').get(detailKey)
         )
         if (cmdError) {
           return {
@@ -145,7 +135,6 @@ export const detail = task((t, a) =>
       ViewSpinner,
       Match,
       When,
-      MapIndexed,
       HStack,
       VStack,
       Spacer,
@@ -154,12 +143,9 @@ export const detail = task((t, a) =>
       Text,
       ViewHeader,
       ViewMetric,
-      ViewIconLabel,
       TransportButton,
       TransportStatusIcon,
-      TransportTitle,
       TransportStatusLabel,
-      TimestampLabel,
       DateLabel,
       AutoSizer,
       List,

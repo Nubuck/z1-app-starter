@@ -9,9 +9,9 @@ import { elements } from './elements'
 import {
   computeCounts,
   updateServiceInList,
-  viewMetricProps,
   searchSortType,
   computeServices,
+  viewMetricProps,
 } from './tasks'
 
 // main
@@ -56,7 +56,6 @@ export const home = task((t, a) =>
             error,
           }
         }
-        // check for sort/search params
         const item = t.pathOr(null, ['item'], nextData || {})
         const event = t.pathOr(null, ['event'], nextData || {})
         const services = t.pathOr(null, ['services'], nextData || {})
