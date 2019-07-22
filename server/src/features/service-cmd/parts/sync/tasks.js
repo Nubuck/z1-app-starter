@@ -164,7 +164,7 @@ export const pkgToDb = task(t => pkg => {
 const syncFsDbItem = task(t => (fsItem, dbItem = {}) => {
   const keys = t.concat(serviceCmd.CMD_KEYS, ['autoStart', 'dependencies'])
   const remainder = t.omit(keys, safeDbItem(t.merge(dbItem, fsItem || {})))
-  const nextFsItem = t.pick(keys, safeDbItem(fsItem))
+  const nextFsItem = t.pick(keys, safeDbItem(fsItem || {}))
   const nextDbItem = t.pick(keys, safeDbItem(dbItem))
   let _shouldUpdate = false
   const nextProps = t.map(key => {
