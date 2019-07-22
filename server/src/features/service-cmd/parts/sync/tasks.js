@@ -60,7 +60,7 @@ export const pm2OutputToState = task(t => (output = {}) => {
   }
 })
 
-export const safeDbItem = task(t => item => {
+export const safeDbItem = task(t => (item = {}) => {
   const extra = t.not(t.has('autoStart')(item))
     ? {}
     : {
@@ -161,11 +161,11 @@ export const pkgToDb = task(t => pkg => {
 })
 
 // db
-const syncFsDbItem = task(t => (fsItem, dbItem) => {
+const syncFsDbItem = task(t => (fsItem, dbItem = {}) => {
   const keys = t.concat(serviceCmd.CMD_KEYS, ['autoStart', 'dependencies'])
-  const remainder = t.omit(keys, dbItem)
-  const nextFsItem = t.pick(keys, safeDbItem(fsItem || {}))
-  const nextDbItem = t.pick(keys, safeDbItem(dbItem || {}))
+  const remainder = t.omit(keys, safeDbItem(t.merge(dbItem, fsItem || {})))
+  const nextFsItem = t.pick(keys, safeDbItem(fsItem))
+  const nextDbItem = t.pick(keys, safeDbItem(dbItem))
   let _shouldUpdate = false
   const nextProps = t.map(key => {
     const shouldUpdate = t.and(
@@ -181,7 +181,7 @@ const syncFsDbItem = task(t => (fsItem, dbItem) => {
   }, keys)
   return t.mergeAll(
     t.flatten([
-      safeDbItem(remainder),
+      remainder,
       nextProps,
       { _shouldUpdate },
       { folderStatus: t.isNil(fsItem) ? 'deleted' : 'okay' },
@@ -200,7 +200,6 @@ export const syncFsDbState = task(t => (fsState = {}, dbState = {}) => {
 
 // platform
 const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
-  const remainder = t.omit(serviceCmd.PLATFORM_KEYS, fsDbItem)
   const nextFsDbItem = t.pick(
     serviceCmd.PLATFORM_KEYS,
     safeDbItem(fsDbItem || {})
@@ -211,6 +210,7 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
   )
   let _shouldRestart = false
   let _shouldUpdate = false
+  const platformKeys = t.keys(nextPlatformItem)
   const nextProps = t.map(key => {
     const shouldUpdate = t.and(
       t.or(
@@ -237,7 +237,8 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
         ? null
         : nextFsDbItem[key],
     }
-  }, t.keys(nextPlatformItem))
+  }, platformKeys)
+  const remainder = t.omit(platformKeys, safeDbItem(fsDbItem))
   return t.mergeAll(
     t.flatten([remainder, nextProps, { _shouldRestart, _shouldUpdate }])
   )
