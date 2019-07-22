@@ -25,7 +25,7 @@ const use = [
         title: 'Z1 App Starter',
         links: [
           {
-            href: '/static/fonts/line-awesome-font-awesome.css',
+            href: '/static/line-awesome-font-awesome.css',
             rel: 'stylesheet',
           },
         ],

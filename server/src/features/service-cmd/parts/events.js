@@ -54,5 +54,13 @@ export const cmdEvents = task(t => ({
         }
       }
     }
+    if (
+      t.and(
+        t.eq(data.status, 'setup'),
+        t.not(t.eq(data.status, 'installing'))
+      )
+    ) {
+      console.log('RUN SETUP ON:', data)
+    }
   },
 }))

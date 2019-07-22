@@ -198,10 +198,11 @@ export const elements = task(
       )
     },
     TransportItem({ item, onTransport }) {
-      const busy = t.or(
+      const busy = t.anyOf([
         t.eq(item.actionStatus, 'launching'),
-        t.eq(item.actionStatus, 'stopping')
-      )
+        t.eq(item.actionStatus, 'stopping'),
+        t.eq(item.actionStatus, 'running'),
+      ])
       const primaryMetricProps = itemMetricProps(item.status, 'green-500')
       const secondaryMetricProps = itemMetricProps(item.status, 'teal-500')
       return (
@@ -227,6 +228,15 @@ export const elements = task(
                     data: {
                       id: item._id,
                       action: 'start',
+                    },
+                  })
+                }
+                onSetup={() =>
+                  onTransport &&
+                  onTransport({
+                    data: {
+                      id: item._id,
+                      action: 'setup',
                     },
                   })
                 }

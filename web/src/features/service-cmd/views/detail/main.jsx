@@ -105,6 +105,7 @@ export const detail = task((t, a) =>
                   start: 'launching',
                   stop: 'stopping',
                   restart: 'launcing',
+                  setup: 'installing',
                 }),
                 action: formData.action,
               }),
@@ -181,10 +182,11 @@ export const detail = task((t, a) =>
           ['data', 'service', 'actionStatus'],
           state
         )
-        const busy = t.or(
+        const busy = t.anyOf([
           t.eq(actionStatus, 'launching'),
-          t.eq(actionStatus, 'stopping')
-        )
+          t.eq(actionStatus, 'stopping'),
+          t.eq(actionStatus, 'running'),
+        ])
         const logList = t.pathOr([], ['data', 'logs'], state)
         const primaryMetricProps = metricProps(status, 'green-500', 'gray-500')
         const secondaryMetricProps = metricProps(status, 'teal-500', 'teal-700')
@@ -281,6 +283,14 @@ export const detail = task((t, a) =>
                               data: {
                                 id,
                                 action: 'start',
+                              },
+                            })
+                          }
+                          onSetup={() =>
+                            mutations.formTransmit({
+                              data: {
+                                id,
+                                action: 'setup',
                               },
                             })
                           }

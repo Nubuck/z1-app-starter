@@ -180,7 +180,7 @@ export const elements = task(
           </Col>
         )
       },
-      TransportButton({ status, busy, onStart, onStop, box, props }) {
+      TransportButton({ status, busy, onStart, onStop, onSetup, box, props }) {
         const buttonProps = {
           radius: 'full',
           size: 'sm',
@@ -224,9 +224,30 @@ export const elements = task(
                         }
                         bg={busy ? null : [null, { hover: 'red-500' }]}
                         border="red-500"
-                        onClick={() => onStart && onStop()}
+                        onClick={() => onStop && onStop()}
                       >
                         <Icon {...iconProps} name="stop" />
+                      </Button>
+                    ),
+                    setup: (
+                      <Button
+                        {...buttonProps}
+                        color={
+                          busy ? 'blue-500' : ['blue-500', { hover: 'white' }]
+                        }
+                        bg={busy ? null : [null, { hover: 'blue-500' }]}
+                        border="blue-500"
+                        onClick={() => onSetup && onSetup()}
+                      >
+                        <Icon
+                          size="3xl"
+                          name="cloud-download"
+                          style={{
+                            paddingLeft: 0.9,
+                            paddingRight: 0.9,
+                            paddingTop: 1.5,
+                          }}
+                        />
                       </Button>
                     ),
                     _: (
@@ -265,7 +286,7 @@ export const elements = task(
             y="center"
             box={{
               margin: [{ y: 2 }, { sm: { x: 4 } }],
-              padding: [{ y: 3, x: 4 }, { sm: { y: 2,x: 6 } }],
+              padding: [{ y: 3, x: 4 }, { sm: { y: 2, x: 6 } }],
               borderWidth: [{ bottom: 2 }, { sm: { left: 2, bottom: 0 } }],
               borderColor: busy
                 ? 'orange-500'

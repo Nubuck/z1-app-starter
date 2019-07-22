@@ -62,7 +62,9 @@ export const syncCmdPm2 = task((t, a) => async app => {
         if (checkErr) {
           app.error('SERVICE CMD SYNC CHECK NODE_MODS ERROR', checkErr)
         }
-        console.log('CHECK RESULT', checkResult)
+        if (t.eq(checkResult, false)) {
+          status = 'setup'
+        }
       }
       return t.merge(nextService, { status })
     })

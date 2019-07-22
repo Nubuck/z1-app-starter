@@ -61,6 +61,16 @@ export const cmdHooks = task((t, a) => ({
       )
     ) {
       ctx.data.actionStatus = 'running'
+    } else if (
+      t.and(
+        t.and(
+          t.eq(ctx.data.action, 'setup'),
+          t.not(t.or(t.eq(nextStatus, 'ready'), t.eq(nextStatus, 'installing')))
+        ),
+        t.not(t.eq(serviceResult.actionStatus, 'running'))
+      )
+    ) {
+      ctx.data.actionStatus = 'running'
     } else {
       ctx.data.action = null
       ctx.data.actionStatus = null

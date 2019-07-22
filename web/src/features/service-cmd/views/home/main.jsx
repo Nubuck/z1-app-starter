@@ -126,6 +126,7 @@ export const home = task((t, a) =>
               start: 'launching',
               stop: 'stopping',
               restart: 'launcing',
+              setup: 'installing',
             }),
             action: formData.action,
           }),
