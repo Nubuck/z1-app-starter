@@ -6,7 +6,13 @@ import { createView } from '@z1/lib-feature-macros'
 import { elements } from './elements'
 
 // tasks
-import { computeCounts, updateServiceInList, viewMetricProps } from './tasks'
+import {
+  computeCounts,
+  updateServiceInList,
+  viewMetricProps,
+  searchSortType,
+  computeServices,
+} from './tasks'
 
 // main
 export const home = task((t, a) =>
@@ -34,9 +40,23 @@ export const home = task((t, a) =>
             error,
           }
         }
-        if (t.not(t.eq(type, 'data-change'))) {
-          return { status, data: t.merge(viewData, nextData || {}), error }
+        const searchSortKey = searchSortType(nextData || {})
+        if (
+          t.or(t.not(t.eq(type, 'data-change')), t.not(t.isNil(searchSortKey)))
+        ) {
+          const computedData = t.merge(viewData, nextData || {})
+          return {
+            status,
+            data: t.merge(computedData, {
+              computedServices: computeServices(
+                computedData,
+                computedData.services
+              ),
+            }),
+            error,
+          }
         }
+        // check for sort/search params
         const item = t.pathOr(null, ['item'], nextData || {})
         const event = t.pathOr(null, ['event'], nextData || {})
         const services = t.pathOr(null, ['services'], nextData || {})
@@ -53,7 +73,11 @@ export const home = task((t, a) =>
           data: t.mergeAll([
             viewData,
             t.omit(['services', 'item', 'event'], nextData || {}),
-            { services: nextServices, counts: computeCounts(nextServices) },
+            {
+              services: nextServices,
+              computedServices: computeServices(viewData, nextServices),
+              counts: computeCounts(nextServices),
+            },
           ]),
           error,
         }
@@ -203,7 +227,7 @@ export const home = task((t, a) =>
                         />
                       </Row>
                       <MapIndexed
-                        list={state.data.services}
+                        list={state.data.computedServices}
                         render={({ item, index }) => (
                           <TransportItem
                             key={index}

@@ -44,3 +44,27 @@ export const viewMetricProps = color => ({
     color,
   },
 })
+
+const SEARCH_SORT_KEYS = ['sortBy', 'sortDirection', 'search']
+
+export const searchSortType = task(t => (data = {}) =>
+  t.find(key => t.contains(key, SEARCH_SORT_KEYS), t.keys(data))
+)
+
+export const computeServices = task(t => (props = {}, list = []) => {
+  const sorter = t.eq(props.sortDirection, 'asc')
+    ? t.ascend(t.prop(props.sortBy))
+    : t.descend(t.prop(props.sortBy))
+  const nextList = t.or(t.isNil(props.search), t.isZeroLen(props.search))
+    ? list
+    : t.filter(
+        service =>
+          t.anyOf([
+            t.contains(props.search, service.name || ''),
+            t.contains(props.search, service.status || ''),
+            t.contains(props.search, service.interpreter || ''),
+          ]),
+        list
+      )
+  return t.sort(sorter, nextList)
+})

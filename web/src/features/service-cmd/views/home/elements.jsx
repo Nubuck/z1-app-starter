@@ -27,6 +27,7 @@ export const elements = task(
     TransportTitle,
     TransportStatusLabel,
     TimestampLabel,
+    Value,
   }) => ({
     ViewToolbar({
       title,
@@ -58,107 +59,141 @@ export const elements = task(
             <ViewHeader title={title} text={text} icon={icon} size="md" />
           </VStack>
           <Spacer />
-          <VStack
-            y="center"
-            box={{
-              padding: { top: 3, bottom: 2 },
-              width: ['full', { md: 'auto' }],
+          <Value
+            defaultValue={{
+              searchKey: search,
+              sortByKey: sortBy,
+              sortDirectionKey: sortDirection,
             }}
-          >
-            <HStack y="center">
-              <Icon
-                name="search"
-                size="2xl"
-                box={{ margin: [{ right: 2 }, { md: { left: 2 } }] }}
-              />
-              <Input
-                placeholder="Search..."
-                value={search}
-                onChange={t.throttle(event => {
-                  onDataChange &&
-                    onDataChange({
-                      data: { search: event.target.value },
-                    })
-                }, 1500)}
-              />
-            </HStack>
-          </VStack>
-          <VStack
-            y="center"
-            box={{
-              padding: { top: 3, bottom: 2 },
-              width: ['full', { md: 'auto' }],
-            }}
-          >
-            <HStack y="center">
-              <Icon
-                name="sort"
-                size="2xl"
-                box={{ margin: [{ right: 2 }, { md: { left: 2 } }] }}
-              />
-              <Select
-                box={{ margin: { right: 2 } }}
-                value={sortBy}
-                onChange={event =>
-                  onDataChange &&
+            onChange={t.throttle(
+              ({ searchKey, sortByKey, sortDirectionKey }) => {
+                onDataChange &&
                   onDataChange({
                     data: {
-                      sortBy: event.target.value,
+                      search: searchKey,
+                      sortBy: sortByKey,
+                      sortDirection: sortDirectionKey,
                     },
                   })
-                }
-              >
-                <MapIndexed
-                  list={sortFields || []}
-                  render={({ item, index }) => (
-                    <option key={index} value={item.value}>
-                      {item.label}
-                    </option>
-                  )}
-                />
-              </Select>
-              <Button
-                radius="full"
-                size="sm"
-                disabled={t.eq(sortDirection, 'asc')}
-                color={[
-                  t.eq(sortDirection, 'asc') ? 'green-500' : null,
-                  {
-                    hover: t.eq(sortDirection, 'asc') ? null : 'yellow-500',
-                  },
-                ]}
-                box={{ padding: { x: 1 } }}
-                onClick={() =>
-                  onDataChange &&
-                  onDataChange({
-                    data: { sortDirection: 'asc' },
-                  })
-                }
-              >
-                <Icon name="sort-amount-asc" size="2xl" />
-              </Button>
-              <Button
-                radius="full"
-                size="sm"
-                disabled={t.eq(sortDirection, 'desc')}
-                color={[
-                  t.eq(sortDirection, 'desc') ? 'green-500' : null,
-                  {
-                    hover: t.eq(sortDirection, 'desc') ? null : 'yellow-500',
-                  },
-                ]}
-                box={{ padding: { x: 1 } }}
-                onClick={() =>
-                  onDataChange &&
-                  onDataChange({
-                    data: { sortDirection: 'desc' },
-                  })
-                }
-              >
-                <Icon name="sort-amount-desc" size="2xl" />
-              </Button>
-            </HStack>
-          </VStack>
+              },
+              200
+            )}
+            render={({ searchKey, sortByKey, sortDirectionKey }, onChange) => {
+              return (
+                <React.Fragment>
+                  <VStack
+                    y="center"
+                    box={{
+                      padding: { top: 3, bottom: 2 },
+                      width: ['full', { md: 'auto' }],
+                    }}
+                  >
+                    <HStack y="center">
+                      <Icon
+                        name="search"
+                        size="2xl"
+                        box={{ margin: [{ right: 2 }, { md: { left: 2 } }] }}
+                      />
+                      <Input
+                        placeholder="Search..."
+                        value={searchKey || ''}
+                        onChange={t.throttle(
+                          event =>
+                            onChange({
+                              searchKey: event.target.value,
+                              sortByKey,
+                              sortDirectionKey,
+                            }),
+                          100
+                        )}
+                      />
+                    </HStack>
+                  </VStack>
+                  <VStack
+                    y="center"
+                    box={{
+                      padding: { top: 3, bottom: 2 },
+                      width: ['full', { md: 'auto' }],
+                    }}
+                  >
+                    <HStack y="center">
+                      <Icon
+                        name="sort"
+                        size="2xl"
+                        box={{ margin: [{ right: 2 }, { md: { left: 2 } }] }}
+                      />
+                      <Select
+                        box={{ margin: { right: 2 } }}
+                        value={sortByKey || 'status'}
+                        onChange={event =>
+                          onChange({
+                            searchKey,
+                            sortByKey: event.target.value,
+                            sortDirectionKey,
+                          })
+                        }
+                      >
+                        <MapIndexed
+                          list={sortFields || []}
+                          render={({ item, index }) => (
+                            <option key={index} value={item.value}>
+                              {item.label}
+                            </option>
+                          )}
+                        />
+                      </Select>
+                      <Button
+                        radius="full"
+                        size="sm"
+                        disabled={t.eq(sortDirectionKey, 'asc')}
+                        color={[
+                          t.eq(sortDirectionKey, 'asc') ? 'green-500' : null,
+                          {
+                            hover: t.eq(sortDirectionKey, 'asc')
+                              ? null
+                              : 'yellow-500',
+                          },
+                        ]}
+                        box={{ padding: { x: 1 } }}
+                        onClick={() =>
+                          onChange({
+                            searchKey,
+                            sortByKey,
+                            sortDirectionKey: 'asc',
+                          })
+                        }
+                      >
+                        <Icon name="sort-amount-asc" size="2xl" />
+                      </Button>
+                      <Button
+                        radius="full"
+                        size="sm"
+                        disabled={t.eq(sortDirectionKey, 'desc')}
+                        color={[
+                          t.eq(sortDirectionKey, 'desc') ? 'green-500' : null,
+                          {
+                            hover: t.eq(sortDirectionKey, 'desc')
+                              ? null
+                              : 'yellow-500',
+                          },
+                        ]}
+                        box={{ padding: { x: 1 } }}
+                        onClick={() =>
+                          onChange({
+                            searchKey,
+                            sortByKey,
+                            sortDirectionKey: 'desc',
+                          })
+                        }
+                      >
+                        <Icon name="sort-amount-desc" size="2xl" />
+                      </Button>
+                    </HStack>
+                  </VStack>
+                </React.Fragment>
+              )
+            }}
+          />
         </Row>
       )
     },
