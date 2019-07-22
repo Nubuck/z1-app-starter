@@ -2,7 +2,7 @@ import { task } from '@z1/lib-feature-box-server-nedb'
 import Tail from 'always-tail'
 
 // main
-export const cmdEvents = task((t, a) => ({
+export const cmdEvents = task(t => ({
   onPatched(data, ctx) {
     if (t.or(t.eq(data.status, 'online'), t.eq(data.status, 'stopped'))) {
       const existingTail = ctx.app.get(`log_${data._id}`)
@@ -21,7 +21,7 @@ export const cmdEvents = task((t, a) => ({
           nextTail.watch()
           ctx.app.set(`log_${data._id}`, nextTail)
         } else {
-          console.log('log path not found', data._id)
+          ctx.app.error('log path not found', data._id)
         }
         // err
         if (t.not(t.isNil(errorPath))) {
@@ -35,7 +35,7 @@ export const cmdEvents = task((t, a) => ({
           nextErrTail.watch()
           ctx.app.set(`error_${data._id}`, nextErrTail)
         } else {
-          console.log('error path not found', data._id)
+          ctx.app.error('error path not found', data._id)
         }
       } else if (
         t.and(t.not(t.isNil(existingTail)), t.eq(data.status, 'stopped'))

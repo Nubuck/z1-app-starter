@@ -232,6 +232,7 @@ export const serviceCmd = {
     'env',
     'options',
     'cwd',
+
   ],
   PLATFORM_KEYS: [
     'pid',

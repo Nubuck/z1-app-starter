@@ -45,7 +45,10 @@ export const syncCmdPm2 = task((t, a) => async app => {
             cwd: nextCwd,
             slug: t.caseTo.constantCase(cmdFile.name),
           },
-          t.pick(['name', 'version', 'main', 'bin', 'cmd'], cmdFile || {})
+          t.pick(
+            ['name', 'version', 'main', 'bin', 'cmd', 'dependencies'],
+            cmdFile || {}
+          )
         )
       )
     })
@@ -96,12 +99,20 @@ export const syncCmdPm2 = task((t, a) => async app => {
   const dbKeys = t.keys(dbServices)
   const fsKeys = t.keys(fsServices)
 
+  // sync
+  const nextFsDbPlatformState = syncFsDbPlatformState(
+    syncFsDbState(fsServices, dbServices),
+    platformState
+  )
+
   // seed
   if (t.isZeroLen(dbKeys)) {
     return await a.map(fsKeys, 1, async fsKey => {
-      const nextService = fsServices[fsKey]
+      const nextService = nextFsDbPlatformState[fsKey]
       const [seedError, seedResult] = await a.of(
-        app.service('service-cmd').create(safeDbItem(nextService))
+        app
+          .service('service-cmd')
+          .create(t.merge(nextService, { folderStatus: 'okay' }))
       )
       if (seedError) {
         app.error('SERVICE CMD SEED ERROR', seedError)
@@ -109,12 +120,6 @@ export const syncCmdPm2 = task((t, a) => async app => {
       return seedResult || nextService
     })
   }
-
-  // sync
-  const nextFsDbPlatformState = syncFsDbPlatformState(
-    syncFsDbState(fsServices, dbServices),
-    platformState
-  )
 
   const patchKeys = t.map(
     nextKey => nextFsDbPlatformState[nextKey].slug,

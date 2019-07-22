@@ -2,15 +2,15 @@ import { task } from '@z1/lib-feature-box-server-nedb'
 import { serviceCmd } from './cmd'
 
 // sync
-import { safeDbItem, pm2OutputToState } from './sync/tasks'
+import { safeDbItem, pm2OutputToState, safeParse } from './sync'
 
 // tasks
 const activeCmd = task(t => item => {
-  const options = JSON.parse(item.options || '{}')
+  const options = safeParse(item.options)
   return t.mergeAll([
     item,
     {
-      env: JSON.parse(item.env || '{}'),
+      env: safeParse(item.env),
     },
     options,
   ])

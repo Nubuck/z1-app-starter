@@ -1,34 +1,24 @@
 import { task, fs } from '@z1/lib-feature-box-server-nedb'
 import { cmdHooks } from './hooks'
 import { cmdEvents } from './events'
+import { safeParse } from './sync'
 
 // main
 export const services = task((t, a) => (s, m, { auth, data }) => {
-  const safeParse = val => {
-    if (t.isNil(val)) {
-      return {}
-    }
-    if (t.or(t.isType(val, 'Object'), t.isType(val, 'Array'))) {
-      return val
-    }
-    if (t.isZeroLen(val)) {
-      return {}
-    }
-    return JSON.parse(val)
-  }
   const nextItem = (ctx, item) => {
     try {
       return t.merge(item, {
         env: safeParse(item.env),
         options: safeParse(item.options),
         meta: safeParse(item.meta),
+        dependencies: safeParse(item.dependencies),
       })
     } catch (ex) {
       ctx.app.error('service-cmd afterResult error', ex, item)
       return item
     }
   }
-  const afterResult = ctx => {
+  const withSafeParse = ctx => {
     if (t.not(t.isNil(t.pathOr(null, ['result', '_id'], ctx)))) {
       ctx.result = nextItem(ctx, ctx.result)
     }
@@ -43,22 +33,22 @@ export const services = task((t, a) => (s, m, { auth, data }) => {
       if (t.not(t.isNil(logPath))) {
         const [logErr, logResult] = await a.of(fs.readAsync(logPath))
         if (logErr) {
-          console.log('Error reading log', logErr)
+          ctx.app.error('Error reading log', logErr)
         }
         const [errLogErr, errLogResult] = await a.of(fs.readAsync(errPath))
         if (errLogErr) {
-          console.log('Error reading error log', errLogErr)
+          ctx.app.error('Error reading error log', errLogErr)
         }
 
         if (logResult) {
           ctx.result.logs = t.concat(
             t.map(
               line => ({ id: ctx.result._id, type: 'err', line }),
-              t.split(/\n/, errLogResult) || []
+              t.split(/\n/, errLogResult || '')
             ),
             t.map(
               line => ({ id: ctx.result._id, type: 'out', line }),
-              t.split(/\n/, logResult) || []
+              t.split(/\n/, logResult || '')
             )
           )
         }
@@ -71,7 +61,7 @@ export const services = task((t, a) => (s, m, { auth, data }) => {
       'service-cmd',
       {
         Model: m.services_state,
-        events: ['log-pub', 'log-sub'],
+        events: ['log-pub'],
       },
       {
         hooks: {
@@ -84,7 +74,7 @@ export const services = task((t, a) => (s, m, { auth, data }) => {
             remove: [auth.authenticate('jwt')],
           },
           after: {
-            get: [afterResult, withLogs],
+            get: [withSafeParse, withLogs],
             find: [
               ctx => {
                 ctx.result.data = t.map(
@@ -94,8 +84,8 @@ export const services = task((t, a) => (s, m, { auth, data }) => {
                 return ctx
               },
             ],
-            create: [afterResult],
-            patch: [cmdHooks.afterPatch, afterResult, withLogs],
+            create: [withSafeParse],
+            patch: [cmdHooks.afterPatch, withSafeParse, withLogs],
             remove: [],
           },
         },
