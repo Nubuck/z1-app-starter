@@ -56,12 +56,16 @@ export const cmdEvents = task(t => ({
       }
     }
     if (
-      t.and(t.eq(data.status, 'setup'), t.not(t.eq(data.status, 'installing')))
+      t.and(
+        t.and(
+          t.eq(data.status, 'setup'),
+          t.not(t.eq(data.status, 'installing'))
+        ),
+        t.eq(data.action, 'setup')
+      )
     ) {
       installCmd(ctx.app, data)
-        .then(result =>
-          ctx.app.debug('SERVICE SETUP RESULT', result)
-        )
+        .then(() => ctx.app.debug('SERVICE SETUP COMPLETE'))
         .catch(err => ctx.app.debug('SERVICE SETUP ERROR', err))
     }
   },

@@ -10,7 +10,7 @@ export const installCmd = task((t, a) => async (app, service) => {
     installErr = err
   }
   if (installErr) {
-    app.error('FAILED TO INSTALL PKG', service.name, installErr)
+    app.error('FAILED TO INSTALL PKG', installErr)
     const [patchErr, patchResult] = await a.of(
       app
         .service('service-cmd')
@@ -23,7 +23,6 @@ export const installCmd = task((t, a) => async (app, service) => {
     if (patchErr) {
       app.error('FAILED TO PATCH PKG', service.name, patchErr)
     }
-    app.debug('INSTALL PATCH RESULT', patchResult)
     return patchResult
   }
   const [patchErr, patchResult] = await a.of(
@@ -38,6 +37,5 @@ export const installCmd = task((t, a) => async (app, service) => {
   if (patchErr) {
     app.error('FAILED TO PATCH PKG', service.name, patchErr)
   }
-  app.debug('INSTALL PATCH RESULT', patchResult)
   return patchResult
 })

@@ -59,7 +59,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
       let status = 'init'
       if (shouldCheckNodeMods) {
         const [checkErr, checkResult] = await a.of(
-          Fs.existsAsync(Fs.path(pkgPath, 'node_modules'))
+          Fs.existsAsync(Fs.cwd(nextCwd).path('node_modules'))
         )
         if (checkErr) {
           app.error('SERVICE CMD SYNC CHECK NODE_MODS ERROR', checkErr)

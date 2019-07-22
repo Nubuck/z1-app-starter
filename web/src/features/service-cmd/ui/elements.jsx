@@ -303,12 +303,7 @@ export const elements = task(
         return (
           <Row
             box={{
-              opacity: t.or(
-                t.isNil(status),
-                t.or(t.eq(status, 'stopped'), t.eq(status, 'init'))
-              )
-                ? 50
-                : 100,
+              opacity: t.eq(status, 'online') ? 100 : 50,
             }}
           >
             {children}

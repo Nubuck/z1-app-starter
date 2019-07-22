@@ -385,6 +385,28 @@ export const detail = task((t, a) =>
                             />
                             <ViewMetric
                               {...secondaryMetricProps}
+                              icon="folder-o"
+                              label="folder status"
+                              color={
+                                t.eq(
+                                  t.pathOr(
+                                    '...',
+                                    ['data', 'service', 'folderStatus'],
+                                    state
+                                  ),
+                                  'deleted'
+                                )
+                                  ? 'red-500'
+                                  : 'blue-500'
+                              }
+                              text={`${t.pathOr(
+                                '...',
+                                ['data', 'service', 'folderStatus'],
+                                state
+                              )}`}
+                            />
+                            <ViewMetric
+                              {...secondaryMetricProps}
                               icon="terminal"
                               label="interpreter"
                               text={`${t.pathOr(
@@ -403,16 +425,7 @@ export const detail = task((t, a) =>
                                 state
                               )}`}
                             />
-                            <ViewMetric
-                              {...secondaryMetricProps}
-                              icon="folder-o"
-                              label="folder status"
-                              text={`${t.pathOr(
-                                '...',
-                                ['data', 'service', 'folderStatus'],
-                                state
-                              )}`}
-                            />
+
                             <ViewMetric
                               {...secondaryMetricProps}
                               icon="flag-checkered"
