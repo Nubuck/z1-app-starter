@@ -20,7 +20,7 @@
     "@z1/lib-feature-box-server-nedb": "^0.2.9",
     "@z1/preset-tools": "^0.2.5",
     "always-tail": "^0.2.0",
-    "npminstall": "^3.22.1",
+    "npminstall": "4.1.1",
     "pm2": "^3.5.1",
     "timer-stopwatch": "^0.2.0"
   }

@@ -10,6 +10,7 @@ import {
   syncFsDbState,
   syncFsDbPlatformState,
   pm2OutputToState,
+  anyOf,
 } from './tasks'
 
 // main
@@ -19,6 +20,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
   if (t.not(t.has('path')(cmdConfig))) {
     return {}
   }
+
   // folder state
   const servicePath = Fs.path(cmdConfig.path)
   const [dirErr] = await a.of(Fs.dirAsync(servicePath))
@@ -137,13 +139,15 @@ export const syncCmdPm2 = task((t, a) => async app => {
     })
   }
 
+  // mutate
   const patchKeys = t.map(
     nextKey => nextFsDbPlatformState[nextKey].slug,
     t.filter(key => {
-      return t.or(
+      return anyOf([
         nextFsDbPlatformState[key]._shouldUpdate,
-        nextFsDbPlatformState[key]._shouldRestart
-      )
+        nextFsDbPlatformState[key]._shouldRestart,
+        nextFsDbPlatformState[key]._shouldPatch,
+      ])
     }, t.keys(nextFsDbPlatformState))
   )
 

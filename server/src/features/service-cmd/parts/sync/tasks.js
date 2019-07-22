@@ -166,14 +166,15 @@ const syncFsDbItem = task(t => (fsItem, dbItem = {}) => {
   const remainder = t.omit(keys, safeDbItem(t.merge(dbItem, fsItem || {})))
   const nextFsItem = t.pick(keys, safeDbItem(fsItem || {}))
   const nextDbItem = t.pick(keys, safeDbItem(dbItem))
-  let _shouldUpdate = false
+  let _shouldPatch = false
   const nextProps = t.map(key => {
-    const shouldUpdate = t.and(
-      t.has(key)(nextFsItem),
-      t.not(t.eq(nextFsItem[key], nextDbItem[key]))
+    const hasKey = t.has(key)
+    const shouldUpdate = t.or(
+      t.and(hasKey(nextFsItem), t.not(t.eq(nextFsItem[key], nextDbItem[key]))),
+      t.not(hasKey(dbItem))
     )
     if (shouldUpdate) {
-      _shouldUpdate = true
+      _shouldPatch = true
     }
     return {
       [key]: shouldUpdate ? nextFsItem[key] : nextDbItem[key],
@@ -183,7 +184,7 @@ const syncFsDbItem = task(t => (fsItem, dbItem = {}) => {
     t.flatten([
       remainder,
       nextProps,
-      { _shouldUpdate },
+      { _shouldPatch },
       { folderStatus: t.isNil(fsItem) ? 'deleted' : 'okay' },
     ])
   )
@@ -225,7 +226,7 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
           t.isNil(nextFsDbItem[key]),
           t.not(t.isNil(nextPlatformItem[key]))
         )
-          ? remainder.autoStart
+          ? fsDbItem.autoStart
           : false
       }
       _shouldUpdate = true
@@ -253,4 +254,8 @@ export const syncFsDbPlatformState = task(t => (fsDbState, platformState) => {
       ]
     }, t.keys(fsDbState))
   )
+})
+
+export const anyOf = task(t => (list = []) => {
+  return t.gt(t.findIndex(subject => t.eq(subject, true), list), -1)
 })

@@ -1,5 +1,6 @@
 import { task } from '@z1/lib-feature-box-server-nedb'
 import Tail from 'always-tail'
+import { installCmd } from './cmd'
 
 // main
 export const cmdEvents = task(t => ({
@@ -55,12 +56,13 @@ export const cmdEvents = task(t => ({
       }
     }
     if (
-      t.and(
-        t.eq(data.status, 'setup'),
-        t.not(t.eq(data.status, 'installing'))
-      )
+      t.and(t.eq(data.status, 'setup'), t.not(t.eq(data.status, 'installing')))
     ) {
-      console.log('RUN SETUP ON:', data)
+      installCmd(ctx.app, data)
+        .then(result =>
+          ctx.app.debug('SERVICE SETUP RESULT', result)
+        )
+        .catch(err => ctx.app.debug('SERVICE SETUP ERROR', err))
     }
   },
 }))
