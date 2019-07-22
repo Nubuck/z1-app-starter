@@ -10,7 +10,6 @@ import {
   syncFsDbState,
   syncFsDbPlatformState,
   pm2OutputToState,
-  safeDbItem,
 } from './tasks'
 
 // main
@@ -39,7 +38,7 @@ export const syncCmdPm2 = task((t, a) => async app => {
     a.map(findResult || [], 1, async pkgPath => {
       const cmdFile = await Fs.readAsync(pkgPath, 'json')
       const nextCwd = path.dirname(Fs.path(pkgPath))
-      return pkgToDb(
+      const nextService = pkgToDb(
         t.merge(
           {
             cwd: nextCwd,
@@ -51,6 +50,21 @@ export const syncCmdPm2 = task((t, a) => async app => {
           )
         )
       )
+      const shouldCheckNodeMods = t.and(
+        t.eq(nextService.interpreter, 'node'),
+        t.gt(t.length(t.keys(nextService.dependencies)), 0)
+      )
+      let status = 'init'
+      if (shouldCheckNodeMods) {
+        const [checkErr, checkResult] = await a.of(
+          Fs.existsAsync(Fs.path(pkgPath, 'node_modules'))
+        )
+        if (checkErr) {
+          app.error('SERVICE CMD SYNC CHECK NODE_MODS ERROR', checkErr)
+        }
+        console.log('CHECK RESULT', checkResult)
+      }
+      return t.merge(nextService, { status })
     })
   )
   if (fsStateErr) {
