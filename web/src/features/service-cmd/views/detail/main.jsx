@@ -398,7 +398,7 @@ export const detail = task((t, a) =>
                               icon="folder-o"
                               label="folder status"
                               text={`${t.pathOr(
-                                'okay',
+                                '...',
                                 ['data', 'service', 'folderStatus'],
                                 state
                               )}`}
