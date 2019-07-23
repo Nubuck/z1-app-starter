@@ -188,7 +188,7 @@ export const elements = task(
           box: {
             padding: 2,
             margin: { x: 2 },
-            opacity: busy ? 50 : null,
+            opacity: t.or(busy, t.eq(status, 'errored')) ? 50 : null,
             cursor: busy ? 'wait' : 'pointer',
             outline: 'none',
           },
@@ -246,6 +246,25 @@ export const elements = task(
                             paddingLeft: 0.9,
                             paddingRight: 0.9,
                             paddingTop: 1.5,
+                          }}
+                        />
+                      </Button>
+                    ),
+                    errored: (
+                      <Button
+                        {...buttonProps}
+                        as={'div'}
+                        color={'orange-500'}
+                        border="orange-500"
+                        next={ui => ui.next({ cursor: null })}
+                      >
+                        <Icon
+                          size="3xl"
+                          name="warning"
+                          style={{
+                            paddingLeft: 0.9,
+                            paddingRight: 0.9,
+                            paddingTop: 1,
                           }}
                         />
                       </Button>
@@ -326,14 +345,14 @@ export const elements = task(
                 name="cube"
                 size={['3xl', { xl: '4xl' }]}
                 color={
-                  busy
+                  t.or(busy, t.eq(status, 'errored'))
                     ? 'orange-500'
                     : t.not(t.eq(status, 'online'))
                     ? 'red-500'
                     : 'green-500'
                 }
                 box={{
-                  opacity: busy ? 50 : 100,
+                  opacity: t.or(busy, t.eq(status, 'errored')) ? 50 : 100,
                   width: [8, { xl: 10 }],
                   textAlignX: 'center',
                 }}
@@ -362,7 +381,7 @@ export const elements = task(
                     padding: { top: t.not(spacing) ? 0 : 1 },
                   }}
                 >
-                  ready
+                  {t.eq(status, 'errored') ? 'halted' : 'ready'}
                 </Text>
               </When>
             </HStack>
@@ -465,7 +484,13 @@ export const elements = task(
             next={ui => ui.next(box || {})}
           >
             <ViewIconLabel
-              icon={t.eq(status, 'online') ? 'play' : 'stop'}
+              icon={
+                t.eq(status, 'online')
+                  ? 'play'
+                  : t.eq(status, 'errored')
+                  ? 'ban'
+                  : 'stop'
+              }
               text={status || 'offline'}
               color={t.eq(status, 'online') ? 'green-500' : 'red-500'}
               size={['md', { md: 'xl' }]}

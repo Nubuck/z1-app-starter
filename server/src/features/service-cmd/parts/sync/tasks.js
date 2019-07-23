@@ -2,6 +2,10 @@ import { task } from '@z1/lib-feature-box-server-nedb'
 import { serviceCmd } from '../cmd'
 
 // cmd
+export const anyOf = task(t => (list = []) => {
+  return t.gt(t.findIndex(subject => t.eq(subject, true), list), -1)
+})
+
 export const safeParse = task(t => val => {
   if (t.isNil(val)) {
     return {}
@@ -162,6 +166,7 @@ export const pkgToDb = task(t => pkg => {
 
 // db
 const syncFsDbItem = task(t => (fsItem, dbItem = {}) => {
+  const folderStatus = t.isNil(fsItem) ? 'deleted' : 'okay'
   const keys = t.concat(serviceCmd.CMD_KEYS, ['autoStart', 'dependencies'])
   const remainder = t.omit(keys, safeDbItem(t.merge(dbItem, fsItem || {})))
   const nextFsItem = t.pick(keys, safeDbItem(fsItem || {}))
@@ -185,7 +190,12 @@ const syncFsDbItem = task(t => (fsItem, dbItem = {}) => {
       remainder,
       nextProps,
       { _shouldPatch },
-      { folderStatus: t.isNil(fsItem) ? 'deleted' : 'okay' },
+      {
+        folderStatus,
+        status: t.eq(folderStatus, 'deleted')
+          ? serviceCmd.PM_STATUS.ERRORED
+          : remainder.status,
+      },
     ])
   )
 })
@@ -213,12 +223,19 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
   let _shouldUpdate = false
   const platformKeys = t.keys(nextPlatformItem)
   const nextProps = t.map(key => {
-    const shouldUpdate = t.and(
-      t.or(
-        t.not(t.isNil(nextPlatformItem[key])),
-        t.not(t.isNil(nextFsDbItem[key]))
+    const isCriticalStatus = t.and(
+      t.eq(key, 'status'),
+      t.or(t.eq(nextFsDbItem[key], 'setup'), t.eq(nextFsDbItem[key], 'errored'))
+    )
+    const shouldUpdate = t.or(
+      t.and(
+        t.or(
+          t.not(t.isNil(nextPlatformItem[key])),
+          t.not(t.isNil(nextFsDbItem[key]))
+        ),
+        t.not(t.eq(nextFsDbItem[key], nextPlatformItem[key]))
       ),
-      t.not(t.eq(nextFsDbItem[key], nextPlatformItem[key]))
+      isCriticalStatus
     )
     if (shouldUpdate) {
       if (t.not(_shouldRestart)) {
@@ -233,9 +250,13 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
     }
     return {
       [key]: shouldUpdate
-        ? nextPlatformItem[key]
-        : t.and(t.eq(key, 'status'), t.not(nextPlatformItem[key]))
-        ? null
+        ? isCriticalStatus
+          ? t.eq(nextPlatformItem[key], 'online')
+            ? nextPlatformItem[key]
+            : nextFsDbItem[key]
+          : t.and(t.eq(key, 'status'), t.isNil(nextPlatformItem[key]))
+          ? null
+          : nextPlatformItem[key]
         : nextFsDbItem[key],
     }
   }, platformKeys)
@@ -254,8 +275,4 @@ export const syncFsDbPlatformState = task(t => (fsDbState, platformState) => {
       ]
     }, t.keys(fsDbState))
   )
-})
-
-export const anyOf = task(t => (list = []) => {
-  return t.gt(t.findIndex(subject => t.eq(subject, true), list), -1)
 })
