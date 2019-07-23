@@ -217,7 +217,7 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
   )
   const nextPlatformItem = t.pick(
     serviceCmd.PLATFORM_KEYS,
-    safeDbItem(t.merge(nextFsDbItem, platformItem || {}))
+    safeDbItem(t.merge(nextFsDbItem, platformItem || { status: null }))
   )
   let _shouldRestart = false
   let _shouldUpdate = false
@@ -248,6 +248,7 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
       }
       _shouldUpdate = true
     }
+
     return {
       [key]: shouldUpdate
         ? isCriticalStatus
@@ -255,7 +256,7 @@ const syncFsDbPlatformItem = task(t => (fsDbItem, platformItem) => {
             ? nextPlatformItem[key]
             : nextFsDbItem[key]
           : t.and(t.eq(key, 'status'), t.isNil(nextPlatformItem[key]))
-          ? null
+          ? 'init'
           : nextPlatformItem[key]
         : nextFsDbItem[key],
     }
