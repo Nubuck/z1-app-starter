@@ -27,7 +27,7 @@ export const elements = task(
               {
                 sm: '8/12',
                 md: t.not(large) ? '5/12' : '6/12',
-                lg: t.not(large) ? '4/12' : '5/12',
+                lg: t.not(large) ? '5/12' : '5/12',
                 xl: t.not(large) ? '3/12' : '4/12',
               },
             ],
