@@ -245,7 +245,7 @@ export const elements = task(
                           style={{
                             paddingLeft: 0.9,
                             paddingRight: 0.9,
-                            paddingTop: 1.5,
+                            paddingTop: 0,
                           }}
                         />
                       </Button>
@@ -264,7 +264,7 @@ export const elements = task(
                           style={{
                             paddingLeft: 0.9,
                             paddingRight: 0.9,
-                            paddingTop: 1,
+                            paddingTop: 0,
                           }}
                         />
                       </Button>
@@ -347,6 +347,8 @@ export const elements = task(
                 color={
                   t.or(busy, t.eq(status, 'errored'))
                     ? 'orange-500'
+                    : t.eq(status, 'setup')
+                    ? 'blue-500'
                     : t.not(t.eq(status, 'online'))
                     ? 'red-500'
                     : 'green-500'
@@ -489,10 +491,20 @@ export const elements = task(
                   ? 'play'
                   : t.eq(status, 'errored')
                   ? 'ban'
+                  : t.eq(status, 'setup')
+                  ? 'wrench'
                   : 'stop'
               }
               text={status || 'offline'}
-              color={t.eq(status, 'online') ? 'green-500' : 'red-500'}
+              color={
+                t.eq(status, 'online')
+                  ? 'green-500'
+                  : t.eq(status, 'setup')
+                  ? 'blue-500'
+                  : t.eq(status, 'errored')
+                  ? 'orange-500'
+                  : 'red-500'
+              }
               size={['md', { md: 'xl' }]}
               busy={busy}
               box={{ margin: { right: 2 } }}
