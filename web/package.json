@@ -14,7 +14,7 @@
     "@z1/lib-feature-macros": "^0.2.50",
     "@z1/lib-ui-box-elements": "^0.2.42",
     "@z1/lib-ui-schema": "^0.2.22",
-    "ajv": "^6.7.0",
+    "ajv": "^6.12.3",
     "babel-polyfill": "^6.26.0",
     "bytes": "^3.1.0",
     "dayjs": "^1.8.15",
